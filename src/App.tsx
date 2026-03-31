@@ -213,7 +213,7 @@ export default function App() {
           <div className="h-8 w-[1px] bg-gray-100 mx-2"></div>
           <div className="flex items-center gap-3 pl-2">
             <div className="text-right hidden sm:block">
-              <div className="text-xs font-bold">Dr. Sarah Chen</div>
+              <div className="text-xs font-bold">Dr. Rifki</div>
               <div className="text-[10px] font-mono text-gray-400 uppercase tracking-widest">Occupational Health</div>
             </div>
             <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center border border-gray-200">

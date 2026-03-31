@@ -36,9 +36,14 @@ export const ConsultModal: React.FC<ConsultModalProps> = ({ isOpen, onClose }) =
               <div className="p-4 bg-blue-50 rounded-2xl border border-blue-100">
                 <div className="text-sm font-bold text-blue-900 mb-1">Telemedicine Service</div>
                 <div className="text-xs text-blue-700 mb-3">Connect with a licensed psychologist within 15 minutes.</div>
-                <button className="w-full py-3 bg-blue-600 text-white text-sm font-bold rounded-xl hover:bg-blue-700 transition-colors">
+                <a 
+                  href="https://safespace.elpeef.com" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="block w-full py-3 bg-blue-600 text-white text-center text-sm font-bold rounded-xl hover:bg-blue-700 transition-colors"
+                >
                   Start Virtual Session
-                </button>
+                </a>
               </div>
 
               <div className="space-y-3">
