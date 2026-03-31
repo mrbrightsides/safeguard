@@ -54,7 +54,7 @@ SafeGuard is a cutting-edge, enterprise-grade psychosocial health surveillance s
 ### Installation
 1.  Clone the repository:
     ```bash
-    git clone https://github.com/your-repo/safeguard.git
+    git clone https://github.com/mrbrightsides/safeguard.git
     ```
 2.  Install dependencies:
     ```bash
