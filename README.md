@@ -80,4 +80,4 @@ SafeGuard is designed with privacy-first principles. All individual data is anon
 
 ---
 
-Developed for the **SafeGuard Psychosocial Hackathon 2026**.
+Developed for the **HSIL Hackathon 2026**.
