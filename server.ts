@@ -178,14 +178,12 @@ async function startServer() {
       appType: "spa",
     });
     app.use(vite.middlewares);
-  } else if (process.env.NODE_ENV === "production") {
+  } else if (process.env.NODE_ENV === "production" && !process.env.VERCEL) {
+    // Only serve static files via Express if NOT on Vercel
+    // On Vercel, we let vercel.json handle static files and rewrites
     const distPath = path.join(process.cwd(), 'dist');
     app.use(express.static(distPath));
-    app.get('*', (req, res, next) => {
-      // Skip API and Swagger routes
-      if (req.path.startsWith('/api') || req.path.startsWith('/api-docs')) {
-        return next();
-      }
+    app.get('*', (req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));
     });
   }
