@@ -34,7 +34,7 @@ async function startServer() {
         },
       ],
     },
-    apis: ["./server.ts"], // Path to the API docs
+    apis: ["./api/index.ts"], // Path to the API docs
   };
 
   const swaggerDocs = swaggerJsdoc(swaggerOptions);
@@ -192,7 +192,7 @@ async function startServer() {
 }
 
 // For local development
-if (import.meta.env.VITE_NODE_ENV !== "production" && !import.meta.env.VERCEL) {
+if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
   startServer().then(app => {
     const PORT = 3000;
     app.listen(PORT, "0.0.0.0", () => {
