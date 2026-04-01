@@ -26,23 +26,19 @@ async function startServer() {
           url: "https://safeguard-hsil.vercel.app",
           description: "Production Server (Vercel)",
         },
-        {
-          url: "https://ais-dev-3n7axvunz7ilrzvytt26dm-111006670209.asia-southeast1.run.app",
-          description: "Development Server (AI Studio)",
-        },
       ],
     },
-    apis: ["./api/index.ts"], // Path to the API docs
+    apis: [path.join(process.cwd(), "api", "index.ts")], // Absolute path for Vercel
   };
 
   const swaggerDocs = swaggerJsdoc(swaggerOptions);
   
-  // Swagger UI options to use CDN assets
+  // Swagger UI options to use reliable CDN assets
   const swaggerUiOptions = {
-    customCssUrl: "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.18.3/swagger-ui.min.css",
+    customCssUrl: "https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui.css",
     customJs: [
-      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.18.3/swagger-ui-bundle.js",
-      "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.18.3/swagger-ui-standalone-preset.js"
+      "https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-bundle.js",
+      "https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-standalone-preset.js"
     ]
   };
 
