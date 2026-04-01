@@ -59,4 +59,29 @@ SafeGuard is built on privacy-first principles. All individual data is anonymize
 
 ---
 
+## 📡 API Documentation (v1)
+
+SafeGuard provides a robust set of APIs for integration with external health systems and corporate dashboards.
+
+👉 **Live Interactive Docs**: [https://safeguard-hsil.vercel.app/api-docs](https://safeguard-hsil.vercel.app/api-docs)
+
+### Core Endpoints:
+- `POST /api/v1/risk-detect`: Automated psychosocial risk stratification (L0-L3). A Risk Detection Engine. This is where the system understands human distress.
+- `GET /api/v1/economic-forecast`: ROI calculations and INA-CBG claim estimates. A Health Economic Intelligence. This is how we translate mental health into financial impact.
+- `GET /api/v1/icd-clusters`: ICD-10 Chapter V burden distribution data. A Clinical Standardization Layer. This is how we translate mental health into financial impact.
+
+Our system is built on three layers: detection, economic justification, and clinical standardization.
+
+## 🚀 Technical Architecture Upgrade
+
+The platform has been optimized for **Vercel Serverless** deployment:
+- **Frontend**: React + Vite (Served via Vercel Edge).
+- **Backend**: Node.js Express (Deployed as Serverless Functions in `/api`).
+- **Swagger UI**: OAS 3.0 with CDN-backed assets (jsDelivr) for high availability.
+- **Environment Awareness**: Automatic switching between Local (Port 3000) and Production (Vercel) contexts.
+
+SafeGuard is built as an API-first architecture, enabling integration with enterprise HCIS and national health systems.
+
+---
+
 Developed for the **HSIL Hackathon 2026**.
