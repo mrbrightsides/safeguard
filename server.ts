@@ -172,31 +172,40 @@ async function startServer() {
   });
 
   // Vite middleware for development
-  if (process.env.NODE_ENV !== "production") {
+  if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
     });
     app.use(vite.middlewares);
-  } else {
+  } else if (process.env.NODE_ENV === "production") {
     const distPath = path.join(process.cwd(), 'dist');
     app.use(express.static(distPath));
-    app.get('*', (req, res) => {
+    app.get('*', (req, res, next) => {
+      // Skip API and Swagger routes
+      if (req.path.startsWith('/api') || req.path.startsWith('/api-docs')) {
+        return next();
+      }
       res.sendFile(path.join(distPath, 'index.html'));
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-    console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`);
-  });
-
   return app;
 }
 
-const appPromise = startServer();
+// For local development
+if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
+  startServer().then(app => {
+    const PORT = 3000;
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+      console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`);
+    });
+  });
+}
 
+// Export for Vercel
 export default async (req: any, res: any) => {
-  const app = await appPromise;
+  const app = await startServer();
   return app(req, res);
 };
