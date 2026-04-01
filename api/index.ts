@@ -27,18 +27,107 @@ async function startServer() {
           description: "Production Server (Vercel)",
         },
       ],
+      paths: {
+        "/api/v1/risk-detect": {
+          post: {
+            summary: "Detect psychosocial risk level",
+            description: "Analyzes user assessment data to determine risk level (L0-L3) based on clinical hierarchy.",
+            requestBody: {
+              required: true,
+              content: {
+                "application/json": {
+                  schema: {
+                    type: "object",
+                    properties: {
+                      dass21_score: { type: "integer", example: 24 },
+                      srq20_positive: { type: "integer", example: 8 },
+                      suicidal_ideation: { type: "boolean", example: false }
+                    }
+                  }
+                }
+              }
+            },
+            responses: {
+              200: {
+                description: "Risk stratification result",
+                content: {
+                  "application/json": {
+                    schema: {
+                      type: "object",
+                      properties: {
+                        risk_level: { type: "string", example: "L2: Syndrome Domain" },
+                        icd_code: { type: "string", example: "F41.1" },
+                        recommendation: { type: "string", example: "Clinical consultation required within 48 hours." }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "/api/v1/economic-forecast": {
+          get: {
+            summary: "Get health economic evaluation data",
+            description: "Returns ROI calculations and INA-CBG claim estimates for mental health interventions.",
+            responses: {
+              200: {
+                description: "Economic forecast data",
+                content: {
+                  "application/json": {
+                    schema: {
+                      type: "object",
+                      properties: {
+                        roi_ratio: { type: "string", example: "1:4" },
+                        mean_claim_ina_cbg: { type: "string", example: "Rp12,400,000" },
+                        potential_savings_annual: { type: "string", example: "Rp1,250,000,000" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "/api/v1/icd-clusters": {
+          get: {
+            summary: "Get top burden clusters (ICD-10)",
+            description: "Returns the distribution of mental health burdens based on ICD-10 Chapter V.",
+            responses: {
+              200: {
+                description: "ICD-10 burden clusters",
+                content: {
+                  "application/json": {
+                    schema: {
+                      type: "array",
+                      items: {
+                        type: "object",
+                        properties: {
+                          name: { type: "string" },
+                          value: { type: "integer" },
+                          color: { type: "string" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     },
-    apis: [path.join(process.cwd(), "api", "index.ts")], // Absolute path for Vercel
+    apis: [], // No need to scan files on Vercel
   };
 
   const swaggerDocs = swaggerJsdoc(swaggerOptions);
   
   // Swagger UI options to use reliable CDN assets
   const swaggerUiOptions = {
-    customCssUrl: "https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui.css",
+    customCssUrl: "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.11.0/swagger-ui.css",
     customJs: [
-      "https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-bundle.js",
-      "https://unpkg.com/swagger-ui-dist@5.11.0/swagger-ui-standalone-preset.js"
+      "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.11.0/swagger-ui-bundle.js",
+      "https://cdn.jsdelivr.net/npm/swagger-ui-dist@5.11.0/swagger-ui-standalone-preset.js"
     ]
   };
 
