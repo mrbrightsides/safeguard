@@ -20,10 +20,10 @@ const data = [
 const heatmapData = [
   { region: 'Jakarta', risk: 'High', count: 45, color: 'bg-red-500' },
   { region: 'Surabaya', risk: 'Moderate', count: 28, color: 'bg-yellow-500' },
-  { region: 'Bandung', risk: 'Low', count: 12, color: 'bg-emerald-500' },
+  { region: 'Bandung', risk: 'Low', count: 12, color: 'bg-teal-500' },
   { region: 'Medan', risk: 'High', count: 38, color: 'bg-red-500' },
   { region: 'Makassar', risk: 'Moderate', count: 15, color: 'bg-yellow-500' },
-  { region: 'Semarang', risk: 'Low', count: 8, color: 'bg-emerald-500' },
+  { region: 'Semarang', risk: 'Low', count: 8, color: 'bg-teal-500' },
 ];
 
 export const Dashboard: React.FC = () => {
@@ -72,7 +72,7 @@ export const Dashboard: React.FC = () => {
                 <div>
                   <h3 className="font-bold text-gray-900">Live Biometrics</h3>
                   <div className="flex items-center gap-1.5">
-                    <div className={cn("w-1.5 h-1.5 rounded-full", isSyncing ? "bg-emerald-500 animate-pulse" : "bg-gray-300")}></div>
+                    <div className={cn("w-1.5 h-1.5 rounded-full", isSyncing ? "bg-teal-500 animate-pulse" : "bg-gray-300")}></div>
                     <span className="text-[10px] font-mono text-gray-400 uppercase tracking-widest">
                       {isSyncing ? 'Syncing via Bluetooth' : 'Disconnected'}
                     </span>
@@ -108,13 +108,13 @@ export const Dashboard: React.FC = () => {
             <div className="mt-8 pt-8 border-t border-gray-50">
               <div className="flex justify-between items-center mb-2">
                 <span className="text-xs text-gray-500">Stress Recovery State</span>
-                <span className="text-xs font-bold text-emerald-600">Optimal</span>
+                <span className="text-xs font-bold text-teal-600">Optimal</span>
               </div>
               <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
                 <motion.div 
                   initial={{ width: 0 }}
                   animate={{ width: '75%' }}
-                  className="h-full bg-emerald-500 rounded-full"
+                  className="h-full bg-teal-500 rounded-full"
                 ></motion.div>
               </div>
             </div>
@@ -124,10 +124,10 @@ export const Dashboard: React.FC = () => {
         {/* Stats Grid */}
         <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
           {[
-            { label: lang === 'EN' ? 'Active Surveillance' : 'Surveilans Aktif', value: '1,284', icon: Activity, color: 'text-blue-600' },
+            { label: lang === 'EN' ? 'Active Surveillance' : 'Surveilans Aktif', value: '1,284', icon: Activity, color: 'text-teal-600' },
             { label: lang === 'EN' ? 'High Risk Alerts' : 'Peringatan Risiko Tinggi', value: '12', icon: AlertTriangle, color: 'text-orange-600' },
             { label: lang === 'EN' ? 'Well-being Index' : 'Indeks Kesejahteraan', value: '84%', icon: Heart, color: 'text-rose-600' },
-            { label: lang === 'EN' ? 'Population Coverage' : 'Cakupan Populasi', value: '92%', icon: Users, color: 'text-emerald-600' },
+            { label: lang === 'EN' ? 'Population Coverage' : 'Cakupan Populasi', value: '92%', icon: Users, color: 'text-teal-600' },
           ].map((stat, i) => (
             <motion.div
               key={stat.label}
@@ -162,8 +162,8 @@ export const Dashboard: React.FC = () => {
             {[
               { emoji: '😔', label: 'Stressed', color: 'hover:bg-red-50 hover:text-red-600' },
               { emoji: '😐', label: 'Neutral', color: 'hover:bg-gray-50 hover:text-gray-600' },
-              { emoji: '😊', label: 'Good', color: 'hover:bg-emerald-50 hover:text-emerald-600' },
-              { emoji: '🤩', label: 'Great', color: 'hover:bg-blue-50 hover:text-blue-600' },
+              { emoji: '😊', label: 'Good', color: 'hover:bg-teal-50 hover:text-teal-600' },
+              { emoji: '🤩', label: 'Great', color: 'hover:bg-teal-50 hover:text-teal-600' },
             ].map((mood) => (
               <button 
                 key={mood.label}
@@ -184,7 +184,7 @@ export const Dashboard: React.FC = () => {
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-black p-8 rounded-3xl text-white shadow-xl shadow-black/10 relative overflow-hidden group">
+        <div className="bg-teal-900 p-8 rounded-3xl text-white shadow-xl shadow-teal-900/10 relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform">
             <Heart className="w-32 h-32" />
           </div>
@@ -198,7 +198,7 @@ export const Dashboard: React.FC = () => {
                 // In a real app, this would open the consultation modal or navigate
                 window.dispatchEvent(new CustomEvent('open-consultation'));
               }}
-              className="px-6 py-3 bg-white text-black rounded-xl font-bold text-sm hover:bg-gray-100 transition-colors flex items-center gap-2"
+              className="px-6 py-3 bg-white text-teal-900 rounded-xl font-bold text-sm hover:bg-gray-100 transition-colors flex items-center gap-2"
             >
               <Users className="w-4 h-4" />
               Consult a Professional
@@ -207,7 +207,7 @@ export const Dashboard: React.FC = () => {
         </div>
 
         <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm relative overflow-hidden group">
-          <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform text-emerald-600">
+          <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform text-teal-600">
             <Shield className="w-32 h-32" />
           </div>
           <div className="relative z-10">
@@ -220,7 +220,7 @@ export const Dashboard: React.FC = () => {
                 // This will be handled by the parent component
                 window.dispatchEvent(new CustomEvent('navigate-to-assessment'));
               }}
-              className="px-6 py-3 bg-gray-900 text-white rounded-xl font-bold text-sm hover:bg-black transition-colors flex items-center gap-2"
+              className="px-6 py-3 bg-teal-900 text-white rounded-xl font-bold text-sm hover:bg-teal-950 transition-colors flex items-center gap-2"
             >
               <Activity className="w-4 h-4" />
               Start Assessment
@@ -365,7 +365,7 @@ export const Dashboard: React.FC = () => {
                       row.risk === 'Emergency' ? "bg-red-100 text-red-600" :
                       row.risk === 'High' ? "bg-orange-100 text-orange-600" :
                       row.risk === 'Moderate' ? "bg-yellow-100 text-yellow-600" :
-                      "bg-emerald-100 text-emerald-600"
+                      "bg-teal-100 text-teal-600"
                     )}>
                       {row.risk}
                     </span>

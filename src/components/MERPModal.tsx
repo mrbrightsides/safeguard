@@ -90,6 +90,36 @@ export const MERPModal: React.FC<MERPModalProps> = ({ isOpen, onClose, onTrigger
                     >
                       Yes, Trigger Protocol
                     </button>
+                    
+                    <div className="grid grid-cols-2 gap-2 mt-2">
+                      <a 
+                        href="tel:119"
+                        className="flex items-center justify-center gap-2 py-3 bg-white border border-red-100 text-red-600 rounded-xl text-xs font-bold hover:bg-red-50 transition-all"
+                      >
+                        <Phone className="w-3 h-3" />
+                        Call 119 (SPGDT)
+                      </a>
+                      <a 
+                        href="tel:112"
+                        className="flex items-center justify-center gap-2 py-3 bg-white border border-red-100 text-red-600 rounded-xl text-xs font-bold hover:bg-red-50 transition-all"
+                      >
+                        <Phone className="w-3 h-3" />
+                        Call 112 (Emergency)
+                      </a>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 gap-2">
+                      <a 
+                        href="https://jaksehat.jakarta.go.id/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center gap-2 py-3 bg-white border border-gray-100 text-gray-600 rounded-xl text-xs font-bold hover:bg-gray-50 transition-all"
+                      >
+                        <Shield className="w-3 h-3" />
+                        JakSehat Portal
+                      </a>
+                    </div>
+
                     <button 
                       onClick={onClose}
                       className="w-full py-4 bg-gray-100 text-gray-600 rounded-2xl font-bold hover:bg-gray-200 transition-all"

@@ -27,11 +27,11 @@ import {
 } from 'lucide-react';
 
 const riskData = [
-  { name: 'Engineering', low: 45, med: 12, high: 3 },
-  { name: 'Sales', low: 30, med: 25, high: 8 },
-  { name: 'Marketing', low: 38, med: 15, high: 4 },
-  { name: 'Operations', low: 52, med: 10, high: 2 },
-  { name: 'HR', low: 20, med: 5, high: 1 },
+  { name: '18-24', low: 45, med: 12, high: 3 },
+  { name: '25-34', low: 30, med: 25, high: 8 },
+  { name: '35-44', low: 38, med: 15, high: 4 },
+  { name: '45-54', low: 52, med: 10, high: 2 },
+  { name: '55+', low: 20, med: 5, high: 1 },
 ];
 
 const trendData = [
@@ -46,7 +46,7 @@ const trendData = [
   { month: 'Jun', stress: null, anxiety: null, forecast: 25 },
 ];
 
-const COLORS = ['#10b981', '#f59e0b', '#ef4444'];
+const COLORS = ['#14b8a6', '#82a382', '#ef4444'];
 
 export const OrganizationAnalytics: React.FC = () => {
   return (
@@ -94,13 +94,13 @@ export const OrganizationAnalytics: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Risk Distribution by Department */}
+        {/* Risk Distribution by Age Group */}
         <div className="lg:col-span-2 bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
           <div className="flex justify-between items-center mb-8">
-            <h3 className="text-lg font-bold">Risk Stratification by Department</h3>
+            <h3 className="text-lg font-bold">Risk Stratification by Age Group</h3>
             <div className="flex gap-4 text-[10px] font-mono uppercase tracking-widest">
-              <div className="flex items-center gap-1.5"><div className="w-2 h-2 bg-emerald-500 rounded-full"></div> Low</div>
-              <div className="flex items-center gap-1.5"><div className="w-2 h-2 bg-amber-500 rounded-full"></div> Medium</div>
+              <div className="flex items-center gap-1.5"><div className="w-2 h-2 bg-teal-500 rounded-full"></div> Low</div>
+              <div className="flex items-center gap-1.5"><div className="w-2 h-2 bg-sage-400 rounded-full"></div> Medium</div>
               <div className="flex items-center gap-1.5"><div className="w-2 h-2 bg-red-500 rounded-full"></div> High</div>
             </div>
           </div>
@@ -120,8 +120,8 @@ export const OrganizationAnalytics: React.FC = () => {
                   cursor={{ fill: '#f8f9fa' }}
                   contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
                 />
-                <Bar dataKey="low" stackId="a" fill="#10b981" radius={[0, 0, 0, 0]} barSize={20} />
-                <Bar dataKey="med" stackId="a" fill="#f59e0b" radius={[0, 0, 0, 0]} />
+                <Bar dataKey="low" stackId="a" fill="#14b8a6" radius={[0, 0, 0, 0]} barSize={20} />
+                <Bar dataKey="med" stackId="a" fill="#82a382" radius={[0, 0, 0, 0]} />
                 <Bar dataKey="high" stackId="a" fill="#ef4444" radius={[0, 4, 4, 0]} />
               </BarChart>
             </ResponsiveContainer>
@@ -159,8 +159,8 @@ export const OrganizationAnalytics: React.FC = () => {
           </div>
           <div className="space-y-3 mt-4">
             {[
-              { label: 'Low Risk', value: '75%', color: 'bg-emerald-500' },
-              { label: 'Medium Risk', value: '20%', color: 'bg-amber-500' },
+              { label: 'Low Risk', value: '75%', color: 'bg-teal-500' },
+              { label: 'Medium Risk', value: '20%', color: 'bg-sage-400' },
               { label: 'High Risk', value: '5%', color: 'bg-red-500' },
             ].map((item, i) => (
               <div key={i} className="flex items-center justify-between">
@@ -255,13 +255,13 @@ export const OrganizationAnalytics: React.FC = () => {
             </AreaChart>
           </ResponsiveContainer>
         </div>
-        <div className="mt-6 p-4 bg-blue-50 rounded-2xl border border-blue-100 flex items-start gap-4">
-          <div className="p-2 bg-blue-100 rounded-lg">
-            <TrendingUp className="w-4 h-4 text-blue-600" />
+        <div className="mt-6 p-4 bg-teal-50 rounded-2xl border border-teal-100 flex items-start gap-4">
+          <div className="p-2 bg-teal-100 rounded-lg">
+            <TrendingUp className="w-4 h-4 text-teal-600" />
           </div>
           <div>
-            <h4 className="text-sm font-bold text-blue-900">AI Insight: Positive Trajectory</h4>
-            <p className="text-xs text-blue-700/80 leading-relaxed">
+            <h4 className="text-sm font-bold text-teal-900">AI Insight: Positive Trajectory</h4>
+            <p className="text-xs text-teal-700/80 leading-relaxed">
               Based on current intervention participation rates (92%), the model predicts a 15% further reduction in organization-wide stress levels over the next 90 days.
             </p>
           </div>
@@ -282,11 +282,11 @@ export const OrganizationAnalytics: React.FC = () => {
               <div key={i}>
                 <div className="flex justify-between items-end mb-2">
                   <span className="text-sm font-medium">{item.label}</span>
-                  <span className="text-xl font-bold text-emerald-400">{item.value}</span>
+                  <span className="text-xl font-bold text-teal-400">{item.value}</span>
                 </div>
                 <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
                   <div 
-                    className="h-full bg-emerald-500 rounded-full" 
+                    className="h-full bg-teal-500 rounded-full" 
                     style={{ width: item.value.replace('+', '') }}
                   ></div>
                 </div>

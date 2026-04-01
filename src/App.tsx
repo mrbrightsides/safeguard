@@ -12,7 +12,8 @@ import {
   X,
   Activity,
   Heart,
-  AlertTriangle
+  AlertTriangle,
+  LogOut
 } from 'lucide-react';
 import { Dashboard } from './components/Dashboard';
 import { Assessment } from './components/Assessment';
@@ -21,6 +22,7 @@ import { OrganizationAnalytics } from './components/OrganizationAnalytics';
 import { WellnessHub } from './components/WellnessHub';
 import { ConsultModal } from './components/ConsultModal';
 import { MERPModal } from './components/MERPModal';
+import { RoleSelection, UserRole } from './components/RoleSelection';
 import { cn } from './lib/utils';
 
 type View = 'dashboard' | 'assessment' | 'ai-analysis' | 'analytics' | 'wellness' | 'settings';
@@ -35,6 +37,7 @@ interface Notification {
 }
 
 export default function App() {
+  const [role, setRole] = useState<UserRole | null>(null);
   const [activeView, setActiveView] = useState<View>('dashboard');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [pendingAnalysis, setPendingAnalysis] = useState<string | undefined>(undefined);
@@ -79,20 +82,27 @@ export default function App() {
   }, []);
 
   const navItems = [
-    { id: 'dashboard', label: 'Population Health', icon: LayoutDashboard },
-    { id: 'analytics', label: 'Org Analytics', icon: Activity },
-    { id: 'assessment', label: 'Digital Anamnesis', icon: ClipboardCheck },
-    { id: 'ai-analysis', label: 'AI Risk Detector', icon: BrainCircuit },
-    { id: 'wellness', label: 'Wellness Hub', icon: Heart },
-    { id: 'settings', label: 'System Config', icon: Settings },
-  ];
+    { id: 'dashboard', label: 'Population Health', icon: LayoutDashboard, roles: ['corporate'] },
+    { id: 'analytics', label: 'Org Analytics', icon: Activity, roles: ['corporate'] },
+    { id: 'assessment', label: 'Digital Anamnesis', icon: ClipboardCheck, roles: ['personal', 'corporate'] },
+    { id: 'ai-analysis', label: 'AI Risk Detector', icon: BrainCircuit, roles: ['personal', 'corporate'] },
+    { id: 'wellness', label: 'Wellness Hub', icon: Heart, roles: ['personal', 'corporate'] },
+    { id: 'settings', label: 'System Config', icon: Settings, roles: ['corporate'] },
+  ].filter(item => !role || item.roles.includes(role));
+
+  if (!role) {
+    return <RoleSelection onSelect={(selectedRole) => {
+      setRole(selectedRole);
+      setActiveView(selectedRole === 'corporate' ? 'dashboard' : 'assessment');
+    }} />;
+  }
 
   return (
     <div className="min-h-screen bg-[#F8F9FA] text-gray-900 font-sans selection:bg-black selection:text-white">
       {/* Sidebar - Desktop */}
       <aside className="fixed left-0 top-0 h-full w-64 bg-white border-r border-gray-100 hidden lg:flex flex-col z-50">
         <div className="p-8 flex items-center gap-3">
-          <div className="w-10 h-10 bg-black rounded-xl flex items-center justify-center">
+          <div className="w-10 h-10 bg-teal-700 rounded-xl flex items-center justify-center">
             <Shield className="w-6 h-6 text-white" />
           </div>
           <div>
@@ -109,7 +119,7 @@ export default function App() {
               className={cn(
                 "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group",
                 activeView === item.id 
-                  ? "bg-black text-white shadow-lg shadow-black/10" 
+                  ? "bg-teal-600 text-white shadow-lg shadow-teal-600/10" 
                   : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
               )}
             >
@@ -120,12 +130,22 @@ export default function App() {
               <span className="text-sm font-medium">{item.label}</span>
             </button>
           ))}
+          
+          <div className="pt-4 mt-4 border-t border-gray-50">
+            <button
+              onClick={() => setRole(null)}
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-red-50 hover:text-red-600 transition-all duration-200 group"
+            >
+              <LogOut className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
+              <span className="text-sm font-medium">Switch Role</span>
+            </button>
+          </div>
         </nav>
 
         <div className="p-6 border-t border-gray-50">
           <div className="bg-gray-50 p-4 rounded-2xl">
             <div className="flex items-center gap-2 mb-2">
-              <Activity className="w-3 h-3 text-emerald-500" />
+              <Activity className="w-3 h-3 text-teal-500" />
               <span className="text-[10px] font-mono uppercase tracking-widest text-gray-400">System Status</span>
             </div>
             <div className="text-xs font-medium text-gray-600">All Sensors Active</div>
@@ -190,7 +210,7 @@ export default function App() {
                                 "w-2 h-2 mt-1.5 rounded-full shrink-0",
                                 n.type === 'info' ? 'bg-blue-500' :
                                 n.type === 'warning' ? 'bg-amber-500' :
-                                n.type === 'error' ? 'bg-red-500' : 'bg-emerald-500'
+                                n.type === 'error' ? 'bg-red-500' : 'bg-teal-500'
                               )} />
                               <div>
                                 <div className="text-xs font-bold text-gray-900 mb-0.5">{n.title}</div>
@@ -214,7 +234,9 @@ export default function App() {
           <div className="flex items-center gap-3 pl-2">
             <div className="text-right hidden sm:block">
               <div className="text-xs font-bold">Dr. Rifki</div>
-              <div className="text-[10px] font-mono text-gray-400 uppercase tracking-widest">Occupational Health</div>
+              <div className="text-[10px] font-mono text-teal-600 uppercase tracking-widest">
+                {role === 'corporate' ? 'Management View' : 'Personal View'}
+              </div>
             </div>
             <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center border border-gray-200">
               <User className="w-5 h-5 text-gray-400" />
@@ -264,7 +286,7 @@ Please provide a clinical risk stratification and recommendations based on these
                       <div className="font-bold">SATUSEHAT Integration</div>
                       <div className="text-xs text-gray-500">FHIR API v4.0.1</div>
                     </div>
-                    <div className="w-12 h-6 bg-emerald-500 rounded-full relative">
+                    <div className="w-12 h-6 bg-teal-500 rounded-full relative">
                       <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full shadow-sm"></div>
                     </div>
                   </div>
@@ -273,7 +295,7 @@ Please provide a clinical risk stratification and recommendations based on these
                       <div className="font-bold">BPJS Claim Engine</div>
                       <div className="text-xs text-gray-500">Automated ICD Mapping</div>
                     </div>
-                    <div className="w-12 h-6 bg-emerald-500 rounded-full relative">
+                    <div className="w-12 h-6 bg-teal-500 rounded-full relative">
                       <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full shadow-sm"></div>
                     </div>
                   </div>
@@ -320,13 +342,23 @@ Please provide a clinical risk stratification and recommendations based on these
                     }}
                     className={cn(
                       "w-full flex items-center gap-4 p-4 rounded-2xl transition-all",
-                      activeView === item.id ? "bg-black text-white" : "text-gray-500"
+                      activeView === item.id ? "bg-teal-600 text-white" : "text-gray-500"
                     )}
                   >
                     <item.icon className="w-6 h-6" />
                     <span className="font-medium">{item.label}</span>
                   </button>
                 ))}
+                
+                <div className="pt-4 mt-4 border-t border-gray-100">
+                  <button
+                    onClick={() => setRole(null)}
+                    className="w-full flex items-center gap-4 p-4 rounded-2xl text-red-600 hover:bg-red-50 transition-all"
+                  >
+                    <LogOut className="w-6 h-6" />
+                    <span className="font-medium">Switch Role / Landing</span>
+                  </button>
+                </div>
               </nav>
             </motion.div>
           </>

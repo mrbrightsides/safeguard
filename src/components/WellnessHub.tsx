@@ -71,13 +71,13 @@ export const WellnessHub: React.FC = () => {
   return (
     <div className="space-y-8">
       {/* Hero Section */}
-      <div className="relative h-64 rounded-[40px] overflow-hidden bg-black text-white p-12 flex flex-col justify-center">
+      <div className="relative h-64 rounded-[40px] overflow-hidden bg-teal-900 text-white p-12 flex flex-col justify-center">
         <div className="absolute top-0 right-0 p-12 opacity-20">
           <Sparkles className="w-48 h-48" />
         </div>
         <div className="relative z-10 max-w-lg">
           <h2 className="text-4xl font-bold mb-4 tracking-tight">Your SafeSpace</h2>
-          <p className="text-gray-400 text-lg">
+          <p className="text-teal-100/70 text-lg">
             Curated resources to help you maintain mental resilience and emotional balance.
           </p>
         </div>
@@ -92,7 +92,7 @@ export const WellnessHub: React.FC = () => {
             placeholder="Search resources..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 bg-white border border-gray-100 rounded-2xl focus:ring-2 focus:ring-black outline-none transition-all text-sm"
+            className="w-full pl-12 pr-4 py-3 bg-white border border-gray-100 rounded-2xl focus:ring-2 focus:ring-teal-500 outline-none transition-all text-sm"
           />
         </div>
         <div className="flex gap-2 overflow-x-auto pb-2 w-full md:w-auto">
@@ -103,7 +103,7 @@ export const WellnessHub: React.FC = () => {
               className={cn(
                 "px-6 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap",
                 activeCategory === cat 
-                  ? "bg-black text-white shadow-lg shadow-black/10" 
+                  ? "bg-teal-600 text-white shadow-lg shadow-teal-600/10" 
                   : "bg-white text-gray-500 hover:bg-gray-50"
               )}
             >
@@ -149,13 +149,13 @@ export const WellnessHub: React.FC = () => {
                   <Clock className="w-3 h-3" />
                   {resource.duration}
                 </div>
-                <h3 className="font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                <h3 className="font-bold text-gray-900 mb-2 group-hover:text-teal-600 transition-colors">
                   {resource.title}
                 </h3>
                 <p className="text-xs text-gray-500 line-clamp-2 mb-4">
                   {resource.description}
                 </p>
-                <button className="flex items-center gap-2 text-xs font-bold text-black group-hover:gap-3 transition-all">
+                <button className="flex items-center gap-2 text-xs font-bold text-teal-900 group-hover:gap-3 transition-all">
                   Start Now
                   <ChevronRight className="w-4 h-4" />
                 </button>
@@ -166,23 +166,23 @@ export const WellnessHub: React.FC = () => {
       </div>
 
       {/* Featured Exercise */}
-      <div className="bg-emerald-50 rounded-[40px] p-12 flex flex-col md:flex-row items-center gap-12 border border-emerald-100">
+      <div className="bg-sage-50 rounded-[40px] p-12 flex flex-col md:flex-row items-center gap-12 border border-sage-100">
         <div className="flex-1 space-y-6">
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full text-xs font-bold uppercase tracking-widest">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-sage-100 text-sage-700 rounded-full text-xs font-bold uppercase tracking-widest">
             <Wind className="w-4 h-4" />
             Daily Practice
           </div>
-          <h3 className="text-3xl font-bold text-emerald-900">1-Minute De-stress</h3>
-          <p className="text-emerald-700/70 text-lg">
+          <h3 className="text-3xl font-bold text-sage-900">1-Minute De-stress</h3>
+          <p className="text-sage-700/70 text-lg">
             A quick breathing exercise designed for busy professionals to reset their focus between tasks.
           </p>
-          <button className="px-8 py-4 bg-emerald-600 text-white rounded-2xl font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20">
+          <button className="px-8 py-4 bg-sage-600 text-white rounded-2xl font-bold hover:bg-sage-700 transition-all shadow-lg shadow-sage-600/20">
             Start Session
           </button>
         </div>
         <div className="w-64 h-64 bg-white rounded-full flex items-center justify-center shadow-2xl relative">
-          <div className="absolute inset-0 border-8 border-emerald-100 rounded-full animate-ping opacity-20"></div>
-          <Wind className="w-24 h-24 text-emerald-500" />
+          <div className="absolute inset-0 border-8 border-sage-100 rounded-full animate-ping opacity-20"></div>
+          <Wind className="w-24 h-24 text-sage-500" />
         </div>
       </div>
     </div>
