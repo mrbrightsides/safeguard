@@ -246,7 +246,7 @@ export default function App() {
       </header>
 
       {/* Main Content */}
-      <main className="lg:ml-64 p-8">
+      <main className="lg:ml-64 p-8 min-w-0 w-full">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeView}
@@ -254,8 +254,9 @@ export default function App() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
+            className="min-w-0 w-full"
           >
-            {activeView === 'dashboard' && <Dashboard />}
+            {activeView === 'dashboard' && <Dashboard role={role} />}
             {activeView === 'analytics' && <OrganizationAnalytics />}
             {activeView === 'assessment' && (
               <div className="py-12">

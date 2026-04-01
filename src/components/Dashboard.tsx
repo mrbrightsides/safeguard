@@ -3,9 +3,11 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   AreaChart, Area
 } from 'recharts';
-import { Shield, Activity, Users, AlertTriangle, TrendingUp, Heart, Globe, Map, Watch, Zap, Bluetooth } from 'lucide-react';
+import { Shield, Activity, Users, AlertTriangle, TrendingUp, Heart, Globe, Map, Watch, Zap, Bluetooth, Sparkles, Briefcase, User as UserIcon, Coins } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
+
+import { UserRole } from './RoleSelection';
 
 const data = [
   { name: 'Mon', risk: 40, fatigue: 24, stress: 24 },
@@ -26,11 +28,16 @@ const heatmapData = [
   { region: 'Semarang', risk: 'Low', count: 8, color: 'bg-teal-500' },
 ];
 
-export const Dashboard: React.FC = () => {
+interface DashboardProps {
+  role?: UserRole | null;
+}
+
+export const Dashboard: React.FC<DashboardProps> = ({ role }) => {
   const [lang, setLang] = useState<'EN' | 'ID'>('EN');
   const [bpm, setBpm] = useState(72);
   const [hrv, setHrv] = useState(45);
   const [isSyncing, setIsSyncing] = useState(true);
+  const [personalContext, setPersonalContext] = useState<'worker' | 'patient'>('worker');
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -40,12 +47,16 @@ export const Dashboard: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const isPersonal = role === 'personal';
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 overflow-x-hidden">
       {/* Header with Language Toggle */}
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-gray-900">
-          {lang === 'EN' ? 'Population Health Surveillance' : 'Surveilans Kesehatan Populasi'}
+          {isPersonal 
+            ? (lang === 'EN' ? 'Personalized Prevention Roadmap' : 'Peta Jalan Pencegahan Personal')
+            : (lang === 'EN' ? 'Population Health Surveillance' : 'Surveilans Kesehatan Populasi')}
         </h2>
         <button 
           onClick={() => setLang(l => l === 'EN' ? 'ID' : 'EN')}
@@ -55,6 +66,125 @@ export const Dashboard: React.FC = () => {
           {lang}
         </button>
       </div>
+
+      {/* Personalized Prevention Section for Personal Users */}
+      {isPersonal && (
+        <div className="space-y-6">
+          <div className="flex items-center gap-4 p-1 bg-gray-100 rounded-2xl w-fit">
+            <button 
+              onClick={() => setPersonalContext('worker')}
+              className={cn(
+                "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all",
+                personalContext === 'worker' ? "bg-white text-teal-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
+              )}
+            >
+              <Briefcase className="w-3.5 h-3.5" />
+              Worker Mode
+            </button>
+            <button 
+              onClick={() => setPersonalContext('patient')}
+              className={cn(
+                "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all",
+                personalContext === 'patient' ? "bg-white text-teal-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
+              )}
+            >
+              <UserIcon className="w-3.5 h-3.5" />
+              Patient Mode
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2 space-y-6">
+              <div className="bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-teal-50 rounded-xl">
+                      <Sparkles className="w-5 h-5 text-teal-600" />
+                    </div>
+                    <h3 className="font-bold text-lg">
+                      {personalContext === 'worker' ? 'Occupational Health Strategy' : 'Clinical Prevention Roadmap'}
+                    </h3>
+                  </div>
+                  <span className="px-3 py-1 bg-teal-50 text-teal-700 rounded-full text-[10px] font-bold uppercase tracking-widest">
+                    AI Personalized
+                  </span>
+                </div>
+                
+                <div className="space-y-6">
+                  {(personalContext === 'worker' ? [
+                    { title: 'Psychosocial Stressor Index', status: 'Moderate', progress: 65, desc: 'Exposure to workplace conflict and peer-pressure (L3 Prognostic) is currently elevated.' },
+                    { title: 'Occupational Functioning', status: 'Optimal', progress: 88, desc: 'Your productivity and attendance metrics show high resilience against burnout triggers.' },
+                    { title: 'Burnout Resilience', status: 'Improving', progress: 74, desc: 'Recovery markers post-shift indicate better autonomic nervous system regulation.' },
+                  ] : [
+                    { title: 'Symptom Severity (L2 Domain)', status: 'Stable', progress: 82, desc: 'Core symptoms of anxiety (F41) and mood (F32) are within manageable thresholds.' },
+                    { title: 'Social Support Buffer', status: 'Strengthening', progress: 70, desc: 'Quality of social network and peer support (L3) is trending positively.' },
+                    { title: 'Medical Comorbidity Sync', status: 'On Track', progress: 78, desc: 'Physical health markers (Axis III legacy) are synchronized with mental wellness goals.' },
+                  ]).map((item, i) => (
+                    <div key={i} className="group">
+                      <div className="flex justify-between items-end mb-2">
+                        <div>
+                          <div className="text-sm font-bold text-gray-900">{item.title}</div>
+                          <div className="text-[10px] text-gray-400 uppercase font-mono">{item.status}</div>
+                        </div>
+                        <div className="text-sm font-bold text-teal-600">{item.progress}%</div>
+                      </div>
+                      <div className="w-full h-2 bg-gray-50 rounded-full overflow-hidden">
+                        <motion.div 
+                          initial={{ width: 0 }}
+                          animate={{ width: `${item.progress}%` }}
+                          className="h-full bg-teal-500 rounded-full"
+                        />
+                      </div>
+                      <p className="text-xs text-gray-500 mt-2 leading-relaxed">{item.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Personal ROI / Economic Impact */}
+              <div className="bg-emerald-50 p-6 rounded-[32px] border border-emerald-100 flex flex-col sm:flex-row items-center gap-6">
+                <div className="p-4 bg-white rounded-2xl shadow-sm">
+                  <Coins className="w-8 h-8 text-emerald-600" />
+                </div>
+                <div className="flex-1 text-center sm:text-left">
+                  <h4 className="text-sm font-bold text-emerald-900 mb-1">Your Personal Prevention ROI</h4>
+                  <p className="text-xs text-emerald-700/80 mb-3">Estimated annual healthcare savings through proactive wellness (WHO 1:4 ROI Model).</p>
+                  <div className="flex flex-wrap justify-center sm:justify-start gap-4">
+                    <div className="bg-white/50 px-3 py-1.5 rounded-lg border border-emerald-200/50">
+                      <div className="text-[10px] font-mono text-emerald-600 uppercase">Potential Savings</div>
+                      <div className="text-lg font-black text-emerald-900">Rp 24.6M/yr</div>
+                    </div>
+                    <div className="bg-white/50 px-3 py-1.5 rounded-lg border border-emerald-200/50">
+                      <div className="text-[10px] font-mono text-emerald-600 uppercase">Productivity Value</div>
+                      <div className="text-lg font-black text-emerald-900">+Rp 54.4M/yr</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-teal-900 p-8 rounded-[40px] text-white shadow-xl shadow-teal-900/10">
+              <h3 className="text-lg font-bold mb-6">Next Action Steps</h3>
+              <div className="space-y-4">
+                {[
+                  { icon: '📋', text: 'Complete L3 Psychosocial Survey' },
+                  { icon: '🤝', text: 'Schedule Peer Support Check-in' },
+                  { icon: '🧘', text: '15-min Mindfulness Session' },
+                  { icon: '📵', text: 'Digital Detox (1hr before bed)' },
+                ].map((step, i) => (
+                  <div key={i} className="flex items-center gap-3 p-3 bg-teal-800/50 rounded-2xl border border-teal-700/50 hover:bg-teal-800 transition-colors cursor-pointer">
+                    <span className="text-xl">{step.icon}</span>
+                    <span className="text-xs font-medium">{step.text}</span>
+                  </div>
+                ))}
+              </div>
+              <button className="w-full mt-8 py-4 bg-white text-teal-900 rounded-2xl font-bold text-sm hover:bg-gray-100 transition-all">
+                View Full Roadmap
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Wearable Sync & Stats Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -231,14 +361,14 @@ export const Dashboard: React.FC = () => {
 
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+        <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm min-w-0">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-sm font-mono uppercase tracking-widest text-gray-400">
-              {lang === 'EN' ? 'Psychosocial Risk Trend' : 'Tren Risiko Psikososial'}
+              {lang === 'EN' ? 'Psychosocial Risk Trend' : 'Risiko Psikososial'}
             </h3>
             <TrendingUp className="w-4 h-4 text-gray-300" />
           </div>
-          <div className="h-[300px]">
+          <div className="h-[300px] relative min-w-0">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={data}>
                 <defs>
@@ -275,14 +405,14 @@ export const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+        <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm min-w-0">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-sm font-mono uppercase tracking-widest text-gray-400">
               {lang === 'EN' ? 'Fatigue vs Stress Mapping' : 'Pemetaan Kelelahan vs Stres'}
             </h3>
             <Activity className="w-4 h-4 text-gray-300" />
           </div>
-          <div className="h-[300px]">
+          <div className="h-[300px] relative min-w-0">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
