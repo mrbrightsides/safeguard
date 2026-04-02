@@ -16,7 +16,9 @@ import {
   LogOut,
   FileText,
   Info,
-  ShieldCheck
+  ShieldCheck,
+  ChevronRight,
+  Globe
 } from 'lucide-react';
 import { Dashboard } from './components/Dashboard';
 import { Assessment } from './components/Assessment';
@@ -348,6 +350,27 @@ Please provide a clinical risk stratification and recommendations based on these
                     <div className="w-12 h-6 bg-teal-500 rounded-full relative">
                       <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full shadow-sm"></div>
                     </div>
+                  </div>
+
+                  <div className="pt-6 border-t border-gray-100">
+                    <h4 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">Developer Resources</h4>
+                    <a 
+                      href="https://safeguard-hsil.vercel.app/api-docs/" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-between p-4 bg-teal-50 border border-teal-100 rounded-2xl group hover:bg-teal-100 transition-all"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="p-3 bg-teal-600 rounded-xl text-white group-hover:scale-110 transition-transform">
+                          <Globe className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <div className="font-bold text-teal-900">Interactive API Docs</div>
+                          <div className="text-xs text-teal-700">Swagger OAS 3.0 Specification</div>
+                        </div>
+                      </div>
+                      <ChevronRight className="w-5 h-5 text-teal-400 group-hover:translate-x-1 transition-transform" />
+                    </a>
                   </div>
                 </div>
               </div>
