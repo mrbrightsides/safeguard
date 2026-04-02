@@ -92,7 +92,7 @@ export const Assessment: React.FC<AssessmentProps> = ({ onComplete }) => {
 
   if (isTransitioning) {
     return (
-      <div className="max-w-2xl mx-auto p-12 bg-white rounded-3xl shadow-xl border border-gray-100 text-center space-y-8">
+      <div className="w-full max-w-2xl p-12 bg-white rounded-3xl shadow-xl border border-gray-100 text-center space-y-8">
         <div className="relative w-24 h-24 mx-auto">
           <div className="absolute inset-0 border-4 border-teal-100 rounded-full"></div>
           <motion.div 
@@ -117,7 +117,7 @@ export const Assessment: React.FC<AssessmentProps> = ({ onComplete }) => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-8 bg-white rounded-3xl shadow-xl border border-gray-100">
+    <div className="w-full max-w-2xl p-8 bg-white rounded-3xl shadow-xl border border-gray-100">
       <div className="mb-8">
         <div className="flex justify-between items-center mb-2">
           <div className="flex flex-col">

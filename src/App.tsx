@@ -13,19 +13,21 @@ import {
   Activity,
   Heart,
   AlertTriangle,
-  LogOut
+  LogOut,
+  FileText
 } from 'lucide-react';
 import { Dashboard } from './components/Dashboard';
 import { Assessment } from './components/Assessment';
 import { AIAnalysis } from './components/AIAnalysis';
 import { OrganizationAnalytics } from './components/OrganizationAnalytics';
 import { WellnessHub } from './components/WellnessHub';
+import { Whitepaper } from './components/Whitepaper';
 import { ConsultModal } from './components/ConsultModal';
 import { MERPModal } from './components/MERPModal';
 import { RoleSelection, UserRole } from './components/RoleSelection';
 import { cn } from './lib/utils';
 
-type View = 'dashboard' | 'assessment' | 'ai-analysis' | 'analytics' | 'wellness' | 'settings';
+type View = 'dashboard' | 'assessment' | 'ai-analysis' | 'analytics' | 'wellness' | 'settings' | 'whitepaper';
 
 interface Notification {
   id: string;
@@ -131,7 +133,19 @@ export default function App() {
             </button>
           ))}
           
-          <div className="pt-4 mt-4 border-t border-gray-50">
+          <div className="pt-4 mt-4 border-t border-gray-50 space-y-1">
+            <button
+              onClick={() => setActiveView('whitepaper')}
+              className={cn(
+                "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group",
+                activeView === 'whitepaper' 
+                  ? "bg-black text-white shadow-lg" 
+                  : "text-teal-700 bg-teal-50 hover:bg-teal-100"
+              )}
+            >
+              <FileText className="w-5 h-5" />
+              <span className="text-sm font-bold">Strategic Whitepaper</span>
+            </button>
             <button
               onClick={() => setRole(null)}
               className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-red-50 hover:text-red-600 transition-all duration-200 group"
@@ -278,6 +292,7 @@ Please provide a clinical risk stratification and recommendations based on these
               />
             )}
             {activeView === 'wellness' && <WellnessHub />}
+            {activeView === 'whitepaper' && <Whitepaper onBack={() => setActiveView(role === 'corporate' ? 'dashboard' : 'assessment')} />}
             {activeView === 'settings' && (
               <div className="max-w-2xl bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
                 <h3 className="text-xl font-bold mb-6">System Configuration</h3>
