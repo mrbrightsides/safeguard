@@ -18,7 +18,8 @@ import {
   Info,
   ShieldCheck,
   ChevronRight,
-  Globe
+  Globe,
+  Github
 } from 'lucide-react';
 import { Dashboard } from './components/Dashboard';
 import { Assessment } from './components/Assessment';
@@ -215,6 +216,15 @@ export default function App() {
         </div>
 
         <div className="flex items-center gap-4">
+          <a 
+            href="https://github.com/mrbrightsides/safeguard" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="p-2 text-gray-400 hover:text-black transition-colors"
+            title="View Source on GitHub"
+          >
+            <Github className="w-5 h-5" />
+          </a>
           <div className="relative">
             <button 
               onClick={() => {
