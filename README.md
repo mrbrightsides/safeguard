@@ -2,6 +2,13 @@
 
 SafeGuard is an enterprise-grade psychosocial health surveillance system that integrates advanced **Safespace AI/ML** prognostic models with robust **Health Economic Evaluation (HEE)**. Designed for large organizations and healthcare providers, it monitors, detects, and mitigates mental health burdens using WHO-standard ROI modeling and ICD-10 clinical frameworks.
 
+## 🛡️ The SAFE Framework
+SafeGuard operates on the **SAFE** mnemonic to ensure comprehensive mental health surveillance:
+- **S**ense: Real-time biometric and digital anamnesis data collection.
+- **A**nalyze: AI-driven risk stratification and prognostic modeling.
+- **F**lag: Automated alerting for Level 0-L2 clinical risks.
+- **E**ngage: Personalized wellness roadmaps and clinical escalation.
+
 ---
 
 ## 🚀 Key Features
