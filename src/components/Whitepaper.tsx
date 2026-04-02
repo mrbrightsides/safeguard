@@ -15,6 +15,7 @@ import {
   Scale,
   Building2
 } from 'lucide-react';
+import { jsPDF } from 'jspdf';
 import { cn } from '../lib/utils';
 
 interface WhitepaperProps {
@@ -22,6 +23,88 @@ interface WhitepaperProps {
 }
 
 export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
+  const downloadWhitepaper = () => {
+    const doc = new jsPDF();
+    const timestamp = new Date().toLocaleString();
+    
+    // Title
+    doc.setFontSize(22);
+    doc.setTextColor(13, 148, 136); // Teal-600
+    doc.text('SafeGuard Strategic Whitepaper', 20, 30);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(150, 150, 150);
+    doc.text(`v1.0 / Generated: ${timestamp}`, 20, 38);
+    
+    // Line
+    doc.setDrawColor(230, 230, 230);
+    doc.line(20, 45, 190, 45);
+    
+    // Section 1: Executive Summary
+    doc.setFontSize(16);
+    doc.setTextColor(0, 0, 0);
+    doc.text('1. Executive Summary', 20, 60);
+    
+    doc.setFontSize(11);
+    doc.setTextColor(80, 80, 80);
+    const summary = 'SafeGuard AI is an inclusive psychosocial hazard intelligence system. It detects early warning signals of bullying, burnout, and organizational dysfunction, mapping them into clinical, occupational, and legal risk layers.';
+    const splitSummary = doc.splitTextToSize(summary, 170);
+    doc.text(splitSummary, 20, 70);
+    
+    // Section 2: Global & National Burden
+    doc.setFontSize(16);
+    doc.setTextColor(0, 0, 0);
+    doc.text('2. Global & National Burden', 20, 95);
+    
+    doc.setFontSize(11);
+    doc.setTextColor(80, 80, 80);
+    doc.text('- Global Suicide: 727,000 deaths/year.', 25, 105);
+    doc.text('- Workplace Harassment: 17.9% of global workers.', 25, 112);
+    doc.text('- Indonesia School Signal: 36.31% students potentially bullied.', 25, 119);
+    doc.text('- Indonesia Youth: 61% with depression had suicidal thoughts.', 25, 126);
+    
+    // Section 3: Economic Evaluation (ROI)
+    doc.setFontSize(16);
+    doc.setTextColor(0, 0, 0);
+    doc.text('3. Economic Evaluation (ROI)', 20, 145);
+    
+    doc.setFontSize(11);
+    doc.setTextColor(80, 80, 80);
+    doc.text('- WHO ROI: $1 invested -> $4 return.', 25, 155);
+    doc.text('- INA-CBG Baseline: Rp12.4M per admission.', 25, 162);
+    doc.text('- JISDOR Rate: Rp17,002 (1 April 2026).', 25, 169);
+    
+    // Section 4: The SAFE Framework
+    doc.setFontSize(16);
+    doc.setTextColor(0, 0, 0);
+    doc.text('4. The SAFE Framework', 20, 185);
+    
+    doc.setFontSize(11);
+    doc.setTextColor(80, 80, 80);
+    doc.text('- Sense: Real-time biometric and digital anamnesis data collection.', 25, 195);
+    doc.text('- Analyze: AI-driven risk stratification and prognostic modeling.', 25, 202);
+    doc.text('- Flag: Automated alerting for Level 0-L2 clinical risks.', 25, 209);
+    doc.text('- Engage: Personalized wellness roadmaps and clinical escalation.', 25, 216);
+    
+    // Section 5: AI/ML Mitigations
+    doc.setFontSize(16);
+    doc.setTextColor(0, 0, 0);
+    doc.text('5. AI/ML Mitigations', 20, 235);
+    
+    doc.setFontSize(11);
+    doc.setTextColor(80, 80, 80);
+    doc.text('- AI Hallucination -> Human-in-the-loop validation.', 25, 245);
+    doc.text('- Data Bias -> Multi-source data diversity.', 25, 252);
+    doc.text('- Privacy Risk -> End-to-end encryption.', 25, 259);
+    
+    // Footer
+    doc.setFontSize(10);
+    doc.setTextColor(180, 180, 180);
+    doc.text('Developed for HSIL Hackathon 2026. All rights reserved.', 20, 285);
+    
+    doc.save(`SafeGuard_Strategic_Whitepaper_${new Date().getTime()}.pdf`);
+  };
+
   const sections = [
     { id: 'executive', title: 'Executive Summary', icon: FileText },
     { id: 'problem', title: 'Global & National Burden', icon: Globe },
@@ -44,9 +127,12 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
         </button>
         <div className="flex items-center gap-4">
           <span className="text-[10px] font-mono text-gray-400 uppercase tracking-widest">v1.0 / April 2026</span>
-          <button className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-xl text-xs font-bold hover:bg-gray-800 transition-all">
+          <button 
+            onClick={downloadWhitepaper}
+            className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-xl text-xs font-bold hover:bg-gray-800 transition-all"
+          >
             <Download className="w-4 h-4" />
-            Download PDF
+            Download Whitepaper
           </button>
         </div>
       </div>
