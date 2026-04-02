@@ -1,213 +1,150 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { AlertTriangle, X, Shield, Phone, MapPin, Send, CheckCircle2 } from 'lucide-react';
-import { cn } from '../lib/utils';
+import { 
+  AlertTriangle, 
+  Phone, 
+  MapPin, 
+  Navigation, 
+  Shield, 
+  X, 
+  Activity,
+  Loader2,
+  CheckCircle2
+} from 'lucide-react';
 
 interface MERPModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onTrigger: (data: any) => void;
+  onTrigger?: (data: { location: string }) => void;
 }
 
 export const MERPModal: React.FC<MERPModalProps> = ({ isOpen, onClose, onTrigger }) => {
-  const [step, setStep] = useState<'confirm' | 'details' | 'success'>('confirm');
-  const [location, setLocation] = useState('Main Office - Floor 4, Area B');
-  const [isLocating, setIsLocating] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'triggering' | 'active'>('idle');
+  const [location, setLocation] = useState<string>('Detecting...');
 
   useEffect(() => {
-    if (!isOpen) {
-      setStep('confirm');
+    if (isOpen) {
+      // Simulate GPS detection
+      setTimeout(() => setLocation('RFCC Unit - Sector 4 (Lat: -6.234, Long: 106.845)'), 1500);
+    } else {
+      setStatus('idle');
+      setLocation('Detecting...');
     }
   }, [isOpen]);
 
-  const handleConfirm = () => {
-    setStep('details');
-  };
-
-  const handleTrigger = () => {
-    onTrigger({
-      type: 'Psychosocial Emergency',
-      location: location,
-      timestamp: new Date().toISOString(),
-      status: 'Active'
-    });
-    setStep('success');
+  const triggerEmergency = () => {
+    setStatus('triggering');
+    setTimeout(() => {
+      setStatus('active');
+      const msg = new SpeechSynthesisUtterance("Emergency Protocol Activated. MERP Team notified. Stay where you are, help is on the way.");
+      window.speechSynthesis.speak(msg);
+      if (onTrigger) {
+        onTrigger({ location });
+      }
+    }, 2000);
   };
 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
-          <motion.div
+        <>
+          <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 bg-red-950/40 backdrop-blur-md z-[100]"
           />
-          
-          <motion.div
+          <motion.div 
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            className="relative w-full max-w-lg bg-white rounded-[32px] shadow-2xl overflow-hidden"
+            className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-white rounded-[40px] shadow-2xl z-[110] overflow-hidden border-4 border-red-600"
           >
-            {/* Header */}
-            <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-red-50">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-red-600 rounded-xl">
-                  <AlertTriangle className="w-5 h-5 text-white" />
+            <div className="bg-red-600 p-8 text-white flex justify-between items-center">
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-white/20 rounded-2xl animate-pulse">
+                  <AlertTriangle className="w-8 h-8 text-white" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-red-900">MERP Emergency</h3>
-                  <p className="text-[10px] font-mono text-red-600 uppercase tracking-widest">Medical Emergency Response Protocol</p>
+                  <h2 className="text-2xl font-black uppercase tracking-tighter">MERP Emergency</h2>
+                  <p className="text-sm text-red-100 font-medium">Medical Emergency Response Plan Active</p>
                 </div>
               </div>
-              <button 
-                onClick={onClose}
-                className="p-2 hover:bg-red-100 rounded-full transition-colors text-red-900"
-              >
-                <X className="w-5 h-5" />
+              <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-full transition-colors">
+                <X className="w-6 h-6" />
               </button>
             </div>
 
-            <div className="p-8">
-              {step === 'confirm' && (
+            <div className="p-8 space-y-8">
+              {status === 'idle' && (
                 <div className="space-y-6 text-center">
-                  <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <AlertTriangle className="w-10 h-10 text-red-600 animate-pulse" />
+                  <div className="p-6 bg-red-50 rounded-3xl border border-red-100">
+                    <p className="text-red-900 font-bold text-lg mb-2">Are you in immediate danger?</p>
+                    <p className="text-sm text-red-600">Triggering this will alert the refinery medical team and broadcast your GPS location.</p>
                   </div>
-                  <div>
-                    <h4 className="text-xl font-bold text-gray-900 mb-2">Trigger Emergency Response?</h4>
-                    <p className="text-gray-500 text-sm">
-                      This will immediately notify the on-site medical team, HR emergency contacts, and security personnel.
-                    </p>
-                  </div>
-                  <div className="flex flex-col gap-3">
-                    <button 
-                      onClick={handleConfirm}
-                      className="w-full py-4 bg-red-600 text-white rounded-2xl font-bold hover:bg-red-700 transition-all shadow-lg shadow-red-600/20"
-                    >
-                      Yes, Trigger Protocol
-                    </button>
-                    
-                    <div className="grid grid-cols-2 gap-2 mt-2">
-                      <a 
-                        href="tel:119"
-                        className="flex items-center justify-center gap-2 py-3 bg-white border border-red-100 text-red-600 rounded-xl text-xs font-bold hover:bg-red-50 transition-all"
-                      >
-                        <Phone className="w-3 h-3" />
-                        Call 119 (SPGDT)
-                      </a>
-                      <a 
-                        href="tel:112"
-                        className="flex items-center justify-center gap-2 py-3 bg-white border border-red-100 text-red-600 rounded-xl text-xs font-bold hover:bg-red-50 transition-all"
-                      >
-                        <Phone className="w-3 h-3" />
-                        Call 112 (Emergency)
-                      </a>
-                    </div>
-                    
-                    <div className="grid grid-cols-1 gap-2">
-                      <a 
-                        href="https://jaksehat.jakarta.go.id/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2 py-3 bg-white border border-gray-100 text-gray-600 rounded-xl text-xs font-bold hover:bg-gray-50 transition-all"
-                      >
-                        <Shield className="w-3 h-3" />
-                        JakSehat Portal
-                      </a>
-                    </div>
-
-                    <button 
-                      onClick={onClose}
-                      className="w-full py-4 bg-gray-100 text-gray-600 rounded-2xl font-bold hover:bg-gray-200 transition-all"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {step === 'details' && (
-                <div className="space-y-6">
-                  <div className="space-y-4">
-                    <label className="block">
-                      <span className="text-xs font-mono text-gray-400 uppercase tracking-widest mb-2 block">Current Location</span>
-                      <div className="relative">
-                        <input 
-                          type="text" 
-                          value={location}
-                          onChange={(e) => setLocation(e.target.value)}
-                          className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl text-sm focus:ring-2 focus:ring-red-500 outline-none transition-all"
-                        />
-                        <button 
-                          onClick={() => {
-                            setIsLocating(true);
-                            setTimeout(() => setIsLocating(false), 1500);
-                          }}
-                          className="absolute right-2 top-2 p-1.5 bg-white border border-gray-100 rounded-lg text-gray-400 hover:text-red-600 transition-colors"
-                        >
-                          <MapPin className={cn("w-4 h-4", isLocating && "animate-bounce text-red-600")} />
-                        </button>
-                      </div>
-                    </label>
-
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                        <div className="flex items-center gap-2 mb-1">
-                          <Shield className="w-3 h-3 text-emerald-500" />
-                          <span className="text-[10px] font-mono text-gray-400 uppercase">Security</span>
-                        </div>
-                        <div className="text-xs font-bold">Alert Sent</div>
-                      </div>
-                      <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                        <div className="flex items-center gap-2 mb-1">
-                          <Phone className="w-3 h-3 text-blue-500" />
-                          <span className="text-[10px] font-mono text-gray-400 uppercase">Medical Team</span>
-                        </div>
-                        <div className="text-xs font-bold">Standby</div>
-                      </div>
-                    </div>
+                  
+                  <div className="flex items-center justify-center gap-4 text-sm text-gray-500 font-mono">
+                    <MapPin className="w-4 h-4 text-red-500" />
+                    {location}
                   </div>
 
                   <button 
-                    onClick={handleTrigger}
-                    className="w-full py-4 bg-black text-white rounded-2xl font-bold hover:bg-gray-800 transition-all flex items-center justify-center gap-2"
+                    onClick={triggerEmergency}
+                    className="w-full py-6 bg-red-600 text-white rounded-3xl font-black text-xl uppercase tracking-widest hover:bg-red-700 transition-all shadow-xl shadow-red-600/20 active:scale-95"
                   >
-                    <Send className="w-4 h-4" />
-                    Send Emergency Signal
+                    Trigger SOS
                   </button>
                 </div>
               )}
 
-              {step === 'success' && (
-                <div className="space-y-6 text-center py-4">
-                  <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <CheckCircle2 className="w-10 h-10 text-emerald-600" />
+              {status === 'triggering' && (
+                <div className="py-12 flex flex-col items-center justify-center space-y-6">
+                  <Loader2 className="w-16 h-16 text-red-600 animate-spin" />
+                  <div className="text-center">
+                    <h3 className="text-xl font-bold">Broadcasting Signal...</h3>
+                    <p className="text-sm text-gray-500">Connecting to MERP Satellite & Local Security</p>
                   </div>
-                  <div>
-                    <h4 className="text-xl font-bold text-gray-900 mb-2">Protocol Activated</h4>
-                    <p className="text-gray-500 text-sm">
-                      The emergency response team has been dispatched to your location. Please stay where you are.
-                    </p>
+                </div>
+              )}
+
+              {status === 'active' && (
+                <div className="space-y-8">
+                  <div className="flex flex-col items-center text-center space-y-4">
+                    <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center">
+                      <CheckCircle2 className="w-10 h-10 text-emerald-600" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-bold text-emerald-900">Assistance Dispatched</h3>
+                      <p className="text-sm text-emerald-700 font-medium">ETA: 4 Minutes 20 Seconds</p>
+                    </div>
                   </div>
-                  <div className="p-4 bg-emerald-50 rounded-2xl border border-emerald-100 text-left">
-                    <div className="text-[10px] font-mono text-emerald-600 uppercase tracking-widest mb-2">Estimated Arrival</div>
-                    <div className="text-lg font-bold text-emerald-900">3 - 5 Minutes</div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                      <div className="text-[10px] font-mono text-gray-400 uppercase mb-1">First Responder</div>
+                      <div className="text-sm font-bold">Unit 4 Medical Team</div>
+                    </div>
+                    <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                      <div className="text-[10px] font-mono text-gray-400 uppercase mb-1">Status</div>
+                      <div className="text-sm font-bold text-emerald-600">En Route</div>
+                    </div>
                   </div>
-                  <button 
-                    onClick={onClose}
-                    className="w-full py-4 bg-gray-900 text-white rounded-2xl font-bold hover:bg-black transition-all"
-                  >
-                    Close
-                  </button>
+
+                  <div className="p-6 bg-blue-50 rounded-3xl border border-blue-100 flex items-center gap-4">
+                    <div className="p-3 bg-blue-600 rounded-xl">
+                      <Phone className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <div className="text-sm font-bold text-blue-900">Direct Link Open</div>
+                      <div className="text-xs text-blue-700">Medical officer is monitoring your audio.</div>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
           </motion.div>
-        </div>
+        </>
       )}
     </AnimatePresence>
   );

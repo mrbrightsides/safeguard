@@ -6,9 +6,10 @@ import { cn } from '../lib/utils';
 
 interface AssessmentProps {
   onComplete: (scores: Record<string, number>) => void;
+  isAccessibilityMode?: boolean;
 }
 
-export const Assessment: React.FC<AssessmentProps> = ({ onComplete }) => {
+export const Assessment: React.FC<AssessmentProps> = ({ onComplete, isAccessibilityMode }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [isTtsEnabled, setIsTtsEnabled] = useState(false);
@@ -117,7 +118,10 @@ export const Assessment: React.FC<AssessmentProps> = ({ onComplete }) => {
   }
 
   return (
-    <div className="w-full max-w-2xl p-8 bg-white rounded-3xl shadow-xl border border-gray-100">
+    <div className={cn(
+      "w-full max-w-2xl p-8 rounded-3xl border transition-all",
+      isAccessibilityMode ? "bg-black border-gray-800" : "bg-white border-gray-100 shadow-xl"
+    )}>
       <div className="mb-8">
         <div className="flex justify-between items-center mb-2">
           <div className="flex flex-col">
@@ -155,11 +159,17 @@ export const Assessment: React.FC<AssessmentProps> = ({ onComplete }) => {
           exit={{ opacity: 0, x: -20 }}
           className="min-h-[200px]"
         >
-          <h2 className="text-2xl font-serif italic text-gray-900 mb-8 leading-tight">
+          <h2 className={cn(
+            "font-serif italic mb-8 leading-tight transition-all",
+            isAccessibilityMode ? "text-4xl text-white" : "text-2xl text-gray-900"
+          )}>
             "{currentQuestion.text}"
           </h2>
 
-          <div className="grid gap-3">
+          <div className={cn(
+            "grid gap-3",
+            isAccessibilityMode ? "gap-6" : "gap-3"
+          )}>
             {[
               { label: "Did not apply to me at all", value: 0 },
               { label: "Applied to me to some degree", value: 1 },
@@ -170,9 +180,10 @@ export const Assessment: React.FC<AssessmentProps> = ({ onComplete }) => {
                 key={option.value}
                 onClick={() => handleAnswer(option.value)}
                 className={cn(
-                  "w-full p-4 text-left rounded-xl border transition-all duration-200 group",
-                  "hover:border-teal-600 hover:bg-gray-50",
-                  "border-gray-200 text-gray-600"
+                  "w-full text-left rounded-xl border transition-all duration-200 group",
+                  isAccessibilityMode 
+                    ? "p-8 border-gray-700 bg-gray-900 text-white text-xl hover:border-teal-500" 
+                    : "p-4 border-gray-200 text-gray-600 hover:border-teal-600 hover:bg-gray-50"
                 )}
               >
                 <div className="flex items-center justify-between">

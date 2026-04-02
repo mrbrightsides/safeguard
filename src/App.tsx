@@ -14,7 +14,9 @@ import {
   Heart,
   AlertTriangle,
   LogOut,
-  FileText
+  FileText,
+  Info,
+  ShieldCheck
 } from 'lucide-react';
 import { Dashboard } from './components/Dashboard';
 import { Assessment } from './components/Assessment';
@@ -22,12 +24,13 @@ import { AIAnalysis } from './components/AIAnalysis';
 import { OrganizationAnalytics } from './components/OrganizationAnalytics';
 import { WellnessHub } from './components/WellnessHub';
 import { Whitepaper } from './components/Whitepaper';
+import { About } from './components/About';
 import { ConsultModal } from './components/ConsultModal';
 import { MERPModal } from './components/MERPModal';
 import { RoleSelection, UserRole } from './components/RoleSelection';
 import { cn } from './lib/utils';
 
-type View = 'dashboard' | 'assessment' | 'ai-analysis' | 'analytics' | 'wellness' | 'settings' | 'whitepaper';
+type View = 'dashboard' | 'assessment' | 'ai-analysis' | 'analytics' | 'wellness' | 'settings' | 'whitepaper' | 'about';
 
 interface Notification {
   id: string;
@@ -46,6 +49,7 @@ export default function App() {
   const [showGlobalConsultModal, setShowGlobalConsultModal] = useState(false);
   const [showMERPModal, setShowMERPModal] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [isAccessibilityMode, setIsAccessibilityMode] = useState(false);
   const [notifications, setNotifications] = useState<Notification[]>([
     { id: '1', title: 'System Update', message: 'SafeGuard v2.4.0 is now live.', time: '2h ago', type: 'info', read: false },
     { id: '2', title: 'Risk Alert', message: 'High stress spike in Engineering Dept.', time: '5h ago', type: 'warning', read: false },
@@ -89,8 +93,17 @@ export default function App() {
     { id: 'assessment', label: 'Digital Anamnesis', icon: ClipboardCheck, roles: ['personal', 'corporate'] },
     { id: 'ai-analysis', label: 'AI Risk Detector', icon: BrainCircuit, roles: ['personal', 'corporate'] },
     { id: 'wellness', label: 'Wellness Hub', icon: Heart, roles: ['personal', 'corporate'] },
+    { id: 'about', label: 'About SafeGuard', icon: Info, roles: ['personal', 'corporate'] },
     { id: 'settings', label: 'System Config', icon: Settings, roles: ['corporate'] },
   ].filter(item => !role || item.roles.includes(role));
+
+  const toggleAccessibility = () => {
+    setIsAccessibilityMode(!isAccessibilityMode);
+    if (!isAccessibilityMode) {
+      const msg = new SpeechSynthesisUtterance("Accessibility Mode Activated. Interface optimized for high contrast and simplified interaction.");
+      window.speechSynthesis.speak(msg);
+    }
+  };
 
   if (!role) {
     return <RoleSelection onSelect={(selectedRole) => {
@@ -100,9 +113,15 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8F9FA] text-gray-900 font-sans selection:bg-black selection:text-white">
+    <div className={cn(
+      "min-h-screen transition-colors duration-300",
+      isAccessibilityMode ? "bg-black text-white selection:bg-teal-500" : "bg-[#F8F9FA] text-gray-900 selection:bg-black selection:text-white"
+    )}>
       {/* Sidebar - Desktop */}
-      <aside className="fixed left-0 top-0 h-full w-64 bg-white border-r border-gray-100 hidden lg:flex flex-col z-50">
+      <aside className={cn(
+        "fixed left-0 top-0 h-full w-64 border-r hidden lg:flex flex-col z-50 transition-colors",
+        isAccessibilityMode ? "bg-black border-gray-800" : "bg-white border-gray-100"
+      )}>
         <div className="p-8 flex items-center gap-3">
           <div className="w-10 h-10 bg-teal-700 rounded-xl flex items-center justify-center">
             <Shield className="w-6 h-6 text-white" />
@@ -113,7 +132,7 @@ export default function App() {
           </div>
         </div>
 
-        <nav className="flex-1 px-4 py-4 space-y-1">
+        <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto custom-scrollbar">
           {navItems.map((item) => (
             <button
               key={item.id}
@@ -134,6 +153,18 @@ export default function App() {
           ))}
           
           <div className="pt-4 mt-4 border-t border-gray-50 space-y-1">
+            <button
+              onClick={toggleAccessibility}
+              className={cn(
+                "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group",
+                isAccessibilityMode 
+                  ? "bg-teal-500 text-black font-bold" 
+                  : "text-gray-500 hover:bg-gray-50"
+              )}
+            >
+              <ShieldCheck className="w-5 h-5" />
+              <span className="text-sm font-medium">Accessibility Mode</span>
+            </button>
             <button
               onClick={() => setActiveView('whitepaper')}
               className={cn(
@@ -270,11 +301,13 @@ export default function App() {
             transition={{ duration: 0.2 }}
             className="min-w-0 w-full"
           >
-            {activeView === 'dashboard' && <Dashboard role={role} />}
+            {activeView === 'dashboard' && <Dashboard role={role} isAccessibilityMode={isAccessibilityMode} />}
             {activeView === 'analytics' && <OrganizationAnalytics />}
             {activeView === 'assessment' && (
               <div className="py-12">
-                <Assessment onComplete={(scores) => {
+                <Assessment 
+                  isAccessibilityMode={isAccessibilityMode}
+                  onComplete={(scores) => {
                   const summary = `DASS-21 Clinical Assessment Results: 
 - Depression Score: ${scores.depression}
 - Anxiety Score: ${scores.anxiety}
@@ -292,6 +325,7 @@ Please provide a clinical risk stratification and recommendations based on these
               />
             )}
             {activeView === 'wellness' && <WellnessHub />}
+            {activeView === 'about' && <About onGetStarted={() => setActiveView('assessment')} />}
             {activeView === 'whitepaper' && <Whitepaper onBack={() => setActiveView(role === 'corporate' ? 'dashboard' : 'assessment')} />}
             {activeView === 'settings' && (
               <div className="max-w-2xl bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
@@ -337,18 +371,18 @@ Please provide a clinical risk stratification and recommendations based on these
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
-              className="fixed left-0 top-0 h-full w-72 bg-white z-[70] lg:hidden p-8"
+              className="fixed left-0 top-0 h-full w-72 bg-white z-[70] lg:hidden p-8 flex flex-col"
             >
-              <div className="flex justify-between items-center mb-12">
+              <div className="flex justify-between items-center mb-12 shrink-0">
                 <div className="flex items-center gap-3">
-                  <Shield className="w-8 h-8" />
-                  <span className="font-bold text-xl">SafeGuard</span>
+                  <Shield className="w-8 h-8 text-teal-700" />
+                  <span className="font-bold text-xl tracking-tighter">SafeGuard</span>
                 </div>
                 <button onClick={() => setIsMobileMenuOpen(false)}>
-                  <X className="w-6 h-6" />
+                  <X className="w-6 h-6 text-gray-400" />
                 </button>
               </div>
-              <nav className="space-y-4">
+              <nav className="space-y-4 overflow-y-auto flex-1 pr-2 custom-scrollbar">
                 {navItems.map((item) => (
                   <button
                     key={item.id}

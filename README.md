@@ -1,5 +1,20 @@
 # SafeGuard: Safespace AI/ML Prognostic & Health Economic Evaluation
 
+<div align="center">
+
+[![HSIL Hackathon 2026](https://img.shields.io/badge/HSIL_Hackathon-2026-red?style=for-the-badge)](https://hsil.id/)
+[![AI-Powered](https://img.shields.io/badge/AI--Powered-Teal?style=for-the-badge&logo=google-gemini&logoColor=white)](https://ai.google.dev/)
+[![Accessibility-First](https://img.shields.io/badge/Accessibility--First-Blue?style=for-the-badge&logo=accessibility&logoColor=white)](https://www.w3.org/WAI/standards-guidelines/wcag/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+
+[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![Motion](https://img.shields.io/badge/Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white)](https://motion.dev/)
+[![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
+
+</div>
+
 SafeGuard is an enterprise-grade psychosocial health surveillance system that integrates advanced **Safespace AI/ML** prognostic models with robust **Health Economic Evaluation (HEE)**. Designed for large organizations and healthcare providers, it monitors, detects, and mitigates mental health burdens using WHO-standard ROI modeling and ICD-10 clinical frameworks.
 
 ## 🛡️ The SAFE Framework
@@ -36,20 +51,27 @@ SafeGuard operates on the **SAFE** mnemonic to ensure comprehensive mental healt
 *   **DASS-21 & SRQ-20 Integration**: Comprehensive psychosocial self-assessment for AI-driven risk detection.
 *   **Live Biometric Surveillance**: Real-time BPM and HRV (Heart Rate Variability) sync via Bluetooth simulation to monitor autonomic nervous system regulation.
 
-### 6. **Mental Emergency Response Protocol (MERP)**
-*   **L0 Crisis Management**: Standardized protocols for immediate escalation of Level 0 (Emergency) cases.
-*   **Professional Consultation**: Instant connection to licensed psychologists and mental health professionals.
+### 6. **Inclusive Design (Accessibility-First)**
+*   **Adaptive UI Engine**: Toggleable **Accessibility Mode** with high-contrast (B&W) interface and simplified layouts.
+*   **AI Voice Summary (TTS)**: Real-time audio briefing of health risks and population status for low-vision users.
+*   **Tremor-Resistant Interaction**: Extra-large touch targets (p-8/80px) and simplified navigation for users with motor disabilities (Parkinson/Amputation).
+*   **Universal Iconography**: Zero-text dependency mode using intuitive icons for low-literacy populations.
+
+### 7. **Mental Emergency Response Protocol (MERP)**
+*   **L0 SOS Trigger**: Floating emergency button with immediate GPS-linked escalation.
+*   **Automated Dispatch**: Real-time connection to refinery medical teams and first responders.
+*   **Voice-Guided Protocol**: Audio instructions for users in crisis until help arrives.
 
 ---
 
 ## 🛠️ Tech Stack
 
-*   **Frontend**: React 18+, TypeScript, Vite
-*   **Styling**: Tailwind CSS (Utility-first CSS)
+*   **Frontend**: React 19, TypeScript, Vite
+*   **Styling**: Tailwind CSS 4.0 (Utility-first CSS)
 *   **Animations**: Motion (formerly Framer Motion)
 *   **Data Visualization**: Recharts (Area, Bar, Pie, Doughnut)
-*   **Icons**: Lucide React
-*   **State Management**: React Hooks (useState, useEffect)
+*   **PDF Generation**: jsPDF (Strategic Whitepaper Export)
+*   **Accessibility**: Web Speech API (TTS), WCAG 2.2 Compliance
 
 ---
 
@@ -73,11 +95,9 @@ SafeGuard provides a robust set of APIs for integration with external health sys
 👉 **Live Interactive Docs**: [https://safeguard-hsil.vercel.app/api-docs](https://safeguard-hsil.vercel.app/api-docs)
 
 ### Core Endpoints:
-- `POST /api/v1/risk-detect`: Automated psychosocial risk stratification (L0-L3). A Risk Detection Engine. This is where the system understands human distress.
-- `GET /api/v1/economic-forecast`: ROI calculations and INA-CBG claim estimates. A Health Economic Intelligence. This is how we translate mental health into financial impact.
-- `GET /api/v1/icd-clusters`: ICD-10 Chapter V burden distribution data. A Clinical Standardization Layer. This is how we translate mental health into financial impact.
-
-Our system is built on three layers: detection, economic justification, and clinical standardization.
+- `POST /api/v1/risk-detect`: Automated psychosocial risk stratification (L0-L3).
+- `GET /api/v1/economic-forecast`: ROI calculations and INA-CBG claim estimates.
+- `GET /api/v1/icd-clusters`: ICD-10 Chapter V burden distribution data.
 
 ## 🚀 Technical Architecture Upgrade
 
@@ -86,9 +106,3 @@ The platform has been optimized for **Vercel Serverless** deployment:
 - **Backend**: Node.js Express (Deployed as Serverless Functions in `/api`).
 - **Swagger UI**: OAS 3.0 with CDN-backed assets (jsDelivr) for high availability.
 - **Environment Awareness**: Automatic switching between Local (Port 3000) and Production (Vercel) contexts.
-
-SafeGuard is built as an API-first architecture, enabling integration with enterprise HCIS and national health systems.
-
----
-
-Developed for the **HSIL Hackathon 2026**.

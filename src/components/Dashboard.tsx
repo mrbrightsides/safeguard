@@ -30,14 +30,27 @@ const heatmapData = [
 
 interface DashboardProps {
   role?: UserRole | null;
+  isAccessibilityMode?: boolean;
 }
 
-export const Dashboard: React.FC<DashboardProps> = ({ role }) => {
+export const Dashboard: React.FC<DashboardProps> = ({ role, isAccessibilityMode }) => {
   const [lang, setLang] = useState<'EN' | 'ID'>('EN');
   const [bpm, setBpm] = useState(72);
   const [hrv, setHrv] = useState(45);
   const [isSyncing, setIsSyncing] = useState(true);
   const [personalContext, setPersonalContext] = useState<'worker' | 'patient'>('worker');
+
+  // Voice Summary Effect
+  useEffect(() => {
+    if (isAccessibilityMode) {
+      const summary = role === 'personal' 
+        ? "Welcome to your personal prevention roadmap. Your heart rate is stable at 72 beats per minute. No high-risk psychosocial hazards detected today."
+        : "Population Health Surveillance active. Overall risk level is low. Three departments showing minor fatigue spikes. System monitoring in real-time.";
+      
+      const utterance = new SpeechSynthesisUtterance(summary);
+      window.speechSynthesis.speak(utterance);
+    }
+  }, [isAccessibilityMode, role]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -50,10 +63,16 @@ export const Dashboard: React.FC<DashboardProps> = ({ role }) => {
   const isPersonal = role === 'personal';
 
   return (
-    <div className="space-y-6 overflow-x-hidden">
+    <div className={cn(
+      "space-y-6 overflow-x-hidden transition-all duration-500",
+      isAccessibilityMode && "p-4"
+    )}>
       {/* Header with Language Toggle */}
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-gray-900">
+        <h2 className={cn(
+          "font-bold transition-all",
+          isAccessibilityMode ? "text-4xl text-white" : "text-2xl text-gray-900"
+        )}>
           {isPersonal 
             ? (lang === 'EN' ? 'Personalized Prevention Roadmap' : 'Peta Jalan Pencegahan Personal')
             : (lang === 'EN' ? 'Population Health Surveillance' : 'Surveilans Kesehatan Populasi')}
