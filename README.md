@@ -64,6 +64,16 @@ SafeGuard operates on the **SAFE** mnemonic to ensure comprehensive mental healt
 
 ---
 
+## 🎯 Why SafeGuard Matters
+
+- Psychosocial hazards are invisible → not measured → not managed
+- Traditional systems are reactive → SafeGuard is predictive
+- One incident can cost billions → prevention costs <1%
+
+SafeGuard bridges the gap between clinical insight and economic decision-making.
+
+---
+
 ## 🛠️ Tech Stack
 
 *   **Frontend**: React 19, TypeScript, Vite
@@ -106,3 +116,7 @@ The platform has been optimized for **Vercel Serverless** deployment:
 - **Backend**: Node.js Express (Deployed as Serverless Functions in `/api`).
 - **Swagger UI**: OAS 3.0 with CDN-backed assets (jsDelivr) for high availability.
 - **Environment Awareness**: Automatic switching between Local (Port 3000) and Production (Vercel) contexts.
+
+---
+
+Developed for the **HSIL Hackathon 2026**.
