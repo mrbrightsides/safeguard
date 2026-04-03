@@ -31,6 +31,8 @@ The disparity between the cost of prevention and the cost of failure is staggeri
 
 > **"Preventing one case is enough to justify the entire system's expenditure."**
 
+SafeGuard moves the needle from 'Fee-for-Service' to 'Value-Based Care' by preventing acute psychiatric episodes through L3 Prognostic Surveillance, effectively reducing the burden on secondary care facilities (RSUD).
+
 ---
 
 ### 4. Technical Architecture & Interoperability
