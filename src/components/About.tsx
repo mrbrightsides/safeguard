@@ -31,10 +31,26 @@ export const About: React.FC<AboutProps> = ({ onGetStarted }) => {
             Pioneering the Future of <span className="text-teal-400">Psychosocial Surveillance</span>
           </h1>
           <p className="text-teal-100/70 text-lg leading-relaxed">
-            SafeGuard was born from a simple but powerful vision: to transform invisible psychosocial hazards into visible, actionable, and preventable insights. We combine clinical precision with AI-driven prognostic modeling to protect the world's most valuable asset—human capital.
+            SafeGuard was born from a simple but powerful vision: to transform invisible psychosocial hazards into visible, actionable, and preventable insights. As a <b>High-Value Health System</b>, we combine clinical precision with AI-driven prognostic modeling to protect the world's most valuable asset—human capital.
           </p>
         </div>
         <div className="absolute top-0 right-0 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
+      </section>
+
+      {/* HSIL Alignment Section */}
+      <section className="p-12 bg-white rounded-[40px] border border-teal-100 shadow-sm relative overflow-hidden">
+        <div className="relative z-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-teal-50 text-teal-700 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6">
+            HSIL Harvard Alignment
+          </div>
+          <h2 className="text-2xl font-bold mb-4">Building High-Value Health Systems</h2>
+          <p className="text-gray-600 leading-relaxed max-w-2xl">
+            SafeGuard is strategically aligned with the <b>Health Systems Innovation Lab (HSIL) at Harvard T.H. Chan School of Public Health</b>. Our mission is to leverage AI to create high-value health systems that prioritize early detection, economic accountability, and clinical excellence.
+          </p>
+        </div>
+        <div className="absolute top-0 right-0 p-12 opacity-5">
+          <Globe className="w-64 h-64" />
+        </div>
       </section>
 
       {/* Core Values */}

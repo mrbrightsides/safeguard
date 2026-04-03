@@ -57,9 +57,9 @@ const icdData = [
 ];
 
 const economicData = [
-  { category: 'Mental Health Crisis (L0)', inaction: 245000, intervention: 45000, savings: 200000 },
-  { category: 'Productivity Loss', inaction: 850000, intervention: 120000, savings: 730000 },
-  { category: 'Chronic Care (F30-F48)', inaction: 420000, intervention: 95000, savings: 325000 },
+  { category: 'L0: Emergency', inaction: 20000, intervention: 1000, savings: 19000 },
+  { category: 'Productivity Loss (TAM)', inaction: 500000, intervention: 80000, savings: 420000 },
+  { category: 'Chronic Care (F30-F48)', inaction: 150000, intervention: 35000, savings: 115000 },
 ];
 
 export const OrganizationAnalytics: React.FC = () => {
@@ -86,26 +86,41 @@ export const OrganizationAnalytics: React.FC = () => {
       </div>
 
       {/* Macro Hook Banner */}
-      <div className="bg-teal-900 text-white p-6 rounded-[32px] relative overflow-hidden shadow-xl shadow-teal-900/20">
-        <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-6">
+      <div className="bg-teal-900 text-white p-8 rounded-[40px] relative overflow-hidden shadow-xl shadow-teal-900/20">
+        <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="max-w-2xl">
-            <div className="flex items-center gap-2 mb-2">
+            <div className="flex items-center gap-2 mb-4">
               <AlertCircle className="w-4 h-4 text-teal-400" />
-              <span className="text-[10px] font-mono uppercase tracking-widest text-teal-400">Global Burden Context</span>
+              <span className="text-[10px] font-mono uppercase tracking-widest text-teal-400">Strategic Economic Case</span>
             </div>
-            <h2 className="text-xl font-bold mb-2">Mental health issues cause US$1 Trillion loss annually.</h2>
+            <h2 className="text-2xl font-bold mb-4 leading-tight">"Preventing one case is enough to justify the entire system."</h2>
             <p className="text-teal-100/70 text-sm leading-relaxed">
-              Equivalent to ~Rp17 Quadrillion per year. Safespace utilizes WHO-standard 1:4 ROI modeling to mitigate this burden through early ICD-10 prognostic detection.
+              From Symptom to System: Transforming fragmented mental health complaints into accountable, boardroom-ready economic interventions. We mitigate the Rp 500 Billion productivity loss through early ICD-10 prognostic detection.
             </p>
           </div>
-          <div className="text-center md:text-right">
-            <div className="text-3xl font-black text-teal-400">1:4</div>
-            <div className="text-[10px] font-mono uppercase tracking-widest text-teal-100/50">Investment Return Ratio</div>
+          <div className="flex flex-col items-center md:items-end gap-2">
+            <div className="text-4xl font-black text-teal-400">1:4</div>
+            <div className="text-[10px] font-mono uppercase tracking-widest text-teal-100/50">WHO ROI Standard</div>
           </div>
         </div>
         <div className="absolute top-0 right-0 p-12 opacity-10">
-          <TrendingUp className="w-48 h-48" />
+          <TrendingUp className="w-64 h-64" />
         </div>
+      </div>
+
+      {/* Strategic Market Valuation (TAM/SAM/SOM) */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {[
+          { label: 'TAM: Total Addressable Market', value: 'Rp 300-500B', desc: '250,000+ workers across healthcare & high-risk industries', color: 'text-blue-600', bg: 'bg-blue-50' },
+          { label: 'SAM: Serviceable Available Market', value: 'Rp 150-250B', desc: 'Focused on hospitals, universities, and BUMN', color: 'text-emerald-600', bg: 'bg-emerald-50' },
+          { label: 'SOM: Serviceable Obtainable Market', value: 'Rp 50-80B', desc: 'Targeted initial pilot (10-20 institutions)', color: 'text-amber-600', bg: 'bg-amber-50' },
+        ].map((item, i) => (
+          <div key={i} className={cn("p-8 rounded-[32px] border border-transparent shadow-sm transition-all hover:shadow-md", item.bg)}>
+            <div className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-4">{item.label}</div>
+            <div className={cn("text-3xl font-black mb-2", item.color)}>{item.value}</div>
+            <p className="text-xs text-gray-600 leading-relaxed">{item.desc}</p>
+          </div>
+        ))}
       </div>
 
       {/* Summary Stats */}

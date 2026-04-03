@@ -63,44 +63,44 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
     doc.text('- Indonesia School Signal: 36.31% students potentially bullied.', 25, 119);
     doc.text('- Indonesia Youth: 61% with depression had suicidal thoughts.', 25, 126);
     
-    // Section 3: Economic Evaluation (ROI)
+    // Section 3: Strategic Market Valuation (TAM/SAM/SOM)
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
-    doc.text('3. Economic Evaluation (ROI)', 20, 145);
+    doc.text('3. Strategic Market Valuation', 20, 145);
     
     doc.setFontSize(11);
     doc.setTextColor(80, 80, 80);
-    doc.text('- WHO ROI: $1 invested -> $4 return.', 25, 155);
-    doc.text('- INA-CBG Baseline: Rp12.4M per admission.', 25, 162);
-    doc.text('- JISDOR Rate: Rp17,002 (1 April 2026).', 25, 169);
-    
-    // Section 4: The SAFE Framework
+    doc.text('- TAM (Total Addressable Market): Rp 300-500 Billion.', 25, 155);
+    doc.text('- SAM (Serviceable Available Market): Rp 150-250 Billion.', 25, 162);
+    doc.text('- SOM (Serviceable Obtainable Market): Rp 50-80 Billion.', 25, 169);
+
+    // Section 4: Economic Case for Intervention
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
-    doc.text('4. The SAFE Framework', 20, 185);
+    doc.text('4. The Economic Case for Intervention', 20, 185);
     
     doc.setFontSize(11);
     doc.setTextColor(80, 80, 80);
-    doc.text('- Sense: Real-time biometric and digital anamnesis data collection.', 25, 195);
-    doc.text('- Analyze: AI-driven risk stratification and prognostic modeling.', 25, 202);
-    doc.text('- Flag: Automated alerting for Level 0-L2 clinical risks.', 25, 209);
-    doc.text('- Engage: Personalized wellness roadmaps and clinical escalation.', 25, 216);
+    doc.text('- System Implementation Cost: < Rp 1 Billion.', 25, 195);
+    doc.text('- Single Fatal Incident Cost: Up to Rp 20 Billion.', 25, 202);
+    doc.text('- "Preventing one case is enough to justify the entire system."', 25, 209);
     
-    // Section 5: AI/ML Mitigations
+    // Section 5: The SAFE Framework
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
-    doc.text('5. AI/ML Mitigations', 20, 235);
+    doc.text('5. The SAFE Framework', 20, 225);
     
     doc.setFontSize(11);
     doc.setTextColor(80, 80, 80);
-    doc.text('- AI Hallucination -> Human-in-the-loop validation.', 25, 245);
-    doc.text('- Data Bias -> Multi-source data diversity.', 25, 252);
-    doc.text('- Privacy Risk -> End-to-end encryption.', 25, 259);
+    doc.text('- Sense: Real-time biometric and digital anamnesis data collection.', 25, 235);
+    doc.text('- Analyze: AI-driven risk stratification and prognostic modeling.', 25, 242);
+    doc.text('- Flag: Automated alerting for Level 0-L2 clinical risks.', 25, 249);
+    doc.text('- Engage: Personalized wellness roadmaps and clinical escalation.', 25, 256);
     
     // Footer
     doc.setFontSize(10);
     doc.setTextColor(180, 180, 180);
-    doc.text('Developed for HSIL Hackathon 2026. All rights reserved.', 20, 285);
+    doc.text('Prepared for HSIL Hackathon 2026 - Harvard T.H. Chan School of Public Health.', 20, 285);
     
     doc.save(`SafeGuard_Strategic_Whitepaper_${new Date().getTime()}.pdf`);
   };
@@ -108,8 +108,8 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
   const sections = [
     { id: 'executive', title: 'Executive Summary', icon: FileText },
     { id: 'problem', title: 'Global & National Burden', icon: Globe },
-    { id: 'sector', title: 'Sectoral Epidemiology', icon: Users },
-    { id: 'economic', title: 'Economic Evaluation (ROI)', icon: TrendingUp },
+    { id: 'economic', title: 'Strategic Market Valuation', icon: TrendingUp },
+    { id: 'impact', title: 'Economic Case for Intervention', icon: BarChart3 },
     { id: 'clinical', title: 'Clinical & ICD-10 Framework', icon: Stethoscope },
     { id: 'ai-mitigation', title: 'AI/ML Mitigations', icon: ShieldCheck },
   ];
@@ -274,48 +274,66 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
             </div>
           </section>
 
-          {/* Economic Evaluation */}
+          {/* Strategic Market Valuation */}
           <section id="economic" className="scroll-mt-32">
             <h2 className="text-2xl font-bold mb-8 flex items-center gap-3">
               <TrendingUp className="w-6 h-6 text-teal-600" />
-              Economic Evaluation (ROI)
+              Strategic Market Valuation
             </h2>
-            <div className="bg-teal-50 p-10 rounded-[40px] border border-teal-100">
-              <div className="flex flex-col md:flex-row gap-12 items-center">
-                <div className="flex-1">
-                  <h3 className="text-xl font-bold text-teal-900 mb-4">The 1:4 Return on Investment</h3>
-                  <p className="text-teal-800/70 mb-6 leading-relaxed">
-                    WHO reports that every US$1 invested in treatment for depression and anxiety leads to a return of US$4 in better health and productivity.
-                  </p>
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm">
-                        <span className="font-bold text-teal-600">$1</span>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="p-8 bg-white rounded-3xl border border-gray-100 shadow-sm">
+                <div className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">TAM</div>
+                <div className="text-2xl font-bold text-teal-600 mb-2">Rp 300-500B</div>
+                <p className="text-xs text-gray-500">Total Addressable Market: 250,000+ workers facing productivity loss.</p>
+              </div>
+              <div className="p-8 bg-white rounded-3xl border border-gray-100 shadow-sm">
+                <div className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">SAM</div>
+                <div className="text-2xl font-bold text-teal-600 mb-2">Rp 150-250B</div>
+                <p className="text-xs text-gray-500">Serviceable Available Market: Hospitals, Universities, and BUMN.</p>
+              </div>
+              <div className="p-8 bg-white rounded-3xl border border-gray-100 shadow-sm">
+                <div className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">SOM</div>
+                <div className="text-2xl font-bold text-teal-600 mb-2">Rp 50-80B</div>
+                <p className="text-xs text-gray-500">Serviceable Obtainable Market: 10-20 early-adopter institutions.</p>
+              </div>
+            </div>
+          </section>
+
+          {/* Economic Case for Intervention */}
+          <section id="impact" className="scroll-mt-32">
+            <h2 className="text-2xl font-bold mb-8 flex items-center gap-3">
+              <BarChart3 className="w-6 h-6 text-teal-600" />
+              The Economic Case for Intervention
+            </h2>
+            <div className="bg-gray-900 text-white p-10 rounded-[40px] relative overflow-hidden">
+              <div className="relative z-10">
+                <div className="flex flex-col md:flex-row gap-12 items-center">
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold mb-4 italic">"Preventing one case is enough to justify the entire system."</h3>
+                    <p className="text-gray-400 mb-8 leading-relaxed">
+                      SafeGuard transforms fragmented mental health complaints into accountable, boardroom-ready economic interventions.
+                    </p>
+                    <div className="space-y-6">
+                      <div className="flex justify-between items-end">
+                        <span className="text-sm text-gray-400 uppercase tracking-widest">System Implementation</span>
+                        <span className="text-xl font-bold text-teal-400">&lt; Rp 1 Billion</span>
                       </div>
-                      <div className="text-sm font-bold text-teal-900">Invested</div>
-                    </div>
-                    <div className="w-px h-8 bg-teal-200 ml-6"></div>
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-teal-600 rounded-2xl flex items-center justify-center shadow-lg shadow-teal-600/20">
-                        <span className="font-bold text-white">$4</span>
+                      <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+                        <div className="h-full bg-teal-500 w-[5%]"></div>
                       </div>
-                      <div className="text-sm font-bold text-teal-900">Return (Rp68,008 per $1)</div>
+                      
+                      <div className="flex justify-between items-end">
+                        <span className="text-sm text-gray-400 uppercase tracking-widest">Single Fatal Incident Cost</span>
+                        <span className="text-xl font-bold text-red-400">Up to Rp 20 Billion</span>
+                      </div>
+                      <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+                        <div className="h-full bg-red-500 w-full"></div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div className="w-full md:w-64 space-y-4">
-                  <div className="p-6 bg-white rounded-3xl shadow-sm">
-                    <div className="text-xs font-mono text-gray-400 uppercase mb-1">INA-CBG Baseline</div>
-                    <div className="text-xl font-bold text-gray-900">Rp12.4M</div>
-                    <div className="text-[10px] text-gray-500">Mean Claim / Admission</div>
-                  </div>
-                  <div className="p-6 bg-white rounded-3xl shadow-sm">
-                    <div className="text-xs font-mono text-gray-400 uppercase mb-1">Exchange Rate</div>
-                    <div className="text-xl font-bold text-gray-900">Rp17,002</div>
-                    <div className="text-[10px] text-gray-500">JISDOR 1 April 2026</div>
                   </div>
                 </div>
               </div>
+              <div className="absolute bottom-0 right-0 w-96 h-96 bg-teal-500/5 rounded-full blur-3xl -mb-48 -mr-48"></div>
             </div>
           </section>
 
@@ -365,7 +383,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
               "SafeGuard is not a cost center; it is a risk control system."
             </p>
             <p className="text-gray-400 text-sm">
-              Developed for the HSIL Hackathon 2026. All data based on WHO, ILO, UNESCO, and Kemenkes official reports.
+              Prepared for the HSIL Hackathon 2026 - Harvard T.H. Chan School of Public Health. All data based on WHO, ILO, UNESCO, and Kemenkes official reports.
             </p>
           </div>
         </div>
