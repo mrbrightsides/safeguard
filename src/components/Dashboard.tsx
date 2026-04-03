@@ -3,7 +3,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   AreaChart, Area
 } from 'recharts';
-import { Shield, Activity, Users, AlertTriangle, TrendingUp, Heart, Globe, Map, Watch, Zap, Bluetooth, Sparkles, Briefcase, User as UserIcon, Coins } from 'lucide-react';
+import { Shield, Activity, Users, AlertTriangle, TrendingUp, Heart, Globe, Map, Watch, Zap, Bluetooth, Sparkles, Briefcase, User as UserIcon, Coins, Database, Cloud, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
 
@@ -297,6 +297,36 @@ export const Dashboard: React.FC<DashboardProps> = ({ role, isAccessibilityMode 
               </div>
             </motion.div>
           ))}
+        </div>
+      </div>
+
+      {/* SATUSEHAT Integration Status */}
+      <div className="bg-blue-900 p-8 rounded-[40px] text-white relative overflow-hidden shadow-xl shadow-blue-900/20">
+        <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="flex items-center gap-6">
+            <div className="w-16 h-16 bg-blue-800 rounded-3xl flex items-center justify-center shadow-inner">
+              <Cloud className="w-8 h-8 text-blue-400" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span>
+                <h3 className="text-xl font-bold">SATUSEHAT Node Connected</h3>
+              </div>
+              <p className="text-blue-200/60 text-sm max-w-md">
+                SafeGuard is actively synchronized with the National Health Data Exchange. All psychosocial risk assessments are mapped to HL7 FHIR R4 standards.
+              </p>
+            </div>
+          </div>
+          <div className="flex flex-col items-center md:items-end gap-2">
+            <div className="px-4 py-2 bg-blue-800 rounded-xl border border-blue-700 flex items-center gap-2">
+              <Database className="w-4 h-4 text-blue-400" />
+              <span className="text-xs font-mono font-bold">FHIR R4 ACTIVE</span>
+            </div>
+            <div className="text-[10px] font-mono uppercase tracking-widest text-blue-300/50">Last Sync: {new Date().toLocaleTimeString()}</div>
+          </div>
+        </div>
+        <div className="absolute top-0 right-0 p-12 opacity-10">
+          <CheckCircle2 className="w-64 h-64" />
         </div>
       </div>
 

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { analyzeBehavioralRisk } from '../services/geminiService';
+import { generateFHIRPayload } from '../services/fhirService';
 import { motion, AnimatePresence } from 'motion/react';
-import { Brain, Search, Loader2, ShieldCheck, FileText, ExternalLink, Info, Phone, UserPlus, X, Download } from 'lucide-react';
+import { Brain, Search, Loader2, ShieldCheck, FileText, ExternalLink, Info, Phone, UserPlus, X, Download, Database, CheckCircle2 } from 'lucide-react';
 import { ICD_DESCRIPTIONS } from '../lib/constants';
 import { cn } from '../lib/utils';
 
@@ -12,9 +13,12 @@ interface AIAnalysisProps {
 export const AIAnalysis: React.FC<AIAnalysisProps> = ({ initialInput }) => {
   const [input, setInput] = useState(initialInput || '');
   const [loading, setLoading] = useState(false);
+  const [syncing, setSyncing] = useState(false);
   const [result, setResult] = useState<any>(null);
   const [showICDTooltip, setShowICDTooltip] = useState(false);
   const [showConsultModal, setShowConsultModal] = useState(false);
+  const [showFHIRModal, setShowFHIRModal] = useState(false);
+  const [fhirPayload, setFhirPayload] = useState<any>(null);
 
   // Auto-analyze if initialInput is provided
   React.useEffect(() => {
@@ -84,6 +88,23 @@ It does not constitute a formal medical diagnosis.
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
+  };
+
+  const handleSyncSATUSEHAT = () => {
+    if (!result) return;
+    setSyncing(true);
+    
+    // Simulate API Latency
+    setTimeout(() => {
+      const payload = generateFHIRPayload(
+        "P-8821-X", 
+        result.riskLevel || "Moderate", 
+        { icd: result.suggestedICD, dsm: result.suggestedDSM }
+      );
+      setFhirPayload(payload);
+      setSyncing(false);
+      setShowFHIRModal(true);
+    }, 1500);
   };
 
   const getRiskColor = (level: string) => {
@@ -270,9 +291,13 @@ It does not constitute a formal medical diagnosis.
                   <span className="text-xs font-medium text-gray-900">{result.suggestedDSM || 'Probable MDD'}</span>
                 </div>
                 <div className="pt-4 border-t border-gray-50 space-y-2">
-                  <button className="w-full flex items-center justify-center gap-2 text-[10px] font-mono uppercase tracking-widest text-blue-600 hover:text-blue-700">
-                    <ExternalLink className="w-3 h-3" />
-                    Sync to SATUSEHAT
+                  <button 
+                    onClick={handleSyncSATUSEHAT}
+                    disabled={syncing}
+                    className="w-full flex items-center justify-center gap-2 text-[10px] font-mono uppercase tracking-widest text-blue-600 hover:text-blue-700 disabled:opacity-50"
+                  >
+                    {syncing ? <Loader2 className="w-3 h-3 animate-spin" /> : <ExternalLink className="w-3 h-3" />}
+                    {syncing ? 'Syncing...' : 'Sync to SATUSEHAT'}
                   </button>
                   <button 
                     onClick={() => setShowConsultModal(true)}
@@ -340,6 +365,74 @@ It does not constitute a formal medical diagnosis.
                       <div className="text-sm font-bold">0811-1111-111</div>
                     </div>
                   </div>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* FHIR Payload Modal */}
+      <AnimatePresence>
+        {showFHIRModal && (
+          <>
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowFHIRModal(false)}
+              className="fixed inset-0 bg-black/40 backdrop-blur-md z-[100]"
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl bg-white rounded-[40px] shadow-2xl z-[110] p-10 overflow-hidden"
+            >
+              <div className="flex justify-between items-center mb-8">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-blue-600 rounded-xl">
+                    <Database className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold">SATUSEHAT FHIR Payload</h3>
+                    <p className="text-xs text-gray-400 font-mono uppercase tracking-widest">HL7 FHIR R4 Standard Integration</p>
+                  </div>
+                </div>
+                <button onClick={() => setShowFHIRModal(false)} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              
+              <div className="space-y-6">
+                <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl flex items-center gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                  <p className="text-sm text-emerald-900 font-medium">Data successfully mapped to national health record standards.</p>
+                </div>
+
+                <div className="relative">
+                  <div className="absolute top-4 right-4 text-[10px] font-mono text-gray-400 uppercase tracking-widest">JSON Payload</div>
+                  <pre className="w-full h-80 p-6 bg-gray-900 text-teal-400 rounded-3xl overflow-auto text-[10px] font-mono custom-scrollbar leading-relaxed">
+                    {JSON.stringify(fhirPayload, null, 2)}
+                  </pre>
+                </div>
+
+                <div className="flex gap-4">
+                  <button 
+                    onClick={() => setShowFHIRModal(false)}
+                    className="flex-1 py-4 bg-black text-white text-sm font-bold rounded-2xl hover:bg-gray-800 transition-all"
+                  >
+                    Close Viewer
+                  </button>
+                  <button 
+                    className="px-8 py-4 bg-gray-100 text-gray-600 text-sm font-bold rounded-2xl hover:bg-gray-200 transition-all"
+                    onClick={() => {
+                      navigator.clipboard.writeText(JSON.stringify(fhirPayload, null, 2));
+                      alert("Payload copied to clipboard!");
+                    }}
+                  >
+                    Copy JSON
+                  </button>
                 </div>
               </div>
             </motion.div>
