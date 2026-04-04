@@ -3,7 +3,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   AreaChart, Area
 } from 'recharts';
-import { Shield, Activity, Users, AlertTriangle, TrendingUp, Heart, Globe, Map, Watch, Zap, Bluetooth, Sparkles, Briefcase, User as UserIcon, Coins, Database, Cloud, CheckCircle2 } from 'lucide-react';
+import { Shield, Activity, Users, AlertTriangle, TrendingUp, Heart, Globe, Map, Watch, Zap, Bluetooth, Sparkles, Briefcase, User as UserIcon, Coins, Database, Cloud, CheckCircle2, LayoutGrid, ShieldAlert } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
 
@@ -329,6 +329,66 @@ export const Dashboard: React.FC<DashboardProps> = ({ role, isAccessibilityMode 
           <CheckCircle2 className="w-64 h-64" />
         </div>
       </div>
+
+      {/* Community Medicine & OSHA Pyramid Section */}
+      {!isPersonal && (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-black rounded-xl">
+                  <LayoutGrid className="w-5 h-5 text-white" />
+                </div>
+                <h3 className="font-bold text-lg">Weekly Community Medicine Summary</h3>
+              </div>
+              <span className="text-[10px] font-mono text-gray-400 uppercase tracking-widest">Week 14 Report</span>
+            </div>
+            
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {[
+                { label: 'UA/UC Reports', val: '312', color: 'text-emerald-600' },
+                { label: 'MTC Cases', val: '12', color: 'text-orange-600' },
+                { label: 'LTI/RWDC', val: '4', color: 'text-red-600' },
+                { label: 'Closure Rate', val: '94%', color: 'text-blue-600' },
+              ].map((item, i) => (
+                <div key={i} className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                  <div className={cn("text-xl font-black mb-1", item.color)}>{item.val}</div>
+                  <div className="text-[9px] font-mono uppercase text-gray-400 leading-tight">{item.label}</div>
+                </div>
+              ))}
+            </div>
+            
+            <div className="mt-6 p-4 bg-teal-50 border border-teal-100 rounded-2xl flex items-center gap-3">
+              <Sparkles className="w-4 h-4 text-teal-600" />
+              <p className="text-xs text-teal-900 font-medium">
+                Strategic Zero Bullying Campaign: **92% adoption** reached in Engineering Site B.
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm flex flex-col">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="font-bold text-lg">OSHA Pyramid</h3>
+              <ShieldAlert className="w-5 h-5 text-red-500" />
+            </div>
+            <div className="flex-1 flex flex-col justify-center space-y-1">
+              {[
+                { label: 'Fatality', color: 'bg-black', w: 'w-1/4' },
+                { label: 'LTI', color: 'bg-red-600', w: 'w-2/4' },
+                { label: 'MTC', color: 'bg-orange-500', w: 'w-3/4' },
+                { label: 'UA/UC', color: 'bg-emerald-400', w: 'w-full' },
+              ].map((level, i) => (
+                <div key={i} className={cn("h-6 rounded flex items-center justify-center text-[8px] font-bold text-white uppercase tracking-tighter", level.color, level.w)}>
+                  {level.label}
+                </div>
+              ))}
+            </div>
+            <p className="text-[9px] text-gray-400 mt-4 text-center italic">
+              "The real battlefield is at UA/UC."
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Daily Mood Tracker */}
       <div className="bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm">

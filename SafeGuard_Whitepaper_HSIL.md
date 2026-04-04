@@ -4,7 +4,13 @@
 ### 1. Executive Summary
 SafeGuard is a digital psychosocial early warning system designed to transform fragmented mental health complaints into accountable, boardroom-ready economic interventions. By leveraging AI and interoperable health data (FHIR), SafeGuard bridges the gap between clinical risk and corporate productivity, providing a "High-Value" solution for modern health systems.
 
-> **"From Symptom to System: Transforming fragmented mental health complaints into accountable, boardroom-ready economic interventions."**
+#### **🔺 MASTER HOOK (BOARDROOM LEVEL)**
+> **“1 fatality is not 1 event — it is the visible tip of hundreds of ignored psychosocial signals.”**
+
+👉 **Translasi Manajemen:**
+*   **Fatality (Suicide / CVD)** = Lagging Indicator
+*   **Bullying (UA/UC)** = Leading Indicator
+*   **SafeGuard** = Predictive Bridge
 
 ---
 
@@ -31,11 +37,68 @@ The disparity between the cost of prevention and the cost of failure is staggeri
 
 > **"Preventing one case is enough to justify the entire system's expenditure."**
 
-SafeGuard moves the needle from 'Fee-for-Service' to 'Value-Based Care' by preventing acute psychiatric episodes through L3 Prognostic Surveillance, effectively reducing the burden on secondary care facilities (RSUD).
+---
+
+### 4. SWOT Analysis: Strategic Positioning
+To ensure sustainable growth and impact, SafeGuard's strategic position is analyzed as follows:
+
+#### **Strengths**
+*   **National Alignment**: Fully compatible with SATUSEHAT and HL7 FHIR R4 standards.
+*   **Proactive Framework**: Utilizes the OSHA Incident Pyramid for early risk stratification (UA/UC).
+*   **Economic ROI**: Built-in WHO-standard 1:4 ROI modeling for boardroom accountability.
+*   **Expert Leadership**: Multidisciplinary team spanning Clinical, AI, and Strategy.
+
+#### **Weaknesses**
+*   **Reporting Bias**: Dependency on the accuracy and honesty of user self-reporting.
+*   **Cultural Friction**: Initial resistance in traditional corporate environments to mental health transparency.
+*   **Scaling Requirements**: Transitioning from mock integration to live, large-scale backend infrastructure.
+
+#### **Opportunities**
+*   **Industrial Expansion**: High potential in BUMN, manufacturing, and high-stress healthcare sectors.
+*   **HRIS Integration**: Seamless API-first approach for integration with corporate ERP/HRIS systems.
+*   **Global Standards**: Scalable via WHO/ILO mental health at work frameworks for international markets.
+
+#### **Threats**
+*   **Regulatory Evolution**: Rapidly changing data privacy laws (e.g., Indonesia's PDP Law).
+*   **Generic Competition**: Market saturation from generic Employee Assistance Programs (EAPs).
+*   **Stigma**: Persistent social stigma surrounding mental health reporting in professional settings.
 
 ---
 
-### 4. Technical Architecture & Interoperability
+### 5. The Psychosocial Incident Pyramid (Harvard Style)
+SafeGuard's predictive model is based on the classical safety pyramid (Heinrich → Bird) upgraded for psychosocial hazards.
+
+| Level | Ratio | Reality (Bullying Context) |
+| :--- | :--- | :--- |
+| 💀 **Fatality** | 1 | Suicide / MI / Stroke |
+| 🛑 **RWDC** | 10–30 | Burnout, Absenteeism |
+| 🏥 **MTC** | 30–100 | Panic Attack, Anxiety |
+| 🩹 **FA** | 100–300 | Insomnia, Fatigue |
+| ⚠️ **UA/UC** | 300–600+ | Bullying, Toxic Culture |
+
+**Strategic Insight:**
+> "Eliminating 300 unsafe acts is more powerful than reacting to 1 fatality."
+
+---
+
+### 6. Sector-Specific Risk Profiles & Populations
+SafeGuard's AI models are tailored to specific industrial sectors and vulnerable populations.
+
+#### **Industrial Sector Analysis**
+1.  **Oil & Gas**: High stress, isolation, and high-consequence operations.
+2.  **Mining**: Remote areas and harsh environments amplify psychosocial hazards.
+3.  **Plantation**: Informal leadership and low reporting culture.
+4.  **Office / Service**: High cognitive load and invisible burnout hazards.
+
+#### **Special Population Vulnerabilities**
+*   **Young Workers**: Higher bullying vulnerability and immature coping mechanisms.
+*   **Geriatric**: High comorbidities; stress triggers CVD fatality.
+*   **Pregnant**: Stress increases cortisol, risking preterm birth.
+*   **Disabled**: Higher discrimination risk and underreported UA/UC.
+
+---
+
+### 7. Technical Architecture & Interoperability
 SafeGuard is built on the principles of **High-Value Health Systems**:
 *   **FHIR-Native**: Fully compatible with HL7 FHIR standards for seamless interoperability.
 *   **SATUSEHAT Integration**: Ready for integration with Indonesia's national health data platform.
@@ -44,7 +107,15 @@ SafeGuard is built on the principles of **High-Value Health Systems**:
 
 ---
 
-### 5. Conclusion
+### 8. The Leadership Team
+*   **Akhmad Khudri**: Team Lead & Product Owner (Strategy & SWOT)
+*   **Stanley Nathanael Wijaya**: Lead AI & Product Engineer (Front-end & Integration)
+*   **Dwiki Aulia Rahman**: Health Data & Predictive Insight (AI Architecture & Epidemiology)
+*   **dr. M. Rifki Al Ikhsan**: Clinical & Occupational Health Advisor (Policy, MCU, HRA & Intervention)
+
+---
+
+### 9. Conclusion
 SafeGuard is not just a mental health app; it is a strategic economic tool. By making invisible risks measurable, we empower healthcare leaders and corporate executives to make data-driven decisions that save both lives and capital.
 
 ---

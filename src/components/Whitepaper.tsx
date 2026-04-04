@@ -13,10 +13,15 @@ import {
   Stethoscope,
   BookOpen,
   Scale,
-  Building2
+  Building2,
+  Target,
+  Activity,
+  Heart
 } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import { cn } from '../lib/utils';
+
+import { IncidentPyramid } from './IncidentPyramid';
 
 interface WhitepaperProps {
   onBack: () => void;
@@ -47,34 +52,34 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
     
     doc.setFontSize(11);
     doc.setTextColor(80, 80, 80);
-    const summary = 'SafeGuard AI is an inclusive psychosocial hazard intelligence system. It detects early warning signals of bullying, burnout, and organizational dysfunction, mapping them into clinical, occupational, and legal risk layers.';
+    const summary = 'SafeGuard is a digital psychosocial early warning system designed to transform fragmented mental health complaints into accountable, boardroom-ready economic interventions. By leveraging AI and FHIR, SafeGuard bridges the gap between clinical risk and corporate productivity.';
     const splitSummary = doc.splitTextToSize(summary, 170);
     doc.text(splitSummary, 20, 70);
     
-    // Section 2: Global & National Burden
+    // Section 2: Strategic Market Valuation
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
-    doc.text('2. Global & National Burden', 20, 95);
+    doc.text('2. Strategic Market Valuation', 20, 95);
     
     doc.setFontSize(11);
     doc.setTextColor(80, 80, 80);
-    doc.text('- Global Suicide: 727,000 deaths/year.', 25, 105);
-    doc.text('- Workplace Harassment: 17.9% of global workers.', 25, 112);
-    doc.text('- Indonesia School Signal: 36.31% students potentially bullied.', 25, 119);
-    doc.text('- Indonesia Youth: 61% with depression had suicidal thoughts.', 25, 126);
+    doc.text('- TAM (Total Addressable Market): Rp 300-500 Billion.', 25, 105);
+    doc.text('- SAM (Serviceable Available Market): Rp 150-250 Billion.', 25, 112);
+    doc.text('- SOM (Serviceable Obtainable Market): Rp 50-80 Billion.', 25, 119);
     
-    // Section 3: Strategic Market Valuation (TAM/SAM/SOM)
+    // Section 3: SWOT Analysis
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
-    doc.text('3. Strategic Market Valuation', 20, 145);
+    doc.text('3. SWOT Analysis', 20, 135);
     
-    doc.setFontSize(11);
+    doc.setFontSize(10);
     doc.setTextColor(80, 80, 80);
-    doc.text('- TAM (Total Addressable Market): Rp 300-500 Billion.', 25, 155);
-    doc.text('- SAM (Serviceable Available Market): Rp 150-250 Billion.', 25, 162);
-    doc.text('- SOM (Serviceable Obtainable Market): Rp 50-80 Billion.', 25, 169);
+    doc.text('Strengths: National Alignment (SATUSEHAT), Proactive OSHA Framework, ROI Modeling.', 25, 145);
+    doc.text('Weaknesses: Reporting Bias, Cultural Friction, Scaling Requirements.', 25, 152);
+    doc.text('Opportunities: Industrial Expansion (BUMN), HRIS Integration, Global Standards.', 25, 159);
+    doc.text('Threats: Regulatory Evolution (PDP Law), Generic EAP Competition, Stigma.', 25, 166);
 
-    // Section 4: Economic Case for Intervention
+    // Section 4: Economic Case
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
     doc.text('4. The Economic Case for Intervention', 20, 185);
@@ -83,19 +88,42 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
     doc.setTextColor(80, 80, 80);
     doc.text('- System Implementation Cost: < Rp 1 Billion.', 25, 195);
     doc.text('- Single Fatal Incident Cost: Up to Rp 20 Billion.', 25, 202);
-    doc.text('- "Preventing one case is enough to justify the entire system."', 25, 209);
+    doc.text('- ROI Ratio: 1:4 (WHO Standard).', 25, 209);
     
-    // Section 5: The SAFE Framework
+    // Section 5: Incident Pyramid
+    doc.addPage();
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
-    doc.text('5. The SAFE Framework', 20, 225);
+    doc.text('5. The Psychosocial Incident Pyramid', 20, 30);
     
-    doc.setFontSize(11);
+    doc.setFontSize(10);
     doc.setTextColor(80, 80, 80);
-    doc.text('- Sense: Real-time biometric and digital anamnesis data collection.', 25, 235);
-    doc.text('- Analyze: AI-driven risk stratification and prognostic modeling.', 25, 242);
-    doc.text('- Flag: Automated alerting for Level 0-L2 clinical risks.', 25, 249);
-    doc.text('- Engage: Personalized wellness roadmaps and clinical escalation.', 25, 256);
+    doc.text('1 Fatality (Suicide/CVD) = 600 Unsafe Acts (Bullying/Toxic Culture).', 25, 40);
+    doc.text('Eliminating 300 unsafe acts is more powerful than reacting to 1 fatality.', 25, 47);
+    
+    // Section 6: Sector Analysis
+    doc.setFontSize(16);
+    doc.setTextColor(0, 0, 0);
+    doc.text('6. Sector-Specific Risk Profiles', 20, 65);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(80, 80, 80);
+    doc.text('- Oil & Gas: High stress, isolation, high consequence operations.', 25, 75);
+    doc.text('- Mining: Remote area, harsh environment, heat stress amplification.', 25, 82);
+    doc.text('- Plantation: Informal leadership, low reporting culture.', 25, 89);
+    doc.text('- Office/Service: High cognitive load, invisible burnout hazards.', 25, 96);
+
+    // Section 7: Team
+    doc.setFontSize(16);
+    doc.setTextColor(0, 0, 0);
+    doc.text('7. The Leadership Team', 20, 115);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(80, 80, 80);
+    doc.text('- Akhmad Khudri: Team Lead & Product Owner', 25, 125);
+    doc.text('- Stanley Nathanael Wijaya: Lead AI & Product Engineer', 25, 132);
+    doc.text('- Dwiki Aulia Rahman: Health Data & Predictive Insight', 25, 139);
+    doc.text('- dr. M. Rifki Al Ikhsan: Clinical & Occupational Health Advisor', 25, 146);
     
     // Footer
     doc.setFontSize(10);
@@ -107,11 +135,14 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
 
   const sections = [
     { id: 'executive', title: 'Executive Summary', icon: FileText },
-    { id: 'problem', title: 'Global & National Burden', icon: Globe },
     { id: 'economic', title: 'Strategic Market Valuation', icon: TrendingUp },
+    { id: 'swot', title: 'SWOT Analysis', icon: Target },
     { id: 'impact', title: 'Economic Case for Intervention', icon: BarChart3 },
-    { id: 'clinical', title: 'Clinical & ICD-10 Framework', icon: Stethoscope },
+    { id: 'pyramid', title: 'Incident Pyramid', icon: Activity },
+    { id: 'sectors', title: 'Sector Analysis', icon: Building2 },
+    { id: 'populations', title: 'Special Populations', icon: Heart },
     { id: 'ai-mitigation', title: 'AI/ML Mitigations', icon: ShieldCheck },
+    { id: 'team', title: 'Leadership Team', icon: Users },
   ];
 
   return (
@@ -172,208 +203,249 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
         <div className="lg:col-span-3 space-y-24">
           {/* Executive Summary */}
           <section id="executive" className="scroll-mt-32">
-            <h2 className="text-2xl font-bold mb-8 flex items-center gap-3">
+            <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
               <FileText className="w-6 h-6 text-teal-600" />
-              Executive Summary
+              1. Executive Summary
             </h2>
             <div className="prose prose-teal max-w-none text-gray-600 leading-relaxed space-y-6">
               <p className="font-medium text-gray-900 text-lg italic border-l-4 border-teal-500 pl-6 py-2">
-                "Bullying is not a soft issue; it is a leading indicator of mental-health failure."
+                "From Symptom to System: Transforming fragmented mental health complaints into accountable, boardroom-ready economic interventions."
               </p>
               <p>
-                SafeGuard AI is an inclusive psychosocial hazard intelligence system. It detects early warning signals of bullying, burnout, and organizational dysfunction, mapping them into clinical, occupational, and legal risk layers.
+                SafeGuard is a digital psychosocial early warning system designed to bridge the gap between clinical risk and corporate productivity. By leveraging AI and interoperable health data (FHIR), SafeGuard provides a "High-Value" solution for modern health systems, ensuring that invisible psychosocial hazards are detected and mitigated before they manifest as significant economic losses.
               </p>
-              <div className="grid grid-cols-2 gap-4 not-prose">
-                <div className="p-6 bg-white rounded-3xl border border-gray-100 shadow-sm">
-                  <div className="text-3xl font-bold text-teal-600 mb-1">12B</div>
-                  <div className="text-xs font-bold uppercase tracking-widest text-gray-400">Workdays Lost Annually</div>
-                </div>
-                <div className="p-6 bg-white rounded-3xl border border-gray-100 shadow-sm">
-                  <div className="text-3xl font-bold text-teal-600 mb-1">$1T</div>
-                  <div className="text-xs font-bold uppercase tracking-widest text-gray-400">Global Productivity Loss</div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {/* Global & National Burden */}
-          <section id="problem" className="scroll-mt-32">
-            <h2 className="text-2xl font-bold mb-8 flex items-center gap-3">
-              <Globe className="w-6 h-6 text-teal-600" />
-              Global & National Burden
-            </h2>
-            <div className="space-y-8">
-              <div className="bg-gray-900 text-white p-8 rounded-[40px] relative overflow-hidden">
-                <div className="relative z-10">
-                  <h3 className="text-xl font-bold mb-6">Key Statistics</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                      <div className="text-4xl font-bold text-teal-400 mb-2">727,000</div>
-                      <p className="text-sm text-gray-400">Global suicide deaths per year. 73% occur in low-middle income countries.</p>
-                    </div>
-                    <div>
-                      <div className="text-4xl font-bold text-teal-400 mb-2">17.9%</div>
-                      <p className="text-sm text-gray-400">Workers worldwide have experienced psychological violence or harassment.</p>
-                    </div>
-                    <div>
-                      <div className="text-4xl font-bold text-teal-400 mb-2">36.31%</div>
-                      <p className="text-sm text-gray-400">Indonesian students potentially experience bullying (Asesmen Nasional 2022).</p>
-                    </div>
-                    <div>
-                      <div className="text-4xl font-bold text-teal-400 mb-2">61%</div>
-                      <p className="text-sm text-gray-400">Indonesian youth with depression had suicidal thoughts in the last month.</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="absolute top-0 right-0 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
-              </div>
-              
-              <div className="prose prose-teal max-w-none text-gray-600">
-                <p>
-                  In Indonesia, suicide signals are critical. Sample Registration System (2016) estimates 1,800 deaths/year (5 per day), with 47.7% of victims aged 10–39 years. Bullying is often the "upstream" trigger for these "downstream" psychiatric emergencies.
-                </p>
-              </div>
-            </div>
-          </section>
-
-          {/* Sectoral Epidemiology */}
-          <section id="sector" className="scroll-mt-32">
-            <h2 className="text-2xl font-bold mb-8 flex items-center gap-3">
-              <Users className="w-6 h-6 text-teal-600" />
-              Sectoral Epidemiology
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {[
-                { 
-                  title: 'Education', 
-                  desc: 'High official data baseline. 36.31% bullying potential. Primary target for SAM due to standardized intervention systems.',
-                  icon: BookOpen
-                },
-                { 
-                  title: 'Healthcare', 
-                  desc: 'High risk for workplace violence. Up to 62% of health workers experience violence; verbal abuse is most common.',
-                  icon: Stethoscope
-                },
-                { 
-                  title: 'Office / Formal', 
-                  desc: '17.9% psychological violence rate. Poor working environments (overload, low control) are key mental health hazards.',
-                  icon: Building2
-                },
-                { 
-                  title: 'Extractive Industries', 
-                  desc: 'Hazard recognized (Migas, Mining, Agriculture) but data fragmented. Focus on psychosocial hazard prevention.',
-                  icon: Scale
-                }
-              ].map((sector) => (
-                <div key={sector.title} className="p-8 bg-white rounded-3xl border border-gray-100 hover:border-teal-200 transition-all group">
-                  <sector.icon className="w-8 h-8 text-teal-600 mb-4 group-hover:scale-110 transition-transform" />
-                  <h4 className="font-bold text-lg mb-2">{sector.title}</h4>
-                  <p className="text-sm text-gray-500 leading-relaxed">{sector.desc}</p>
-                </div>
-              ))}
             </div>
           </section>
 
           {/* Strategic Market Valuation */}
           <section id="economic" className="scroll-mt-32">
-            <h2 className="text-2xl font-bold mb-8 flex items-center gap-3">
+            <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
               <TrendingUp className="w-6 h-6 text-teal-600" />
-              Strategic Market Valuation
+              2. Strategic Market Valuation
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="p-8 bg-white rounded-3xl border border-gray-100 shadow-sm">
-                <div className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">TAM</div>
-                <div className="text-2xl font-bold text-teal-600 mb-2">Rp 300-500B</div>
-                <p className="text-xs text-gray-500">Total Addressable Market: 250,000+ workers facing productivity loss.</p>
-              </div>
-              <div className="p-8 bg-white rounded-3xl border border-gray-100 shadow-sm">
-                <div className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">SAM</div>
-                <div className="text-2xl font-bold text-teal-600 mb-2">Rp 150-250B</div>
-                <p className="text-xs text-gray-500">Serviceable Available Market: Hospitals, Universities, and BUMN.</p>
-              </div>
-              <div className="p-8 bg-white rounded-3xl border border-gray-100 shadow-sm">
-                <div className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">SOM</div>
-                <div className="text-2xl font-bold text-teal-600 mb-2">Rp 50-80B</div>
-                <p className="text-xs text-gray-500">Serviceable Obtainable Market: 10-20 early-adopter institutions.</p>
-              </div>
+              {[
+                { label: 'TAM', value: 'Rp 300-500B', desc: 'Total Addressable Market: 250,000+ workers facing productivity loss.' },
+                { label: 'SAM', value: 'Rp 150-250B', desc: 'Serviceable Available Market: Hospitals, Universities, and BUMN.' },
+                { label: 'SOM', value: 'Rp 50-80B', desc: 'Serviceable Obtainable Market: 10-20 early-adopter institutions.' },
+              ].map((m) => (
+                <div key={m.label} className="p-8 bg-white rounded-3xl border border-gray-100 shadow-sm">
+                  <div className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">{m.label}</div>
+                  <div className="text-2xl font-bold text-teal-600 mb-2">{m.value}</div>
+                  <p className="text-xs text-gray-500 leading-relaxed">{m.desc}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* SWOT Analysis */}
+          <section id="swot" className="scroll-mt-32">
+            <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
+              <Target className="w-6 h-6 text-teal-600" />
+              3. SWOT Analysis: Strategic Positioning
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {[
+                { 
+                  title: 'Strengths', 
+                  items: ['National Alignment (SATUSEHAT/FHIR)', 'Proactive OSHA Framework', 'Economic ROI Modeling', 'Expert Leadership'],
+                  color: 'bg-emerald-50 text-emerald-700 border-emerald-100'
+                },
+                { 
+                  title: 'Weaknesses', 
+                  items: ['Reporting Bias Dependency', 'Cultural Friction in Adoption', 'Scaling Requirements'],
+                  color: 'bg-amber-50 text-amber-700 border-amber-100'
+                },
+                { 
+                  title: 'Opportunities', 
+                  items: ['Industrial Expansion (BUMN)', 'HRIS/ERP Integration', 'Global WHO/ILO Standards'],
+                  color: 'bg-blue-50 text-blue-700 border-blue-100'
+                },
+                { 
+                  title: 'Threats', 
+                  items: ['Regulatory Evolution (PDP Law)', 'Generic EAP Competition', 'Mental Health Stigma'],
+                  color: 'bg-red-50 text-red-700 border-red-100'
+                },
+              ].map((s) => (
+                <div key={s.title} className={cn("p-8 rounded-[32px] border", s.color)}>
+                  <h4 className="font-bold mb-4 uppercase tracking-widest text-xs">{s.title}</h4>
+                  <ul className="space-y-2">
+                    {s.items.map((item, i) => (
+                      <li key={i} className="text-sm flex items-start gap-2">
+                        <span className="mt-1.5 w-1 h-1 rounded-full bg-current shrink-0" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
             </div>
           </section>
 
           {/* Economic Case for Intervention */}
           <section id="impact" className="scroll-mt-32">
-            <h2 className="text-2xl font-bold mb-8 flex items-center gap-3">
+            <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
               <BarChart3 className="w-6 h-6 text-teal-600" />
-              The Economic Case for Intervention
+              4. The Economic Case for Intervention
             </h2>
             <div className="bg-gray-900 text-white p-10 rounded-[40px] relative overflow-hidden">
               <div className="relative z-10">
-                <div className="flex flex-col md:flex-row gap-12 items-center">
-                  <div className="flex-1">
-                    <h3 className="text-xl font-bold mb-4 italic">"Preventing one case is enough to justify the entire system."</h3>
-                    <p className="text-gray-400 mb-8 leading-relaxed">
-                      SafeGuard transforms fragmented mental health complaints into accountable, boardroom-ready economic interventions.
-                    </p>
-                    <div className="space-y-6">
-                      <div className="flex justify-between items-end">
-                        <span className="text-sm text-gray-400 uppercase tracking-widest">System Implementation</span>
-                        <span className="text-xl font-bold text-teal-400">&lt; Rp 1 Billion</span>
-                      </div>
-                      <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
-                        <div className="h-full bg-teal-500 w-[5%]"></div>
-                      </div>
-                      
-                      <div className="flex justify-between items-end">
-                        <span className="text-sm text-gray-400 uppercase tracking-widest">Single Fatal Incident Cost</span>
-                        <span className="text-xl font-bold text-red-400">Up to Rp 20 Billion</span>
-                      </div>
-                      <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
-                        <div className="h-full bg-red-500 w-full"></div>
-                      </div>
+                <h3 className="text-xl font-bold mb-8 italic">"Preventing one case is enough to justify the entire system."</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                  <div className="space-y-6">
+                    <div className="flex justify-between items-end">
+                      <span className="text-xs text-gray-400 uppercase tracking-widest">System Implementation</span>
+                      <span className="text-xl font-bold text-teal-400">&lt; Rp 1 Billion</span>
+                    </div>
+                    <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+                      <div className="h-full bg-teal-500 w-[5%]"></div>
+                    </div>
+                  </div>
+                  <div className="space-y-6">
+                    <div className="flex justify-between items-end">
+                      <span className="text-xs text-gray-400 uppercase tracking-widest">Single Fatal Incident Cost</span>
+                      <span className="text-xl font-bold text-red-400">Up to Rp 20 Billion</span>
+                    </div>
+                    <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+                      <div className="h-full bg-red-500 w-full"></div>
                     </div>
                   </div>
                 </div>
+                <div className="mt-12 flex items-center gap-4 p-4 bg-white/5 rounded-2xl border border-white/10">
+                  <div className="text-3xl font-black text-teal-400">1:4</div>
+                  <div className="text-xs text-gray-400 leading-relaxed">
+                    WHO ROI Standard: For every Rp 1 invested in scaled mental health interventions, there is a Rp 4 return in improved health and productivity.
+                  </div>
+                </div>
               </div>
-              <div className="absolute bottom-0 right-0 w-96 h-96 bg-teal-500/5 rounded-full blur-3xl -mb-48 -mr-48"></div>
+            </div>
+          </section>
+
+          {/* Incident Pyramid */}
+          <section id="pyramid" className="scroll-mt-32">
+            <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
+              <TrendingUp className="w-6 h-6 text-teal-600" />
+              5. The Psychosocial Incident Pyramid
+            </h2>
+            <IncidentPyramid />
+            <div className="mt-8 p-8 bg-teal-50 rounded-[32px] border border-teal-100">
+              <h4 className="font-bold text-teal-900 mb-4">Harvard Style Strategic Insight</h4>
+              <p className="text-sm text-teal-800 leading-relaxed">
+                "1 major injury is preceded by 29 minor injuries and 300 near misses." (Heinrich, 1931). 
+                In the modern psychosocial context, 1 fatality (suicide/CVD) is preceded by 600+ unsafe acts (bullying, toxic culture). 
+                SafeGuard detects these leading indicators before they escalate into lagging fatalities.
+              </p>
+            </div>
+          </section>
+
+          {/* Sector Analysis */}
+          <section id="sectors" className="scroll-mt-32">
+            <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
+              <Building2 className="w-6 h-6 text-teal-600" />
+              6. Sector-Specific Risk Profiles
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {[
+                { 
+                  sector: 'Oil & Gas', 
+                  risk: 'High Stress + High Risk', 
+                  desc: 'Long shifts, isolation, and high-consequence operations lead to sleep disturbance and sudden death risk.' 
+                },
+                { 
+                  sector: 'Mining', 
+                  risk: 'Harsh Environments', 
+                  desc: 'Remote areas and heat stress amplify psychosocial hazards, creating a synergy of physical and mental risk.' 
+                },
+                { 
+                  sector: 'Plantation', 
+                  risk: 'Informal Leadership', 
+                  desc: 'Low reporting culture means UA/UC are often undetected until they escalate into medical emergencies.' 
+                },
+                { 
+                  sector: 'Office / Service', 
+                  risk: 'Cognitive Load', 
+                  desc: 'Invisible hazards like burnout and anxiety lead to presenteeism and hidden productivity loss.' 
+                },
+              ].map((s) => (
+                <div key={s.sector} className="p-6 bg-white rounded-3xl border border-gray-100 shadow-sm">
+                  <div className="text-xs font-bold text-teal-600 uppercase tracking-widest mb-2">{s.sector}</div>
+                  <div className="font-bold text-gray-900 mb-2">{s.risk}</div>
+                  <p className="text-xs text-gray-500 leading-relaxed">{s.desc}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* Special Populations */}
+          <section id="populations" className="scroll-mt-32">
+            <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
+              <Heart className="w-6 h-6 text-teal-600" />
+              7. Special Population Vulnerabilities
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              {[
+                { label: 'Young Workers', desc: 'Higher bullying vulnerability, immature coping.' },
+                { label: 'Geriatric', desc: 'High comorbidities; stress triggers CVD fatality.' },
+                { label: 'Pregnant', desc: 'Stress increases cortisol; risk of preterm birth.' },
+                { label: 'Disabled', desc: 'Higher discrimination risk; underreported UA/UC.' },
+              ].map((p) => (
+                <div key={p.label} className="p-6 bg-gray-50 rounded-2xl border border-gray-100">
+                  <div className="font-bold text-gray-900 text-sm mb-2">{p.label}</div>
+                  <p className="text-[10px] text-gray-500 leading-tight">{p.desc}</p>
+                </div>
+              ))}
             </div>
           </section>
 
           {/* AI/ML Mitigations */}
           <section id="ai-mitigation" className="scroll-mt-32">
-            <h2 className="text-2xl font-bold mb-8 flex items-center gap-3">
+            <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
               <ShieldCheck className="w-6 h-6 text-teal-600" />
-              AI/ML Limitations & Mitigations
+              5. AI/ML Mitigations
             </h2>
             <div className="overflow-hidden rounded-[40px] border border-gray-100 shadow-sm">
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr className="bg-gray-50">
                     <th className="p-6 text-xs font-bold uppercase tracking-widest text-gray-400 font-mono">Risk Factor</th>
-                    <th className="p-6 text-xs font-bold uppercase tracking-widest text-gray-400 font-mono">Impact</th>
                     <th className="p-6 text-xs font-bold uppercase tracking-widest text-gray-400 font-mono">Mitigation Strategy</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
                   {[
-                    { risk: 'AI Hallucination', impact: 'Misclassification', mitigation: 'Human-in-the-loop validation (mandatory)' },
-                    { risk: 'Data Bias', impact: 'Wrong Insight', mitigation: 'Multi-source data (Survey + Behavior)' },
-                    { risk: 'Privacy Risk', impact: 'Legal Issue', mitigation: 'End-to-end encryption + Consent' },
-                    { risk: 'Alert Fatigue', impact: 'Ignored System', mitigation: 'Risk-based smart prioritization' },
-                    { risk: 'Cultural Barrier', impact: 'Underreporting', mitigation: 'Anonymous mode + Leadership endorsement' },
+                    { risk: 'AI Hallucination', mitigation: 'Human-in-the-loop validation (mandatory)' },
+                    { risk: 'Data Bias', mitigation: 'Multi-source data (Survey + Behavior)' },
+                    { risk: 'Privacy Risk', mitigation: 'End-to-end encryption + Consent' },
+                    { risk: 'Alert Fatigue', mitigation: 'Risk-based smart prioritization' },
                   ].map((row) => (
                     <tr key={row.risk} className="hover:bg-gray-50/50 transition-colors">
                       <td className="p-6 font-bold text-sm text-gray-900">{row.risk}</td>
-                      <td className="p-6 text-sm text-red-600">{row.impact}</td>
                       <td className="p-6 text-sm text-gray-500">{row.mitigation}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            <div className="mt-8 p-6 bg-amber-50 border border-amber-100 rounded-3xl flex items-start gap-4">
-              <AlertCircle className="w-6 h-6 text-amber-600 shrink-0" />
-              <p className="text-sm text-amber-900 leading-relaxed">
-                <strong>Strategic Note:</strong> AI does not replace clinicians—AI accelerates detection for clinicians. Every limitation is a design requirement for a safer, more ethical, and more accurate system.
-              </p>
+          </section>
+
+          {/* Leadership Team */}
+          <section id="team" className="scroll-mt-32">
+            <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
+              <Users className="w-6 h-6 text-teal-600" />
+              6. The Leadership Team
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {[
+                { name: 'Akhmad Khudri', role: 'Team Lead & Product Owner' },
+                { name: 'Stanley Nathanael Wijaya', role: 'Lead AI & Product Engineer' },
+                { name: 'Dwiki Aulia Rahman', role: 'Health Data & Predictive Insight' },
+                { name: 'dr. M. Rifki Al Ikhsan', role: 'Clinical & Occupational Health Advisor' },
+              ].map((m) => (
+                <div key={m.name} className="p-6 bg-gray-50 rounded-2xl border border-gray-100">
+                  <div className="font-bold text-gray-900">{m.name}</div>
+                  <div className="text-xs text-gray-500 font-mono uppercase tracking-widest mt-1">{m.role}</div>
+                </div>
+              ))}
             </div>
           </section>
 

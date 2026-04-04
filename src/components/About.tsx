@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
+import { cn } from '../lib/utils';
 import { 
   Shield, 
   Target, 
@@ -13,6 +14,8 @@ import {
   Twitter,
   Linkedin
 } from 'lucide-react';
+
+import { IncidentPyramid } from './IncidentPyramid';
 
 interface AboutProps {
   onGetStarted: () => void;
@@ -30,9 +33,15 @@ export const About: React.FC<AboutProps> = ({ onGetStarted }) => {
           <h1 className="text-4xl font-bold mb-6 tracking-tight">
             Pioneering the Future of <span className="text-teal-400">Psychosocial Surveillance</span>
           </h1>
-          <p className="text-teal-100/70 text-lg leading-relaxed">
+          <p className="text-teal-100/70 text-lg leading-relaxed mb-8">
             SafeGuard was born from a simple but powerful vision: to transform invisible psychosocial hazards into visible, actionable, and preventable insights. As a <b>High-Value Health System</b>, we combine clinical precision with AI-driven prognostic modeling to protect the world's most valuable asset—human capital.
           </p>
+          <div className="p-6 bg-white/5 rounded-3xl border border-white/10 backdrop-blur-sm">
+            <p className="text-xs font-mono text-teal-400 uppercase tracking-widest mb-2">Master Hook</p>
+            <p className="text-xl font-bold italic leading-tight">
+              "1 fatality is not 1 event — it is the visible tip of hundreds of ignored psychosocial signals."
+            </p>
+          </div>
         </div>
         <div className="absolute top-0 right-0 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
       </section>
@@ -51,6 +60,11 @@ export const About: React.FC<AboutProps> = ({ onGetStarted }) => {
         <div className="absolute top-0 right-0 p-12 opacity-5">
           <Globe className="w-64 h-64" />
         </div>
+      </section>
+
+      {/* Incident Pyramid Section */}
+      <section className="scroll-mt-32">
+        <IncidentPyramid />
       </section>
 
       {/* Core Values */}
@@ -93,48 +107,92 @@ export const About: React.FC<AboutProps> = ({ onGetStarted }) => {
 
       {/* The Team / Leadership */}
       <section>
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h2 className="text-2xl font-bold">Leadership & Vision</h2>
-            <p className="text-sm text-gray-500">The minds behind the SafeGuard ecosystem.</p>
-          </div>
-          <div className="flex gap-2">
-            <button className="p-2 hover:bg-gray-100 rounded-full transition-colors"><Twitter className="w-4 h-4 text-gray-400" /></button>
-            <button className="p-2 hover:bg-gray-100 rounded-full transition-colors"><Linkedin className="w-4 h-4 text-gray-400" /></button>
-            <button className="p-2 hover:bg-gray-100 rounded-full transition-colors"><Github className="w-4 h-4 text-gray-400" /></button>
-          </div>
+        <div className="mb-12">
+          <h2 className="text-3xl font-bold tracking-tight">Leadership & Vision</h2>
+          <p className="text-gray-500 mt-2">The multidisciplinary team driving the SafeGuard ecosystem.</p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="group relative bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm hover:border-teal-200 transition-all">
-            <div className="flex items-center gap-6">
-              <div className="w-20 h-20 bg-gray-100 rounded-3xl overflow-hidden border border-gray-100">
-                <div className="w-full h-full flex items-center justify-center bg-teal-50 text-teal-600 font-bold text-xl">DR</div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {[
+            {
+              name: 'Akhmad Khudri',
+              role: 'Team Lead & Product Owner',
+              focus: 'Strategy & SWOT',
+              desc: 'Orchestrating the strategic alignment of SafeGuard with global health economics and high-value health system frameworks.',
+              initials: 'AK',
+              color: 'bg-teal-50 text-teal-600',
+              linkedin: 'https://www.linkedin.com/in/akhmad-khudri',
+              github: 'https://github.com/mrbrightsides'
+            },
+            {
+              name: 'Stanley Nathanael Wijaya',
+              role: 'Lead AI & Product Engineer',
+              focus: 'Front-end & Integration',
+              desc: 'Architecting the seamless integration of AI-driven insights into a production-grade, responsive user experience.',
+              initials: 'SW',
+              color: 'bg-blue-50 text-blue-600',
+              linkedin: 'https://www.linkedin.com/in/stanley-nathanael-wijaya',
+              github: 'https://github.com/StyNW7'
+            },
+            {
+              name: 'Dwiki Aulia Rahman',
+              role: 'Health Data & Predictive Insight',
+              focus: 'AI Architecture & Epidemiology',
+              desc: 'Designing robust predictive models and epidemiological frameworks to ensure data-driven psychosocial surveillance.',
+              initials: 'DR',
+              color: 'bg-indigo-50 text-indigo-600'
+            },
+            {
+              name: 'dr. M. Rifki Al Ikhsan',
+              role: 'Clinical & Occupational Health Advisor',
+              focus: 'Policy, MCU, HRA & Intervention',
+              desc: 'Ensuring clinical excellence and occupational health compliance through evidence-based psychosocial intervention strategies.',
+              initials: 'RI',
+              color: 'bg-emerald-50 text-emerald-600',
+              linkedin: 'https://www.linkedin.com/in/m-rifki-al-ikhsan-02703295/'
+            }
+          ].map((member, i) => (
+            <motion.div 
+              key={member.name}
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: i * 0.1 }}
+              className="group relative bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm hover:border-teal-200 transition-all hover:shadow-md"
+            >
+              <div className="flex items-start justify-between mb-6">
+                <div className="flex items-center gap-4">
+                  <div className={cn("w-16 h-16 rounded-2xl flex items-center justify-center font-bold text-lg shadow-inner", member.color)}>
+                    {member.initials}
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-bold text-gray-900">{member.name}</h4>
+                    <p className="text-[10px] font-mono uppercase tracking-widest text-gray-400">{member.role}</p>
+                  </div>
+                </div>
+                <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  {member.linkedin && (
+                    <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="p-2 hover:bg-gray-50 rounded-full transition-colors">
+                      <Linkedin className="w-4 h-4 text-gray-400 hover:text-blue-600" />
+                    </a>
+                  )}
+                  {member.github && (
+                    <a href={member.github} target="_blank" rel="noopener noreferrer" className="p-2 hover:bg-gray-50 rounded-full transition-colors">
+                      <Github className="w-4 h-4 text-gray-400 hover:text-black" />
+                    </a>
+                  )}
+                </div>
               </div>
-              <div>
-                <h4 className="text-xl font-bold">Dr. Rifki</h4>
-                <p className="text-sm text-teal-600 font-mono uppercase tracking-widest">Chief Medical Strategist</p>
+              <div className="space-y-4">
+                <div className="inline-flex items-center gap-1.5 px-2 py-0.5 bg-gray-50 text-gray-500 rounded-md text-[9px] font-bold uppercase tracking-wider border border-gray-100">
+                  <Target className="w-3 h-3" />
+                  {member.focus}
+                </div>
+                <p className="text-sm text-gray-500 leading-relaxed">
+                  {member.desc}
+                </p>
               </div>
-            </div>
-            <p className="mt-6 text-sm text-gray-500 leading-relaxed">
-              Leading the clinical integration of SafeGuard with national health systems like SATUSEHAT, ensuring every AI insight is grounded in evidence-based medicine.
-            </p>
-          </div>
-
-          <div className="group relative bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm hover:border-teal-200 transition-all">
-            <div className="flex items-center gap-6">
-              <div className="w-20 h-20 bg-gray-100 rounded-3xl overflow-hidden border border-gray-100">
-                <div className="w-full h-full flex items-center justify-center bg-blue-50 text-blue-600 font-bold text-xl">AI</div>
-              </div>
-              <div>
-                <h4 className="text-xl font-bold">SafeGuard AI Team</h4>
-                <p className="text-sm text-blue-600 font-mono uppercase tracking-widest">Engineering & ML</p>
-              </div>
-            </div>
-            <p className="mt-6 text-sm text-gray-500 leading-relaxed">
-              A multidisciplinary collective of data scientists and behavioral experts dedicated to building the world's most accurate psychosocial prognostic models.
-            </p>
-          </div>
+            </motion.div>
+          ))}
         </div>
       </section>
 

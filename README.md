@@ -17,6 +17,11 @@
 
 SafeGuard is an enterprise-grade psychosocial health surveillance system that integrates advanced **Safespace AI/ML** prognostic models with robust **Health Economic Evaluation (HEE)**. Designed for large organizations and healthcare providers, it monitors, detects, and mitigates mental health burdens using WHO-standard ROI modeling and ICD-10 clinical frameworks.
 
+### 🔺 THE MASTER HOOK
+> **“1 fatality is not 1 event — it is the visible tip of hundreds of ignored psychosocial signals.”**
+
+SafeGuard transforms **Fatality (Suicide/CVD)** from a lagging indicator into a preventable outcome by monitoring **Bullying (UA/UC)** as a leading indicator.
+
 ## 🛡️ The SAFE Framework
 SafeGuard operates on the **SAFE** mnemonic to ensure comprehensive mental health surveillance:
 - **S**ense: Real-time biometric and digital anamnesis data collection.
@@ -38,39 +43,71 @@ SafeGuard operates on the **SAFE** mnemonic to ensure comprehensive mental healt
 *   **INA-CBG Claim Mapping**: Integration of Indonesian Case-Based Groups (INA-CBG) for mean claim analysis (e.g., Rp12.4M/admission) and medication cost tracking.
 *   **Cost of Inaction vs. Intervention**: Robust comparative analytics to justify wellness budget allocation for management and stakeholders.
 
-### 3. **Clinical & Statistical Interoperability**
+### 3. **The Psychosocial Incident Pyramid**
+*   **1 Fatality = 600 UA/UC**: Based on the safety pyramid (Heinrich → Bird), SafeGuard identifies the 600+ "Unsafe Acts" (bullying, toxic culture) that precede a single fatality.
+*   **Biological Pathway**: Maps chronic stress to the HPA axis, cortisol elevation, and cardiovascular risk (CVD).
+*   **Predictive Bridge**: Turns "near misses" into prevented lives through early detection.
+
+### 4. **Clinical & Statistical Interoperability**
 *   **ICD-10 Chapter V Mapping**: Burden clusters categorized by WHO ICD-10 codes (F30-F39 Mood, F40-F48 Anxiety/Stress, etc.) for standardized reporting.
 *   **Community Medicine Utilization Review**: Doughnut-based analytics for facility distribution (Puskesmas, RSUD) and medication utilization (Antidepressants, Anxiolytics).
 
-### 4. **Personalized Prevention Roadmap**
+### 5. **Personalized Prevention Roadmap**
 *   **Dual-Mode Interface**: Specialized roadmaps for **Worker Mode** (Occupational Health) and **Patient Mode** (Clinical Prevention).
 *   **L3 Prognostic Predictors**: Monitoring of workplace conflict, peer support quality, and psychosocial stressors.
 *   **Personal ROI**: Individualized estimates of annual healthcare savings and productivity value in IDR.
 
-### 5. **Digital Anamnesis & Biometric Sync**
+### 6. **Digital Anamnesis & Biometric Sync**
 *   **DASS-21 & SRQ-20 Integration**: Comprehensive psychosocial self-assessment for AI-driven risk detection.
 *   **Live Biometric Surveillance**: Real-time BPM and HRV (Heart Rate Variability) sync via Bluetooth simulation to monitor autonomic nervous system regulation.
 
-### 6. **Inclusive Design (Accessibility-First)**
+### 7. **Inclusive Design (Accessibility-First)**
 *   **Adaptive UI Engine**: Toggleable **Accessibility Mode** with high-contrast (B&W) interface and simplified layouts.
 *   **AI Voice Summary (TTS)**: Real-time audio briefing of health risks and population status for low-vision users.
 *   **Tremor-Resistant Interaction**: Extra-large touch targets (p-8/80px) and simplified navigation for users with motor disabilities (Parkinson/Amputation).
 *   **Universal Iconography**: Zero-text dependency mode using intuitive icons for low-literacy populations.
 
-### 7. **Mental Emergency Response Protocol (MERP)**
+### 8. **Mental Emergency Response Protocol (MERP)**
 *   **L0 SOS Trigger**: Floating emergency button with immediate GPS-linked escalation.
 *   **Automated Dispatch**: Real-time connection to refinery medical teams and first responders.
 *   **Voice-Guided Protocol**: Audio instructions for users in crisis until help arrives.
 
 ---
 
-## 🎯 Why SafeGuard Matters
+## 👥 The Leadership Team
 
-- Psychosocial hazards are invisible → not measured → not managed
-- Traditional systems are reactive → SafeGuard is predictive
-- One incident can cost billions → prevention costs <1%
+SafeGuard is developed by a multidisciplinary team of experts in AI, product engineering, health data, and clinical occupational health:
 
-SafeGuard bridges the gap between clinical insight and economic decision-making.
+*   **Akhmad Khudri** → Team Lead & Product Owner (Strategy & SWOT)
+    *   [LinkedIn](https://www.linkedin.com/in/akhmad-khudri) | [GitHub](https://github.com/mrbrightsides)
+*   **Stanley Nathanael Wijaya** → Lead AI & Product Engineer (Front-end & Integration)
+    *   [LinkedIn](https://www.linkedin.com/in/stanley-nathanael-wijaya) | [GitHub](https://github.com/StyNW7)
+*   **Dwiki Aulia Rahman** → Health Data & Predictive Insight (AI Architecture & Epidemiology)
+*   **dr. M. Rifki Al Ikhsan** → Clinical & Occupational Health Advisor (Policy, MCU, HRA, Psychosocial Intervention)
+    *   [LinkedIn](https://www.linkedin.com/in/m-rifki-al-ikhsan-02703295/)
+
+---
+
+## 🎤 The S.A.F.E. Pitch (2-Minute Script)
+
+**Hook:** "Bullying is not a soft issue; it is a leading indicator of mental-health failure and a multi-billion rupiah economic drain."
+
+*   **S (Sense):** "We sense the invisible. SafeGuard collects real-time digital and biometric data to detect early warning signals of psychosocial hazards."
+*   **A (Analyze):** "We analyze the risk. Our AI maps these signals into clinical (ICD-10) and economic (ROI) layers, predicting absenteeism before it happens."
+*   **F (Flag):** "We flag the danger. Automated alerts ensure that high-risk cases (Level 0-L2) are escalated to medical teams instantly."
+*   **E (Engage):** "We engage for prevention. Personalized roadmaps and clinical interventions transform high-risk populations into high-value health assets."
+
+**Closing:** "SafeGuard: Bridging the gap between clinical risk and corporate productivity for a High-Value Health System."
+
+---
+
+## 🎯 Why SafeGuard Matters (HSIL 2026 Focus)
+
+SafeGuard aligns with the **HSIL Harvard Hackathon's** focus on **High-Value Health Systems**:
+- **Economic Impact:** Transforms fragmented mental health data into boardroom-ready ROI models.
+- **Interoperability:** Uses **HL7 FHIR R4** standards for seamless integration with **SATUSEHAT**.
+- **Proactive Care:** Shifts the paradigm from reactive crisis management to proactive psychosocial surveillance.
+- **Scalability:** Designed for large-scale industrial and educational ecosystems (BUMN, Universities).
 
 ---
 

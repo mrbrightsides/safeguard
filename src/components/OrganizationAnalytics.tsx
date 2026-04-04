@@ -15,6 +15,7 @@ import {
   AreaChart,
   Area
 } from 'recharts';
+import { motion } from 'motion/react';
 import { 
   Users, 
   TrendingUp, 
@@ -23,9 +24,37 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   Filter,
-  Download
+  Download,
+  ShieldAlert,
+  Activity,
+  LayoutGrid,
+  MapPin,
+  Clock,
+  ShieldCheck,
+  Zap,
+  X,
+  Search,
+  ChevronRight,
+  FileText
 } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { jsPDF } from 'jspdf';
+
+const oshaPyramidData = [
+  { level: 'Fatality Review', count: 0, color: 'bg-black', text: 'text-white', desc: 'Fatal psychosocial outcomes' },
+  { level: 'RWDC / LTI', count: 4, color: 'bg-red-600', text: 'text-white', desc: 'Restricted Work / Lost Time Injury' },
+  { level: 'MTC', count: 12, color: 'bg-orange-500', text: 'text-white', desc: 'Medical Treatment Cases' },
+  { level: 'First Aid (FA)', count: 45, color: 'bg-amber-400', text: 'text-black', desc: 'Minor psychosocial incidents' },
+  { level: 'UA / UC', count: 312, color: 'bg-emerald-400', text: 'text-black', desc: 'Unsafe Acts / Unsafe Conditions (The Battlefield)' },
+];
+
+const bowTieData = {
+  threats: ['Workload Pressure', 'Lack of Support', 'Role Ambiguity', 'Incivility'],
+  preventiveBarriers: ['Manager Training', 'Clear Policies', 'Weekly Pulse Check', 'Peer Support'],
+  topEvent: 'Psychosocial Hazard / Bullying Incident',
+  mitigativeBarriers: ['SafeGuard EWS', 'Clinical Triage', 'MERP Protocol', 'Modified Duty'],
+  consequences: ['Burnout', 'Absenteeism', 'Legal Risk', 'Health Loss']
+};
 
 const riskData = [
   { name: 'L0: Emergency', count: 12, color: '#ef4444', desc: 'Suicidal risk, psychosis, acute crisis' },
@@ -64,6 +93,87 @@ const economicData = [
 
 export const OrganizationAnalytics: React.FC = () => {
   const exchangeRate = 17002; // JISDOR April 1, 2026
+  const [isFilterOpen, setIsFilterOpen] = React.useState(false);
+  const [isLogOpen, setIsLogOpen] = React.useState(false);
+  const [selectedICD, setSelectedICD] = React.useState<string[]>(['F30-F39', 'F40-F48', 'F20-F29', 'F10-F19']);
+
+  const handleExportReport = () => {
+    const doc = new jsPDF();
+    const timestamp = new Date().toLocaleString();
+
+    // Header
+    doc.setFillColor(13, 148, 136); // Teal-600
+    doc.rect(0, 0, 210, 40, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(22);
+    doc.text('SafeGuard Health Economic Report', 20, 25);
+    doc.setFontSize(10);
+    doc.text(`Generated on: ${timestamp}`, 20, 32);
+
+    // Summary Section
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(16);
+    doc.text('Executive Summary', 20, 55);
+    doc.setFontSize(11);
+    doc.text([
+      'SafeGuard predictive surveillance has identified significant ROI opportunities.',
+      'By monitoring leading psychosocial indicators (UA/UC), the system mitigates',
+      'the Rp 500 Billion productivity loss through early ICD-10 prognostic detection.',
+      '',
+      `Current ROI Standard: 1:4 (WHO Standard)`,
+      `Exchange Rate: Rp ${exchangeRate.toLocaleString()}/USD`,
+      `Net Benefit: +Rp 1.25B`
+    ], 20, 65);
+
+    // Economic Data Table
+    doc.setFontSize(14);
+    doc.text('Economic Evaluation (HEE)', 20, 110);
+    doc.setFontSize(10);
+    doc.setFillColor(240, 240, 240);
+    doc.rect(20, 115, 170, 8, 'F');
+    doc.text('Category', 25, 120);
+    doc.text('Inaction Cost', 80, 120);
+    doc.text('Intervention', 120, 120);
+    doc.text('Net Savings', 160, 120);
+
+    economicData.forEach((item, i) => {
+      const y = 128 + (i * 8);
+      doc.text(item.category, 25, y);
+      doc.text(`Rp ${item.inaction.toLocaleString()}`, 80, y);
+      doc.text(`Rp ${item.intervention.toLocaleString()}`, 120, y);
+      doc.text(`Rp ${item.savings.toLocaleString()}`, 160, y);
+    });
+
+    // ICD-10 Distribution
+    doc.setFontSize(14);
+    doc.text('ICD-10 Burden Clusters', 20, 165);
+    icdData.forEach((item, i) => {
+      const y = 175 + (i * 7);
+      doc.text(`${item.name}: ${item.value}%`, 25, y);
+    });
+
+    // Footer
+    doc.setFontSize(8);
+    doc.setTextColor(150, 150, 150);
+    doc.text('Confidential - SafeGuard Enterprise Psychosocial Surveillance', 105, 285, { align: 'center' });
+
+    doc.save(`SafeGuard_HEE_Report_${new Date().getTime()}.pdf`);
+  };
+
+  const toggleICD = (id: string) => {
+    setSelectedICD(prev => 
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    );
+  };
+
+  const surveillanceLogs = [
+    { id: 'LOG-001', time: '2026-04-03 14:20', dept: 'Sales', level: 'L0', event: 'Suicidal ideation markers detected in pulse check', status: 'Escalated', action: 'MERP Triggered' },
+    { id: 'LOG-002', time: '2026-04-03 11:45', dept: 'Engineering', level: 'L2', event: 'Cluster of F41.0 (Panic) symptoms in Site B', status: 'Active', action: 'Group Counseling' },
+    { id: 'LOG-003', time: '2026-04-02 22:10', dept: 'Operations', level: 'L1', event: 'Suspected substance use pattern in night shift', status: 'Monitoring', action: 'Supervisor Briefed' },
+    { id: 'LOG-004', time: '2026-04-02 16:30', dept: 'HR', level: 'L3', event: 'High burnout markers in recruitment team', status: 'Resolved', action: 'Workload Adjusted' },
+    { id: 'LOG-005', time: '2026-04-02 09:15', dept: 'Finance', level: 'L2', event: 'Persistent anxiety reports during audit', status: 'Active', action: 'Peer Support' },
+    { id: 'LOG-006', time: '2026-04-01 14:00', dept: 'IT', level: 'L3', event: 'Role ambiguity leading to stress cluster', status: 'Resolved', action: 'Role Definition Review' },
+  ];
 
   return (
     <div className="space-y-8 pb-12 overflow-x-hidden">
@@ -74,11 +184,17 @@ export const OrganizationAnalytics: React.FC = () => {
           <p className="text-sm text-gray-500">Predictive Surveillance & ROI Analysis (JISDOR: Rp{exchangeRate.toLocaleString()}/USD)</p>
         </div>
         <div className="flex items-center gap-3">
-          <button className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors">
+          <button 
+            onClick={() => setIsFilterOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors"
+          >
             <Filter className="w-4 h-4" />
             ICD-10 Filter
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-xl text-sm font-medium hover:bg-gray-800 transition-colors">
+          <button 
+            onClick={handleExportReport}
+            className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-xl text-sm font-medium hover:bg-gray-800 transition-colors"
+          >
             <Download className="w-4 h-4" />
             Export Health Economic Report
           </button>
@@ -121,6 +237,194 @@ export const OrganizationAnalytics: React.FC = () => {
             <p className="text-xs text-gray-600 leading-relaxed">{item.desc}</p>
           </div>
         ))}
+      </div>
+
+      {/* OSHA Incident Pyramid & Bow Tie Analysis */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* OSHA Pyramid */}
+        <div className="bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm">
+          <div className="flex justify-between items-center mb-8">
+            <div>
+              <h3 className="text-xl font-bold">OSHA-Style Incident Pyramid</h3>
+              <p className="text-sm text-gray-500">Psychosocial Hazard Stratification (UA/UC to Fatality)</p>
+            </div>
+            <ShieldAlert className="w-6 h-6 text-red-500" />
+          </div>
+          
+          <div className="flex flex-col items-center space-y-1">
+            {oshaPyramidData.map((item, i) => (
+              <motion.div
+                key={item.level}
+                initial={{ opacity: 0, scaleX: 0.5 }}
+                animate={{ opacity: 1, scaleX: 1 }}
+                transition={{ delay: i * 0.1 }}
+                className={cn(
+                  "relative h-12 flex items-center justify-center rounded-lg transition-all hover:brightness-110 cursor-help group",
+                  item.color,
+                  item.text
+                )}
+                style={{ width: `${100 - (i * 15)}%` }}
+              >
+                <div className="text-xs font-bold uppercase tracking-tighter">{item.level}: {item.count}</div>
+                
+                {/* Tooltip */}
+                <div className="absolute bottom-full mb-2 hidden group-hover:block w-48 p-2 bg-black text-white text-[10px] rounded-xl z-50 text-center shadow-xl">
+                  {item.desc}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+          
+          <div className="mt-8 p-4 bg-red-50 border border-red-100 rounded-2xl">
+            <p className="text-xs text-red-700 font-medium text-center italic">
+              "If you investigate only fatality, you are already too late. The real battlefield is at UA/UC."
+            </p>
+          </div>
+        </div>
+
+        {/* Bow Tie Analysis */}
+        <div className="bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm relative overflow-hidden">
+          <div className="flex justify-between items-center mb-8">
+            <div>
+              <h3 className="text-xl font-bold">Bow Tie Risk Control</h3>
+              <p className="text-sm text-gray-500">Barrier Integrity & Consequence Mitigation</p>
+            </div>
+            <Zap className="w-6 h-6 text-amber-500" />
+          </div>
+
+          <div className="grid grid-cols-3 gap-4 relative">
+            {/* Threats to Top Event */}
+            <div className="space-y-2">
+              <div className="text-[10px] font-mono uppercase text-gray-400 mb-2">Threats</div>
+              {bowTieData.threats.map(t => (
+                <div key={t} className="p-2 bg-gray-50 border border-gray-100 rounded-lg text-[10px] font-medium text-gray-600">{t}</div>
+              ))}
+              <div className="h-4"></div>
+              <div className="text-[10px] font-mono uppercase text-emerald-500 mb-2">Preventive Barriers</div>
+              {bowTieData.preventiveBarriers.map(b => (
+                <div key={b} className="p-2 bg-emerald-50 border border-emerald-100 rounded-lg text-[10px] font-bold text-emerald-700 flex items-center gap-1">
+                  <ShieldCheck className="w-3 h-3" /> {b}
+                </div>
+              ))}
+            </div>
+
+            {/* Top Event */}
+            <div className="flex flex-col items-center justify-center">
+              <div className="w-full p-4 bg-red-600 text-white rounded-2xl text-center shadow-lg shadow-red-600/20 z-10">
+                <div className="text-[10px] font-mono uppercase opacity-70 mb-1">Top Event</div>
+                <div className="text-xs font-black leading-tight">{bowTieData.topEvent}</div>
+              </div>
+              <div className="w-0.5 h-full bg-gray-100 absolute top-0 left-1/3 -translate-x-1/2"></div>
+              <div className="w-0.5 h-full bg-gray-100 absolute top-0 left-2/3 -translate-x-1/2"></div>
+            </div>
+
+            {/* Consequences */}
+            <div className="space-y-2">
+              <div className="text-[10px] font-mono uppercase text-gray-400 mb-2 text-right">Consequences</div>
+              {bowTieData.consequences.map(c => (
+                <div key={c} className="p-2 bg-gray-50 border border-gray-100 rounded-lg text-[10px] font-medium text-gray-600 text-right">{c}</div>
+              ))}
+              <div className="h-4"></div>
+              <div className="text-[10px] font-mono uppercase text-blue-500 mb-2 text-right">Mitigative Barriers</div>
+              {bowTieData.mitigativeBarriers.map(b => (
+                <div key={b} className="p-2 bg-blue-50 border border-blue-100 rounded-lg text-[10px] font-bold text-blue-700 flex items-center justify-end gap-1">
+                  {b} <ShieldCheck className="w-3 h-3" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Weekly Community Medicine Report Section */}
+      <div className="bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-black rounded-2xl">
+              <LayoutGrid className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h3 className="text-xl font-bold">Weekly Community Medicine Report</h3>
+              <p className="text-sm text-gray-500">Week 14: Strategic Zero Bullying Campaign Autopilot</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full text-[10px] font-bold uppercase tracking-widest border border-emerald-100">
+              Campaign Active: 92% Adoption
+            </span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {[
+            { label: 'New UA/UC Reports', value: '42', icon: Activity, color: 'text-emerald-600' },
+            { label: 'Avg Closure Time', value: '48h', icon: Clock, color: 'text-blue-600' },
+            { label: 'Cluster Alerts', value: '3', icon: MapPin, color: 'text-orange-600' },
+            { label: 'Barrier Failures', value: '8', icon: ShieldAlert, color: 'text-red-600' },
+          ].map((item, i) => (
+            <div key={i} className="p-6 bg-gray-50 rounded-3xl border border-gray-100 group hover:bg-white hover:shadow-md transition-all">
+              <div className={cn("p-2 rounded-xl bg-white w-fit mb-4 shadow-sm", item.color)}>
+                <item.icon className="w-5 h-5" />
+              </div>
+              <div className="text-2xl font-black text-gray-900">{item.value}</div>
+              <div className="text-[10px] font-mono uppercase text-gray-400 mt-1">{item.label}</div>
+            </div>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="space-y-4">
+            <h4 className="text-xs font-bold uppercase tracking-widest text-gray-400">Visuospatiotemporal Action Tracking</h4>
+            <div className="bg-gray-50 p-6 rounded-3xl border border-gray-100 h-64 flex items-center justify-center relative overflow-hidden">
+              {/* Mock Heatmap Visualization */}
+              <div className="absolute inset-0 grid grid-cols-8 grid-rows-4 gap-2 p-4">
+                {Array.from({ length: 32 }).map((_, i) => (
+                  <div 
+                    key={i} 
+                    className={cn(
+                      "rounded-lg transition-all",
+                      Math.random() > 0.8 ? "bg-red-500/40 animate-pulse" : 
+                      Math.random() > 0.6 ? "bg-orange-400/30" : "bg-emerald-400/20"
+                    )}
+                  />
+                ))}
+              </div>
+              <div className="relative z-10 text-center">
+                <div className="text-xs font-bold text-gray-900 bg-white/80 backdrop-blur px-4 py-2 rounded-xl shadow-sm">
+                  Active Cluster: Engineering Site B (L2 Risk)
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h4 className="text-xs font-bold uppercase tracking-widest text-gray-400">Gamification Autopilot Status</h4>
+            <div className="space-y-3">
+              {[
+                { label: 'Weekly Check-in Streak', progress: 85, badge: '🔥' },
+                { label: 'Manager Action Closure', progress: 94, badge: '✅' },
+                { label: 'Early Reporting Participation', progress: 62, badge: '🛡️' },
+              ].map((item, i) => (
+                <div key={i} className="p-4 bg-white border border-gray-100 rounded-2xl shadow-sm">
+                  <div className="flex justify-between items-center mb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-lg">{item.badge}</span>
+                      <span className="text-xs font-bold text-gray-900">{item.label}</span>
+                    </div>
+                    <span className="text-xs font-mono text-teal-600">{item.progress}%</span>
+                  </div>
+                  <div className="w-full h-1.5 bg-gray-50 rounded-full overflow-hidden">
+                    <motion.div 
+                      initial={{ width: 0 }}
+                      animate={{ width: `${item.progress}%` }}
+                      className="h-full bg-teal-500 rounded-full"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Summary Stats */}
@@ -542,11 +846,182 @@ export const OrganizationAnalytics: React.FC = () => {
               </div>
             ))}
           </div>
-          <button className="w-full mt-6 py-3 border border-gray-200 rounded-xl text-sm font-bold hover:bg-gray-50 transition-colors">
+          <button 
+            onClick={() => setIsLogOpen(true)}
+            className="w-full mt-6 py-3 border border-gray-200 rounded-xl text-sm font-bold hover:bg-gray-50 transition-colors"
+          >
             View Full Surveillance Log
           </button>
         </div>
       </div>
+
+      {/* ICD-10 Filter Modal */}
+      {isFilterOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            className="bg-white rounded-[40px] w-full max-w-md overflow-hidden shadow-2xl"
+          >
+            <div className="p-8 border-b border-gray-100 flex justify-between items-center bg-teal-50/50">
+              <div>
+                <h3 className="text-xl font-bold">ICD-10 Filter</h3>
+                <p className="text-xs text-gray-500">Select clusters for analysis</p>
+              </div>
+              <button 
+                onClick={() => setIsFilterOpen(false)}
+                className="p-2 hover:bg-white rounded-full transition-colors shadow-sm"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            <div className="p-8 space-y-4">
+              {[
+                { id: 'F30-F39', label: 'Mood/Depression', count: 145 },
+                { id: 'F40-F48', label: 'Anxiety/Stress', count: 312 },
+                { id: 'F20-F29', label: 'Psychotic Disorders', count: 24 },
+                { id: 'F10-F19', label: 'Substance Use', count: 56 },
+                { id: 'F00-F09', label: 'Organic Disorders', count: 12 },
+              ].map((item) => (
+                <label key={item.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl cursor-pointer hover:bg-gray-100 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <input 
+                      type="checkbox" 
+                      checked={selectedICD.includes(item.id)}
+                      onChange={() => toggleICD(item.id)}
+                      className="w-5 h-5 rounded-lg border-gray-300 text-teal-600 focus:ring-teal-500"
+                    />
+                    <div>
+                      <div className="text-sm font-bold text-gray-900">{item.id}</div>
+                      <div className="text-[10px] text-gray-500 uppercase tracking-wider">{item.label}</div>
+                    </div>
+                  </div>
+                  <div className="text-xs font-mono text-gray-400">{item.count} cases</div>
+                </label>
+              ))}
+            </div>
+            <div className="p-8 bg-gray-50 flex gap-3">
+              <button 
+                onClick={() => setIsFilterOpen(false)}
+                className="flex-1 py-3 bg-black text-white rounded-2xl text-sm font-bold hover:bg-gray-800 transition-colors"
+              >
+                Apply Filters
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Surveillance Log Modal */}
+      {isLogOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            className="bg-white rounded-[40px] w-full max-w-5xl max-h-[85vh] overflow-hidden shadow-2xl flex flex-col"
+          >
+            <div className="p-8 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-black rounded-2xl">
+                  <Activity className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold">Full Surveillance Log</h3>
+                  <p className="text-xs text-gray-500">Real-time psychosocial incident tracking</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="relative">
+                  <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                  <input 
+                    type="text" 
+                    placeholder="Search logs..." 
+                    className="pl-9 pr-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-500/20"
+                  />
+                </div>
+                <button 
+                  onClick={() => setIsLogOpen(false)}
+                  className="p-2 hover:bg-white rounded-full transition-colors shadow-sm"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+            
+            <div className="flex-1 overflow-auto p-8">
+              <table className="w-full text-left border-separate border-spacing-y-3">
+                <thead>
+                  <tr className="text-[10px] font-mono uppercase tracking-widest text-gray-400">
+                    <th className="px-4 py-2">ID / Time</th>
+                    <th className="px-4 py-2">Department</th>
+                    <th className="px-4 py-2">Risk Level</th>
+                    <th className="px-4 py-2">Incident Event</th>
+                    <th className="px-4 py-2">Status</th>
+                    <th className="px-4 py-2">Action Taken</th>
+                    <th className="px-4 py-2"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {surveillanceLogs.map((log) => (
+                    <tr key={log.id} className="group hover:bg-gray-50 transition-colors">
+                      <td className="px-4 py-4 bg-gray-50 rounded-l-2xl border-y border-l border-gray-100">
+                        <div className="text-xs font-bold text-gray-900">{log.id}</div>
+                        <div className="text-[10px] text-gray-400">{log.time}</div>
+                      </td>
+                      <td className="px-4 py-4 bg-gray-50 border-y border-gray-100">
+                        <div className="text-xs font-medium text-gray-600">{log.dept}</div>
+                      </td>
+                      <td className="px-4 py-4 bg-gray-50 border-y border-gray-100">
+                        <span className={cn(
+                          "px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-tighter",
+                          log.level === 'L0' ? "bg-red-100 text-red-700" :
+                          log.level === 'L1' ? "bg-orange-100 text-orange-700" :
+                          log.level === 'L2' ? "bg-blue-100 text-blue-700" : "bg-emerald-100 text-emerald-700"
+                        )}>
+                          {log.level} Risk
+                        </span>
+                      </td>
+                      <td className="px-4 py-4 bg-gray-50 border-y border-gray-100 max-w-xs">
+                        <div className="text-xs text-gray-900 line-clamp-1">{log.event}</div>
+                      </td>
+                      <td className="px-4 py-4 bg-gray-50 border-y border-gray-100">
+                        <div className="flex items-center gap-1.5">
+                          <div className={cn(
+                            "w-1.5 h-1.5 rounded-full",
+                            log.status === 'Escalated' ? "bg-red-500" :
+                            log.status === 'Active' ? "bg-blue-500" :
+                            log.status === 'Resolved' ? "bg-emerald-500" : "bg-gray-400"
+                          )} />
+                          <span className="text-xs font-medium text-gray-600">{log.status}</span>
+                        </div>
+                      </td>
+                      <td className="px-4 py-4 bg-gray-50 border-y border-gray-100">
+                        <div className="flex items-center gap-2 text-xs font-bold text-teal-600">
+                          <ShieldCheck className="w-3 h-3" />
+                          {log.action}
+                        </div>
+                      </td>
+                      <td className="px-4 py-4 bg-gray-50 rounded-r-2xl border-y border-r border-gray-100">
+                        <button className="p-2 hover:bg-white rounded-lg transition-colors">
+                          <ChevronRight className="w-4 h-4 text-gray-400" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="p-8 bg-gray-50 border-t border-gray-100 flex justify-between items-center">
+              <div className="text-xs text-gray-500">Showing 6 of 142 total incidents</div>
+              <div className="flex gap-2">
+                <button className="px-4 py-2 bg-white border border-gray-200 rounded-xl text-xs font-bold hover:bg-gray-100 transition-colors">Previous</button>
+                <button className="px-4 py-2 bg-black text-white rounded-xl text-xs font-bold hover:bg-gray-800 transition-colors">Next Page</button>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 };
