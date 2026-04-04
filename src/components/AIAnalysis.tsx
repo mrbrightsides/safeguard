@@ -3,14 +3,15 @@ import { analyzeBehavioralRisk } from '../services/geminiService';
 import { generateFHIRPayload } from '../services/fhirService';
 import { motion, AnimatePresence } from 'motion/react';
 import { Brain, Search, Loader2, ShieldCheck, FileText, ExternalLink, Info, Phone, UserPlus, X, Download, Database, CheckCircle2 } from 'lucide-react';
-import { ICD_DESCRIPTIONS } from '../lib/constants';
+import { ICD_DESCRIPTIONS, ICD_MAPPING } from '../lib/constants';
 import { cn } from '../lib/utils';
 
 interface AIAnalysisProps {
   initialInput?: string;
+  initialScores?: Record<string, number>;
 }
 
-export const AIAnalysis: React.FC<AIAnalysisProps> = ({ initialInput }) => {
+export const AIAnalysis: React.FC<AIAnalysisProps> = ({ initialInput, initialScores }) => {
   const [input, setInput] = useState(initialInput || '');
   const [loading, setLoading] = useState(false);
   const [syncing, setSyncing] = useState(false);
@@ -20,9 +21,75 @@ export const AIAnalysis: React.FC<AIAnalysisProps> = ({ initialInput }) => {
   const [showFHIRModal, setShowFHIRModal] = useState(false);
   const [fhirPayload, setFhirPayload] = useState<any>(null);
 
-  // Auto-analyze if initialInput is provided
+  // Auto-analyze if initialInput or initialScores is provided
   React.useEffect(() => {
-    if (initialInput) {
+    if (initialScores) {
+      const calculateScoring = () => {
+        const { depression, anxiety, stress } = initialScores;
+        
+        // DASS-21 Ranges (multiplied by 2 as per standard)
+        const getDepressionLevel = (s: number) => {
+          if (s >= 28) return 'extremely_severe';
+          if (s >= 21) return 'severe';
+          if (s >= 14) return 'moderate';
+          if (s >= 10) return 'mild';
+          return 'normal';
+        };
+
+        const getAnxietyLevel = (s: number) => {
+          if (s >= 20) return 'extremely_severe';
+          if (s >= 15) return 'severe';
+          if (s >= 10) return 'moderate';
+          if (s >= 8) return 'mild';
+          return 'normal';
+        };
+
+        const getStressLevel = (s: number) => {
+          if (s >= 34) return 'extremely_severe';
+          if (s >= 26) return 'severe';
+          if (s >= 19) return 'moderate';
+          if (s >= 15) return 'mild';
+          return 'normal';
+        };
+
+        const dLevel = getDepressionLevel(depression);
+        const aLevel = getAnxietyLevel(anxiety);
+        const sLevel = getStressLevel(stress);
+
+        // Map to Risk Level
+        const levels = [dLevel, aLevel, sLevel];
+        let finalRisk = 'Normal';
+        if (levels.includes('extremely_severe')) finalRisk = 'Emergency';
+        else if (levels.includes('severe')) finalRisk = 'Severe';
+        else if (levels.includes('moderate')) finalRisk = 'Moderate';
+        else if (levels.includes('mild')) finalRisk = 'Mild';
+
+        // Map to ICD
+        const icd = dLevel !== 'normal' ? ICD_MAPPING.depression[dLevel as keyof typeof ICD_MAPPING.depression] :
+                    aLevel !== 'normal' ? ICD_MAPPING.anxiety[aLevel as keyof typeof ICD_MAPPING.anxiety] :
+                    sLevel !== 'normal' ? ICD_MAPPING.stress[sLevel as keyof typeof ICD_MAPPING.stress] : 'F32.9';
+
+        setResult({
+          summary: `DASS-21 structured assessment results indicate a ${finalRisk} risk profile. Depression: ${depression}, Anxiety: ${anxiety}, Stress: ${stress}.`,
+          riskLevel: finalRisk,
+          suggestedICD: icd,
+          suggestedDSM: dLevel !== 'normal' ? 'Major Depressive Disorder' : aLevel !== 'normal' ? 'Generalized Anxiety Disorder' : 'Adjustment Disorder',
+          detectedPatterns: [
+            dLevel !== 'normal' ? 'Depressive symptoms' : null,
+            aLevel !== 'normal' ? 'Anxiety markers' : null,
+            sLevel !== 'normal' ? 'Stress indicators' : null
+          ].filter(Boolean),
+          recommendations: [
+            finalRisk === 'Emergency' ? 'Immediate psychiatric evaluation' : null,
+            finalRisk === 'Severe' ? 'Clinical consultation within 24h' : null,
+            'Cognitive Behavioral Therapy (CBT)',
+            'Mindfulness-based stress reduction',
+            'SafeGuard EWS monitoring'
+          ].filter(Boolean)
+        });
+      };
+      calculateScoring();
+    } else if (initialInput) {
       setInput(initialInput);
       const triggerAnalysis = async () => {
         setLoading(true);
@@ -37,7 +104,7 @@ export const AIAnalysis: React.FC<AIAnalysisProps> = ({ initialInput }) => {
       };
       triggerAnalysis();
     }
-  }, [initialInput]);
+  }, [initialInput, initialScores]);
 
   const handleAnalyze = async () => {
     if (!input.trim()) return;
@@ -83,7 +150,8 @@ It does not constitute a formal medical diagnosis.
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `SafeGuard_Report_${new Date().getTime()}.txt`;
+    const dateStr = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+    link.download = `SafeGuard_Report_${dateStr}.txt`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -109,11 +177,11 @@ It does not constitute a formal medical diagnosis.
 
   const getRiskColor = (level: string) => {
     switch (level) {
-      case 'Emergency': return 'text-red-600 bg-red-50 border-red-100';
-      case 'Severe': return 'text-orange-600 bg-orange-50 border-orange-100';
-      case 'Moderate': return 'text-yellow-600 bg-yellow-50 border-yellow-100';
-      case 'Mild': return 'text-blue-600 bg-blue-50 border-blue-100';
-      default: return 'text-emerald-600 bg-emerald-50 border-emerald-100';
+      case 'Emergency': return 'text-red-600 bg-red-50 border-red-200 font-black';
+      case 'Severe': return 'text-orange-600 bg-orange-50 border-orange-200 font-extrabold';
+      case 'Moderate': return 'text-yellow-700 bg-yellow-50 border-yellow-200 font-bold';
+      case 'Mild': return 'text-blue-600 bg-blue-50 border-blue-200 font-semibold';
+      default: return 'text-emerald-600 bg-emerald-50 border-emerald-200 font-medium';
     }
   };
 

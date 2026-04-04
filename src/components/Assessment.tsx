@@ -49,7 +49,10 @@ export const Assessment: React.FC<AssessmentProps> = ({ onComplete, isAccessibil
       ).slice(0, 3).map(q => q.id);
       
       if (additionalQuestions.length > 0) {
-        nextQueue = [...nextQueue, ...additionalQuestions];
+        // Insert additional questions right after the current index
+        const updatedQueue = [...nextQueue];
+        updatedQueue.splice(currentIndex + 1, 0, ...additionalQuestions);
+        nextQueue = updatedQueue;
         setQuestionQueue(nextQueue);
       }
     }

@@ -49,6 +49,7 @@ export default function App() {
   const [activeView, setActiveView] = useState<View>('dashboard');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [pendingAnalysis, setPendingAnalysis] = useState<string | undefined>(undefined);
+  const [pendingScores, setPendingScores] = useState<Record<string, number> | undefined>(undefined);
   const [showGlobalConsultModal, setShowGlobalConsultModal] = useState(false);
   const [showMERPModal, setShowMERPModal] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -327,6 +328,7 @@ export default function App() {
 Please provide a clinical risk stratification and recommendations based on these standardized scores.`;
                   
                   setPendingAnalysis(summary);
+                  setPendingScores(scores);
                   setActiveView('ai-analysis');
                 }} />
               </div>
@@ -334,6 +336,7 @@ Please provide a clinical risk stratification and recommendations based on these
             {activeView === 'ai-analysis' && (
               <AIAnalysis 
                 initialInput={pendingAnalysis} 
+                initialScores={pendingScores}
               />
             )}
             {activeView === 'wellness' && <WellnessHub />}

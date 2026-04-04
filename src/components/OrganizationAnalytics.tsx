@@ -263,7 +263,7 @@ export const OrganizationAnalytics: React.FC = () => {
                   item.color,
                   item.text
                 )}
-                style={{ width: `${100 - (i * 15)}%` }}
+                style={{ width: `${40 + (i * 15)}%` }}
               >
                 <div className="text-xs font-bold uppercase tracking-tighter">{item.level}: {item.count}</div>
                 
