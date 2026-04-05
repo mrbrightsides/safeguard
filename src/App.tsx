@@ -54,6 +54,18 @@ export default function App() {
   const [showMERPModal, setShowMERPModal] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [isAccessibilityMode, setIsAccessibilityMode] = useState(false);
+  const [isPWAInstalled, setIsPWAInstalled] = useState(false);
+
+  useEffect(() => {
+    const checkPWA = () => {
+      if (window.matchMedia('(display-mode: standalone)').matches) {
+        setIsPWAInstalled(true);
+      }
+    };
+    checkPWA();
+    window.addEventListener('appinstalled', () => setIsPWAInstalled(true));
+    return () => window.removeEventListener('appinstalled', () => setIsPWAInstalled(true));
+  }, []);
   const [notifications, setNotifications] = useState<Notification[]>([
     { id: '1', title: 'System Update', message: 'SafeGuard v2.4.0 is now live.', time: '2h ago', type: 'info', read: false },
     { id: '2', title: 'Risk Alert', message: 'High stress spike in Engineering Dept.', time: '5h ago', type: 'warning', read: false },
@@ -126,14 +138,19 @@ export default function App() {
         "fixed left-0 top-0 h-full w-64 border-r hidden lg:flex flex-col z-50 transition-colors",
         isAccessibilityMode ? "bg-black border-gray-800" : "bg-white border-gray-100"
       )}>
-        <div className="p-8 flex items-center gap-3">
-          <div className="w-10 h-10 bg-teal-700 rounded-xl flex items-center justify-center">
-            <Shield className="w-6 h-6 text-white" />
+        <div className="p-8 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-teal-700 rounded-xl flex items-center justify-center">
+              <Shield className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h1 className="font-bold text-xl tracking-tighter">SafeGuard</h1>
+              <p className="text-[10px] font-mono text-gray-400 uppercase tracking-widest">EWS System</p>
+            </div>
           </div>
-          <div>
-            <h1 className="font-bold text-xl tracking-tighter">SafeGuard</h1>
-            <p className="text-[10px] font-mono text-gray-400 uppercase tracking-widest">EWS System</p>
-          </div>
+          {isPWAInstalled && (
+            <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" title="Mobile App Active"></div>
+          )}
         </div>
 
         <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto custom-scrollbar">
@@ -192,12 +209,30 @@ export default function App() {
         </nav>
 
         <div className="p-6 border-t border-gray-50">
-          <div className="bg-gray-50 p-4 rounded-2xl">
-            <div className="flex items-center gap-2 mb-2">
-              <Activity className="w-3 h-3 text-teal-500" />
-              <span className="text-[10px] font-mono uppercase tracking-widest text-gray-400">System Status</span>
+          <div className="bg-gray-50 p-4 rounded-2xl space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Activity className="w-3 h-3 text-teal-500" />
+                <span className="text-[10px] font-mono uppercase tracking-widest text-gray-400">System Status</span>
+              </div>
+              <span className="text-[8px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded uppercase">Live</span>
             </div>
             <div className="text-xs font-medium text-gray-600">All Sensors Active</div>
+            
+            <div className="pt-2 border-t border-gray-100">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="w-3 h-3 text-indigo-500" />
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-gray-400">PWA Status</span>
+                </div>
+                <span className={cn(
+                  "text-[8px] font-bold px-1.5 py-0.5 rounded uppercase",
+                  isPWAInstalled ? "text-indigo-600 bg-indigo-50" : "text-gray-400 bg-gray-100"
+                )}>
+                  {isPWAInstalled ? 'Mobile Ready' : 'Web Only'}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </aside>
@@ -407,18 +442,30 @@ Please provide a clinical risk stratification and recommendations based on these
               initial={{ x: '-100%' }}
               animate={{ x: 0 }}
               exit={{ x: '-100%' }}
-              className="fixed left-0 top-0 h-full w-72 bg-white z-[70] lg:hidden p-8 flex flex-col"
+              className={cn(
+                "fixed left-0 top-0 h-full w-72 z-[70] lg:hidden flex flex-col shadow-2xl transition-colors",
+                isAccessibilityMode ? "bg-black text-white" : "bg-white text-gray-900"
+              )}
             >
-              <div className="flex justify-between items-center mb-12 shrink-0">
+              <div className="p-8 flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-3">
-                  <Shield className="w-8 h-8 text-teal-700" />
-                  <span className="font-bold text-xl tracking-tighter">SafeGuard</span>
+                  <div className="w-10 h-10 bg-teal-700 rounded-xl flex items-center justify-center">
+                    <Shield className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h1 className="font-bold text-xl tracking-tighter">SafeGuard</h1>
+                    <p className="text-[10px] font-mono text-gray-400 uppercase tracking-widest">EWS System</p>
+                  </div>
                 </div>
-                <button onClick={() => setIsMobileMenuOpen(false)}>
+                <button 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-2 hover:bg-gray-100 rounded-xl transition-colors"
+                >
                   <X className="w-6 h-6 text-gray-400" />
                 </button>
               </div>
-              <nav className="space-y-4 overflow-y-auto flex-1 pr-2 custom-scrollbar">
+
+              <nav className="flex-1 px-4 py-2 space-y-1 overflow-y-auto custom-scrollbar">
                 {navItems.map((item) => (
                   <button
                     key={item.id}
@@ -427,25 +474,91 @@ Please provide a clinical risk stratification and recommendations based on these
                       setIsMobileMenuOpen(false);
                     }}
                     className={cn(
-                      "w-full flex items-center gap-4 p-4 rounded-2xl transition-all",
-                      activeView === item.id ? "bg-teal-600 text-white" : "text-gray-500"
+                      "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group",
+                      activeView === item.id 
+                        ? "bg-teal-600 text-white shadow-lg shadow-teal-600/10" 
+                        : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
                     )}
                   >
-                    <item.icon className="w-6 h-6" />
-                    <span className="font-medium">{item.label}</span>
+                    <item.icon className={cn(
+                      "w-5 h-5 transition-transform group-hover:scale-110",
+                      activeView === item.id ? "text-white" : "text-gray-400"
+                    )} />
+                    <span className="text-sm font-medium">{item.label}</span>
                   </button>
                 ))}
                 
-                <div className="pt-4 mt-4 border-t border-gray-100">
+                <div className="pt-4 mt-4 border-t border-gray-100 space-y-1">
                   <button
-                    onClick={() => setRole(null)}
-                    className="w-full flex items-center gap-4 p-4 rounded-2xl text-red-600 hover:bg-red-50 transition-all"
+                    onClick={() => {
+                      toggleAccessibility();
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className={cn(
+                      "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group",
+                      isAccessibilityMode 
+                        ? "bg-teal-500 text-black font-bold" 
+                        : "text-gray-500 hover:bg-gray-50"
+                    )}
                   >
-                    <LogOut className="w-6 h-6" />
-                    <span className="font-medium">Switch Role / Landing</span>
+                    <ShieldCheck className="w-5 h-5" />
+                    <span className="text-sm font-medium">Accessibility Mode</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setActiveView('whitepaper');
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className={cn(
+                      "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group",
+                      activeView === 'whitepaper' 
+                        ? "bg-black text-white shadow-lg" 
+                        : "text-teal-700 bg-teal-50 hover:bg-teal-100"
+                    )}
+                  >
+                    <FileText className="w-5 h-5" />
+                    <span className="text-sm font-bold">Strategic Whitepaper</span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setRole(null);
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-gray-400 hover:bg-red-50 hover:text-red-600 transition-all duration-200 group"
+                  >
+                    <LogOut className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
+                    <span className="text-sm font-medium">Switch Role</span>
                   </button>
                 </div>
               </nav>
+
+              <div className="p-6 border-t border-gray-50 shrink-0">
+                <div className="bg-gray-50 p-4 rounded-2xl space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Activity className="w-3 h-3 text-teal-500" />
+                      <span className="text-[10px] font-mono uppercase tracking-widest text-gray-400">System Status</span>
+                    </div>
+                    <span className="text-[8px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded uppercase">Live</span>
+                  </div>
+                  <div className="text-xs font-medium text-gray-600">All Sensors Active</div>
+                  
+                  <div className="pt-2 border-t border-gray-100">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <ShieldCheck className="w-3 h-3 text-indigo-500" />
+                        <span className="text-[10px] font-mono uppercase tracking-widest text-gray-400">PWA Status</span>
+                      </div>
+                      <span className={cn(
+                        "text-[8px] font-bold px-1.5 py-0.5 rounded uppercase",
+                        isPWAInstalled ? "text-indigo-600 bg-indigo-50" : "text-gray-400 bg-gray-100"
+                      )}>
+                        {isPWAInstalled ? 'Mobile Ready' : 'Web Only'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </motion.div>
           </>
         )}

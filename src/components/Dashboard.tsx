@@ -6,6 +6,7 @@ import {
 import { Shield, Activity, Users, AlertTriangle, TrendingUp, Heart, Globe, Map, Watch, Zap, Bluetooth, Sparkles, Briefcase, User as UserIcon, Coins, Database, Cloud, CheckCircle2, LayoutGrid, ShieldAlert } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
+import { requestFCMToken, onMessageListener } from '../firebase';
 
 import { UserRole } from './RoleSelection';
 
@@ -39,6 +40,56 @@ export const Dashboard: React.FC<DashboardProps> = ({ role, isAccessibilityMode 
   const [hrv, setHrv] = useState(45);
   const [isSyncing, setIsSyncing] = useState(true);
   const [personalContext, setPersonalContext] = useState<'worker' | 'patient'>('worker');
+  const [notificationPermission, setNotificationPermission] = useState<NotificationPermission>(
+    typeof Notification !== 'undefined' ? Notification.permission : 'default'
+  );
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [fcmToken, setFcmToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (e: any) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    
+    onMessageListener().then((payload: any) => {
+      console.log('Foreground message received:', payload);
+      if (payload.notification) {
+        new Notification(payload.notification.title, {
+          body: payload.notification.body,
+          icon: 'https://picsum.photos/seed/safeguard/192/192'
+        });
+      }
+    });
+
+    return () => window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+  }, []);
+
+  const requestNotificationPermission = async () => {
+    if (!('Notification' in window)) return;
+    const permission = await Notification.requestPermission();
+    setNotificationPermission(permission);
+    if (permission === 'granted') {
+      const token = await requestFCMToken();
+      setFcmToken(token);
+      
+      new Notification('SafeGuard EWS', {
+        body: 'Notifications enabled! You will receive real-time behavioral health alerts.',
+        icon: 'https://picsum.photos/seed/safeguard/192/192'
+      });
+    }
+  };
+
+  const handleInstallApp = async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      setDeferredPrompt(null);
+    }
+  };
 
   // Voice Summary Effect
   useEffect(() => {
@@ -422,7 +473,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ role, isAccessibilityMode 
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-teal-900 p-8 rounded-3xl text-white shadow-xl shadow-teal-900/10 relative overflow-hidden group">
           <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform">
             <Heart className="w-32 h-32" />
@@ -430,11 +481,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ role, isAccessibilityMode 
           <div className="relative z-10">
             <h3 className="text-xl font-bold mb-2">Need Professional Help?</h3>
             <p className="text-gray-400 text-sm mb-6 max-w-xs">
-              Connect with licensed mental health professionals, psychologists, or counselors instantly.
+              Connect with licensed mental health professionals instantly.
             </p>
             <button 
               onClick={() => {
-                // In a real app, this would open the consultation modal or navigate
                 window.dispatchEvent(new CustomEvent('open-consultation'));
               }}
               className="px-6 py-3 bg-white text-teal-900 rounded-xl font-bold text-sm hover:bg-gray-100 transition-colors flex items-center gap-2"
@@ -452,11 +502,10 @@ export const Dashboard: React.FC<DashboardProps> = ({ role, isAccessibilityMode 
           <div className="relative z-10">
             <h3 className="text-xl font-bold mb-2 text-gray-900">Digital Anamnesis</h3>
             <p className="text-gray-500 text-sm mb-6 max-w-xs">
-              Complete your psychosocial self-assessment to get AI-driven risk stratification.
+              Complete your psychosocial self-assessment for AI risk stratification.
             </p>
             <button 
               onClick={() => {
-                // This will be handled by the parent component
                 window.dispatchEvent(new CustomEvent('navigate-to-assessment'));
               }}
               className="px-6 py-3 bg-teal-900 text-white rounded-xl font-bold text-sm hover:bg-teal-950 transition-colors flex items-center gap-2"
@@ -464,6 +513,42 @@ export const Dashboard: React.FC<DashboardProps> = ({ role, isAccessibilityMode 
               <Activity className="w-4 h-4" />
               Start Assessment
             </button>
+          </div>
+        </div>
+
+        <div className="bg-indigo-900 p-8 rounded-3xl text-white shadow-xl shadow-indigo-900/10 relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform">
+            <Zap className="w-32 h-32" />
+          </div>
+          <div className="relative z-10">
+            <h3 className="text-xl font-bold mb-2">Mobile Experience</h3>
+            <p className="text-indigo-200/60 text-sm mb-6 max-w-xs">
+              {deferredPrompt ? 'Install SafeGuard on your device for better access.' : 'Enable push notifications for real-time alerts.'}
+            </p>
+            <div className="flex flex-col gap-3">
+              {deferredPrompt && (
+                <button 
+                  onClick={handleInstallApp}
+                  className="px-6 py-3 bg-white text-indigo-900 rounded-xl font-bold text-sm hover:bg-gray-100 transition-colors flex items-center gap-2"
+                >
+                  <Cloud className="w-4 h-4" />
+                  Install App
+                </button>
+              )}
+              <button 
+                onClick={requestNotificationPermission}
+                disabled={notificationPermission === 'granted'}
+                className={cn(
+                  "px-6 py-3 rounded-xl font-bold text-sm transition-colors flex items-center gap-2",
+                  notificationPermission === 'granted' 
+                    ? "bg-indigo-800/50 text-indigo-300 cursor-default" 
+                    : "bg-indigo-500 text-white hover:bg-indigo-600"
+                )}
+              >
+                <ShieldAlert className="w-4 h-4" />
+                {notificationPermission === 'granted' ? 'Notifications Active' : 'Enable Notifications'}
+              </button>
+            </div>
           </div>
         </div>
       </div>
