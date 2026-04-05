@@ -9,8 +9,11 @@ import {
   X, 
   Activity,
   Loader2,
-  CheckCircle2
+  CheckCircle2,
+  Bot,
+  MessageSquare
 } from 'lucide-react';
+import AICounselor from './AICounselor';
 
 interface MERPModalProps {
   isOpen: boolean;
@@ -21,6 +24,7 @@ interface MERPModalProps {
 export const MERPModal: React.FC<MERPModalProps> = ({ isOpen, onClose, onTrigger }) => {
   const [status, setStatus] = useState<'idle' | 'triggering' | 'active'>('idle');
   const [location, setLocation] = useState<string>('Detecting...');
+  const [isAICounselorOpen, setIsAICounselorOpen] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -95,6 +99,14 @@ export const MERPModal: React.FC<MERPModalProps> = ({ isOpen, onClose, onTrigger
                   >
                     Trigger SOS
                   </button>
+
+                  <button 
+                    onClick={() => setIsAICounselorOpen(true)}
+                    className="w-full py-4 bg-white text-red-600 border-2 border-red-100 rounded-3xl font-bold text-sm hover:bg-red-50 transition-all flex items-center justify-center gap-2"
+                  >
+                    <Bot size={18} />
+                    Chat with AI Counselor
+                  </button>
                 </div>
               )}
 
@@ -140,9 +152,22 @@ export const MERPModal: React.FC<MERPModalProps> = ({ isOpen, onClose, onTrigger
                       <div className="text-xs text-blue-700">Medical officer is monitoring your audio.</div>
                     </div>
                   </div>
+
+                  <button 
+                    onClick={() => setIsAICounselorOpen(true)}
+                    className="w-full py-4 bg-teal-600 text-white rounded-3xl font-bold text-sm hover:bg-teal-700 transition-all flex items-center justify-center gap-2 shadow-lg shadow-teal-600/20"
+                  >
+                    <MessageSquare size={18} />
+                    AI Crisis Triaging Chat
+                  </button>
                 </div>
               )}
             </div>
+            <AICounselor 
+              isOpen={isAICounselorOpen} 
+              onClose={() => setIsAICounselorOpen(false)} 
+              initialMessage="I see you've triggered an emergency. I'm here to support you while help is on the way. Can you tell me what's happening?"
+            />
           </motion.div>
         </>
       )}

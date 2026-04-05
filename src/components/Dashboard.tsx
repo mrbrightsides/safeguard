@@ -3,7 +3,7 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   AreaChart, Area
 } from 'recharts';
-import { Shield, Activity, Users, AlertTriangle, TrendingUp, Heart, Globe, Map, Watch, Zap, Bluetooth, Sparkles, Briefcase, User as UserIcon, Coins, Database, Cloud, CheckCircle2, LayoutGrid, ShieldAlert } from 'lucide-react';
+import { Shield, Activity, Users, AlertTriangle, TrendingUp, Heart, Globe, Map, Watch, Zap, Bluetooth, Sparkles, Briefcase, User as UserIcon, Coins, Database, Cloud, CheckCircle2, LayoutGrid, ShieldAlert, X, ChevronRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
 import { requestFCMToken, onMessageListener } from '../firebase-config';
@@ -45,6 +45,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ role, isAccessibilityMode 
   );
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [fcmToken, setFcmToken] = useState<string | null>(null);
+  const [isWearableModalOpen, setIsWearableModalOpen] = useState(false);
+  const [connectedDevice, setConnectedDevice] = useState<string | null>(null);
+  const [isAICounselorOpen, setIsAICounselorOpen] = useState(false);
 
   useEffect(() => {
     const handleBeforeInstallPrompt = (e: any) => {
@@ -175,9 +178,12 @@ export const Dashboard: React.FC<DashboardProps> = ({ role, isAccessibilityMode 
                       {personalContext === 'worker' ? 'Occupational Health Strategy' : 'Clinical Prevention Roadmap'}
                     </h3>
                   </div>
-                  <span className="px-3 py-1 bg-teal-50 text-teal-700 rounded-full text-[10px] font-bold uppercase tracking-widest">
-                    AI Personalized
-                  </span>
+                  <div className="flex flex-col items-end">
+                    <span className="px-3 py-1 bg-teal-50 text-teal-700 rounded-full text-[10px] font-bold uppercase tracking-widest">
+                      AI Risk Detector
+                    </span>
+                    <span className="text-[8px] text-teal-500 font-mono mt-1">Analytical Engine Active</span>
+                  </div>
                 </div>
                 
                 <div className="space-y-6">
@@ -306,20 +312,93 @@ export const Dashboard: React.FC<DashboardProps> = ({ role, isAccessibilityMode 
             </div>
 
             <div className="mt-8 pt-8 border-t border-gray-50">
-              <div className="flex justify-between items-center mb-2">
+              <div className="flex justify-between items-center mb-4">
                 <span className="text-xs text-gray-500">Stress Recovery State</span>
                 <span className="text-xs font-bold text-teal-600">Optimal</span>
               </div>
-              <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden">
+              <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden mb-6">
                 <motion.div 
                   initial={{ width: 0 }}
                   animate={{ width: '75%' }}
                   className="h-full bg-teal-500 rounded-full"
                 ></motion.div>
               </div>
+              
+              <button 
+                onClick={() => setIsWearableModalOpen(true)}
+                className={cn(
+                  "w-full py-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2",
+                  connectedDevice 
+                    ? "bg-teal-50 text-teal-700 border border-teal-100" 
+                    : "bg-rose-600 text-white hover:bg-rose-700 shadow-lg shadow-rose-600/20"
+                )}
+              >
+                {connectedDevice ? (
+                  <>
+                    <CheckCircle2 size={14} />
+                    {connectedDevice} Connected
+                  </>
+                ) : (
+                  <>
+                    <Watch size={14} />
+                    Connect Wearable
+                  </>
+                )}
+              </button>
             </div>
           </div>
         </div>
+
+        {/* Wearable Connection Modal */}
+        <AnimatePresence>
+          {isWearableModalOpen && (
+            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="bg-white rounded-[32px] p-8 w-full max-w-md shadow-2xl border border-gray-100"
+              >
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-xl font-bold text-gray-900">Connect Device</h3>
+                  <button onClick={() => setIsWearableModalOpen(false)} className="p-2 hover:bg-gray-100 rounded-full">
+                    <X className="w-5 h-5 text-gray-400" />
+                  </button>
+                </div>
+                <p className="text-sm text-gray-500 mb-8">Select your wearable device to sync real-time HRV and stress data for AI analysis.</p>
+                
+                <div className="space-y-3">
+                  {[
+                    { id: 'apple', name: 'Apple Watch', icon: Watch, color: 'text-gray-900', bg: 'bg-gray-50' },
+                    { id: 'garmin', name: 'Garmin Connect', icon: Activity, color: 'text-blue-600', bg: 'bg-blue-50' },
+                    { id: 'fitbit', name: 'Fitbit Sense', icon: Zap, color: 'text-teal-600', bg: 'bg-teal-50' },
+                  ].map((device) => (
+                    <button
+                      key={device.id}
+                      onClick={() => {
+                        setConnectedDevice(device.name);
+                        setIsSyncing(true);
+                        setIsWearableModalOpen(false);
+                      }}
+                      className={cn(
+                        "w-full p-4 rounded-2xl border border-gray-100 flex items-center justify-between hover:border-teal-500 hover:bg-teal-50/30 transition-all group",
+                        connectedDevice === device.name && "border-teal-500 bg-teal-50/30"
+                      )}
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className={cn("p-3 rounded-xl", device.bg)}>
+                          <device.icon className={cn("w-5 h-5", device.color)} />
+                        </div>
+                        <span className="font-bold text-gray-900">{device.name}</span>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-teal-500" />
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>
 
         {/* Stats Grid */}
         <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">

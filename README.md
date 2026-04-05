@@ -12,6 +12,8 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Motion](https://img.shields.io/badge/Motion-0055FF?style=for-the-badge&logo=framer&logoColor=white)](https://motion.dev/)
 [![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white)](https://firebase.google.com/)
+[![PWA](https://img.shields.io/badge/PWA-5A0FC8?style=for-the-badge&logo=pwa&logoColor=white)](https://web.dev/progressive-web-apps/)
 
 </div>
 
@@ -33,12 +35,17 @@ SafeGuard operates on the **SAFE** mnemonic to ensure comprehensive mental healt
 
 ## 🚀 Key Features
 
-### 1. **Safespace AI/ML Prognostic Model**
-*   **Hierarchical Risk Stratification**: Automated triaging from **Level 0 (Psychiatric Emergency/Suicidal)** to **Level 3 (Prognostic/Functioning)**.
-*   **Prognostic Surveillance**: 90-day predictive modeling for absenteeism, presenteeism, and relapse risk based on psychosocial stressors (L3).
-*   **AI-Driven Insights**: Real-time analysis of burnout resilience and occupational functioning.
+### 1. **Safespace AI Risk Detector (Analytical Engine)**
+*   **Hierarchical Risk Stratification**: Automated triaging from **Level 0 (Psychiatric Emergency/Suicidal)** to **Level 3 (Prognostic/Functioning)** based on biometric and survey data.
+*   **Prognostic Surveillance**: 90-day predictive modeling for absenteeism, presenteeism, and relapse risk using psychosocial stressors (L3).
+*   **Digital Anamnesis Analysis**: Real-time processing of DASS-21 and SRQ-20 assessments to identify early warning signals.
 
-### 2. **Health Economic Evaluation (HEE)**
+### 2. **AI Chatbot Counselor (Conversational Support)**
+*   **Gemini-Powered Empathy**: Uses Google Gemini 3 Flash to provide 24/7 initial psychosocial support and empathetic listening.
+*   **Crisis Triaging (L0-L3)**: Automated detection of high-risk signals within conversation, with immediate escalation to emergency resources and MERP protocols.
+*   **Empathetic Listening**: A safe, non-judgmental space for users to express feelings and receive immediate coping strategies.
+
+### 3. **Health Economic Evaluation (HEE)**
 *   **WHO-Standard ROI Modeling**: Visualizes the **1:4 Return on Investment** (ROI) for mental health interventions (US$1 Trillion global burden context).
 *   **INA-CBG Claim Mapping**: Integration of Indonesian Case-Based Groups (INA-CBG) for mean claim analysis (e.g., Rp12.4M/admission) and medication cost tracking.
 *   **Cost of Inaction vs. Intervention**: Robust comparative analytics to justify wellness budget allocation for management and stakeholders.
@@ -57,20 +64,36 @@ SafeGuard operates on the **SAFE** mnemonic to ensure comprehensive mental healt
 *   **L3 Prognostic Predictors**: Monitoring of workplace conflict, peer support quality, and psychosocial stressors.
 *   **Personal ROI**: Individualized estimates of annual healthcare savings and productivity value in IDR.
 
-### 6. **Digital Anamnesis & Biometric Sync**
-*   **DASS-21 & SRQ-20 Integration**: Comprehensive psychosocial self-assessment for AI-driven risk detection.
-*   **Live Biometric Surveillance**: Real-time BPM and HRV (Heart Rate Variability) sync via Bluetooth simulation to monitor autonomic nervous system regulation.
+### 6. **AI Chatbot Counselor (24/7 Support)**
+*   **Conversational Interface**: Provides a safe space for users to talk about their stress and emotions in real-time.
+*   **Crisis Detection**: Identifies critical distress signals in chat and triggers the **MERP** protocol.
+*   **Seamless Integration**: Accessible directly from the Wellness Hub and automatically triggered during critical alerts.
 
-### 7. **Inclusive Design (Accessibility-First)**
+### 7. **Digital Anamnesis & Wearable Sync**
+*   **DASS-21 & SRQ-20 Integration**: Comprehensive psychosocial self-assessment for AI-driven risk detection.
+*   **Multi-Device Wearable Sync**: Simulated real-time BPM and HRV (Heart Rate Variability) syncing for **Apple Watch**, **Garmin**, and **Fitbit** to monitor autonomic nervous system regulation.
+
+### 8. **Wellness Hub & Digital Therapeutics**
+*   **Curated Resource Library**: Evidence-based articles on burnout management and cognitive reframing.
+*   **Interactive Exercises**: Guided "Box Breathing" sessions and YouTube-integrated "Deep Sleep Meditation" for immediate stress reduction.
+*   **Resource Stratification**: Content categorized by Article, Exercise, and Audio for diverse learning preferences.
+
+### 9. **Inclusive Design (Accessibility-First)**
 *   **Adaptive UI Engine**: Toggleable **Accessibility Mode** with high-contrast (B&W) interface and simplified layouts.
 *   **AI Voice Summary (TTS)**: Real-time audio briefing of health risks and population status for low-vision users.
 *   **Tremor-Resistant Interaction**: Extra-large touch targets (p-8/80px) and simplified navigation for users with motor disabilities (Parkinson/Amputation).
 *   **Universal Iconography**: Zero-text dependency mode using intuitive icons for low-literacy populations.
 
-### 8. **Mental Emergency Response Protocol (MERP)**
+### 10. **Mental Emergency Response Protocol (MERP)**
 *   **L0 SOS Trigger**: Floating emergency button with immediate GPS-linked escalation.
 *   **Automated Dispatch**: Real-time connection to refinery medical teams and first responders.
 *   **Voice-Guided Protocol**: Audio instructions for users in crisis until help arrives.
+
+### 11. **Progressive Web App (PWA) & Real-time Sync**
+*   **Installable Experience**: Add to Home Screen (A2HS) support for mobile and desktop.
+*   **Service Worker Integration**: Background sync and offline-first capability for remote industrial sites.
+*   **Real-time Firebase Sync**: Instant data synchronization between patients and providers using NoSQL listeners.
+*   **Push Notifications**: Real-time behavioral health alerts via Firebase Cloud Messaging (FCM).
 
 ---
 
@@ -117,20 +140,29 @@ SafeGuard aligns with the **HSIL Harvard Hackathon's** focus on **High-Value Hea
 *   **Styling**: Tailwind CSS 4.0 (Utility-first CSS)
 *   **Animations**: Motion (formerly Framer Motion)
 *   **Data Visualization**: Recharts (Area, Bar, Pie, Doughnut)
+*   **Backend/DB**: Firebase (Firestore, Auth, Messaging)
 *   **PDF Generation**: jsPDF (Strategic Whitepaper Export)
+*   **PWA**: Service Workers, Manifest.json, Offline-first
 *   **Accessibility**: Web Speech API (TTS), WCAG 2.2 Compliance
 
 ---
 
 ## 🛡️ Security & Privacy
-SafeGuard is built on privacy-first principles. All individual data is anonymized in aggregate reports, and Level 0/1 escalations follow strict HIPAA/GDPR-compliant protocols to ensure employee and patient confidentiality.
+SafeGuard is built on privacy-first principles.
+*   **Firestore Security Rules**: Robust Role-Based Access Control (RBAC) ensuring users only access their own data.
+*   **Data Anonymization**: Individual data is anonymized in aggregate reports.
+*   **Encryption**: AES-256 at-rest and TLS 1.3 in-transit.
+*   **Compliance**: Level 0/1 escalations follow strict HIPAA/GDPR-compliant protocols.
 
 ---
 
 ## 🗺️ Roadmap
-- [ ] **Full Wearable API Integration**: Real-time data from Apple Watch, Garmin, and Fitbit.
+- [x] **AI Chatbot Counselor**: 24/7 initial support and crisis triaging using Gemini 3 Flash.
+- [x] **Wearable Integration (Simulated)**: Real-time data syncing from Apple Watch, Garmin, and Fitbit.
+- [x] **Wellness Hub Enhancements**: Interactive exercises and real-world content integration.
+- [ ] **TWA (Trusted Web Activity)**: Native Android deployment for Google Play Store.
+- [ ] **Full Wearable API Integration**: Live production data from HealthKit/Google Fit.
 - [ ] **Manager/Jury Dashboard**: Advanced view for stakeholders with deep-dive ROI simulation tools.
-- [ ] **AI Chatbot Counselor**: 24/7 initial support and crisis triaging using LLMs.
 - [ ] **Multi-language Support**: Full localization for global enterprise deployment.
 
 ---
@@ -148,9 +180,12 @@ SafeGuard provides a robust set of APIs for integration with external health sys
 
 ## 🚀 Technical Architecture Upgrade
 
-The platform has been optimized for **Vercel Serverless** deployment:
+The platform has been optimized for **Full-stack Serverless** deployment:
 - **Frontend**: React + Vite (Served via Vercel Edge).
 - **Backend**: Node.js Express (Deployed as Serverless Functions in `/api`).
+- **Database**: Firebase Firestore (NoSQL) with real-time sync.
+- **Auth**: Firebase Authentication (Google OAuth).
+- **Messaging**: Firebase Cloud Messaging (FCM) via Service Workers.
 - **Swagger UI**: OAS 3.0 with CDN-backed assets (jsDelivr) for high availability.
 - **Environment Awareness**: Automatic switching between Local (Port 3000) and Production (Vercel) contexts.
 
