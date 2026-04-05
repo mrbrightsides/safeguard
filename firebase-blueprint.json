@@ -1,0 +1,43 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Stores user profile and settings.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "role": { "type": "string", "enum": ["personal", "professional", "admin"] },
+        "fcmToken": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email", "role"]
+    },
+    "Assessment": {
+      "title": "Health Assessment",
+      "description": "Stores risk assessment results.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "riskLevel": { "type": "string" },
+        "bpm": { "type": "number" },
+        "hrv": { "type": "number" },
+        "stressScore": { "type": "number" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "riskLevel", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile document."
+    },
+    "/assessments/{assessmentId}": {
+      "schema": "Assessment",
+      "description": "Individual health assessment records."
+    }
+  }
+}

@@ -6,7 +6,7 @@ import {
 import { Shield, Activity, Users, AlertTriangle, TrendingUp, Heart, Globe, Map, Watch, Zap, Bluetooth, Sparkles, Briefcase, User as UserIcon, Coins, Database, Cloud, CheckCircle2, LayoutGrid, ShieldAlert } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
-import { requestFCMToken, onMessageListener } from '../firebase';
+import { requestFCMToken, onMessageListener } from '../firebase-config';
 
 import { UserRole } from './RoleSelection';
 
