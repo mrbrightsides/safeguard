@@ -145,7 +145,7 @@ export default function App() {
             </div>
             <div>
               <h1 className="font-bold text-xl tracking-tighter">SafeGuard</h1>
-              <p className="text-[10px] font-mono text-gray-400 uppercase tracking-widest">EWS Platform</p>
+              <p className="text-[10px] font-mono text-gray-400 uppercase tracking-widest">EWS System</p>
             </div>
           </div>
           {isPWAInstalled && (
@@ -323,7 +323,7 @@ export default function App() {
               )}
             </AnimatePresence>
           </div>
-          <div className="h-8 w-[1px] bg-gray-100 mx-2"></div>
+          {/* <div className="h-8 w-[1px] bg-gray-100 mx-2"></div>
           <div className="flex items-center gap-3 pl-2">
             <div className="text-right hidden sm:block">
               <div className="text-xs font-bold">Dr. Rifki</div>
@@ -334,7 +334,7 @@ export default function App() {
             <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center border border-gray-200">
               <User className="w-5 h-5 text-gray-400" />
             </div>
-          </div>
+          </div> */}
         </div>
       </header>
 
