@@ -145,7 +145,7 @@ export default function App() {
             </div>
             <div>
               <h1 className="font-bold text-xl tracking-tighter">SafeGuard</h1>
-              <p className="text-[10px] font-mono text-gray-400 uppercase tracking-widest">EWS System</p>
+              <p className="text-[10px] font-mono text-gray-400 uppercase tracking-widest">EWS Platform</p>
             </div>
           </div>
           {isPWAInstalled && (
