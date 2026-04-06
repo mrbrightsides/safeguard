@@ -39,44 +39,45 @@ SafeGuard operates on the **SAFE** mnemonic to ensure comprehensive mental healt
 *   **Hierarchical Risk Stratification**: Automated triaging from **Level 0 (Psychiatric Emergency/Suicidal)** to **Level 3 (Prognostic/Functioning)** based on biometric and survey data.
 *   **Prognostic Surveillance**: 90-day predictive modeling for absenteeism, presenteeism, and relapse risk using psychosocial stressors (L3).
 *   **Digital Anamnesis Analysis**: Real-time processing of DASS-21 and SRQ-20 assessments to identify early warning signals.
+*   **AI Personalized Insight**: Provides data-driven risk scores and behavioral patterns for management and clinical advisors.
 
 ### 2. **AI Chatbot Counselor (Conversational Support)**
 *   **Gemini-Powered Empathy**: Uses Google Gemini 3 Flash to provide 24/7 initial psychosocial support and empathetic listening.
 *   **Crisis Triaging (L0-L3)**: Automated detection of high-risk signals within conversation, with immediate escalation to emergency resources and MERP protocols.
 *   **Empathetic Listening**: A safe, non-judgmental space for users to express feelings and receive immediate coping strategies.
+*   **Distinct from Risk Detector**: While the Risk Detector analyzes data, the Counselor provides direct human-like interaction and emotional support.
 
 ### 3. **Health Economic Evaluation (HEE)**
 *   **WHO-Standard ROI Modeling**: Visualizes the **1:4 Return on Investment** (ROI) for mental health interventions (US$1 Trillion global burden context).
 *   **INA-CBG Claim Mapping**: Integration of Indonesian Case-Based Groups (INA-CBG) for mean claim analysis (e.g., Rp12.4M/admission) and medication cost tracking.
 *   **Cost of Inaction vs. Intervention**: Robust comparative analytics to justify wellness budget allocation for management and stakeholders.
 
-### 3. **The Psychosocial Incident Pyramid**
+### 4. **The Psychosocial Incident Pyramid**
 *   **1 Fatality = 600 UA/UC**: Based on the safety pyramid (Heinrich → Bird), SafeGuard identifies the 600+ "Unsafe Acts" (bullying, toxic culture) that precede a single fatality.
 *   **Biological Pathway**: Maps chronic stress to the HPA axis, cortisol elevation, and cardiovascular risk (CVD).
 *   **Predictive Bridge**: Turns "near misses" into prevented lives through early detection.
 
-### 4. **Clinical & Statistical Interoperability**
+### 5. **Clinical & Statistical Interoperability**
+*   **SATUSEHAT Integration**: Fully compliant with **HL7 FHIR R4** standards for seamless integration with the National Health Data Exchange.
+*   **Kemenkes Standard**: Aligned with Indonesian Ministry of Health (Kemenkes) clinical guidelines and reporting frameworks.
 *   **ICD-10 Chapter V Mapping**: Burden clusters categorized by WHO ICD-10 codes (F30-F39 Mood, F40-F48 Anxiety/Stress, etc.) for standardized reporting.
 *   **Community Medicine Utilization Review**: Doughnut-based analytics for facility distribution (Puskesmas, RSUD) and medication utilization (Antidepressants, Anxiolytics).
 
-### 5. **Personalized Prevention Roadmap**
+### 6. **Personalized Prevention Roadmap**
 *   **Dual-Mode Interface**: Specialized roadmaps for **Worker Mode** (Occupational Health) and **Patient Mode** (Clinical Prevention).
 *   **L3 Prognostic Predictors**: Monitoring of workplace conflict, peer support quality, and psychosocial stressors.
 *   **Personal ROI**: Individualized estimates of annual healthcare savings and productivity value in IDR.
 
-### 6. **AI Chatbot Counselor (24/7 Support)**
-*   **Conversational Interface**: Provides a safe space for users to talk about their stress and emotions in real-time.
-*   **Crisis Detection**: Identifies critical distress signals in chat and triggers the **MERP** protocol.
-*   **Seamless Integration**: Accessible directly from the Wellness Hub and automatically triggered during critical alerts.
-
 ### 7. **Digital Anamnesis & Wearable Sync**
 *   **DASS-21 & SRQ-20 Integration**: Comprehensive psychosocial self-assessment for AI-driven risk detection.
-*   **Multi-Device Wearable Sync**: Simulated real-time BPM and HRV (Heart Rate Variability) syncing for **Apple Watch**, **Garmin**, and **Fitbit** to monitor autonomic nervous system regulation.
+*   **Multi-Device Wearable Sync**: Real-time data syncing for **Apple Watch**, **Garmin**, and **Fitbit** to monitor autonomic nervous system regulation (BPM & HRV).
+*   **Autonomic Nervous System Monitoring**: Tracks Heart Rate Variability (HRV) as a physiological marker of stress and resilience.
 
 ### 8. **Wellness Hub & Digital Therapeutics**
 *   **Curated Resource Library**: Evidence-based articles on burnout management and cognitive reframing.
 *   **Interactive Exercises**: Guided "Box Breathing" sessions and YouTube-integrated "Deep Sleep Meditation" for immediate stress reduction.
 *   **Resource Stratification**: Content categorized by Article, Exercise, and Audio for diverse learning preferences.
+*   **AI Counselor Integration**: Direct access to empathetic chat support within the wellness ecosystem.
 
 ### 9. **Inclusive Design (Accessibility-First)**
 *   **Adaptive UI Engine**: Toggleable **Accessibility Mode** with high-contrast (B&W) interface and simplified layouts.
