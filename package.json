@@ -7,10 +7,12 @@
     "dev": "tsx api/index.ts",
     "start": "node api/index.ts",
     "build": "vite build",
+    "build:clean": "rm -rf dist && npm run build",
     "preview": "vite preview",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
-    "dev:web": "vite"
+    "dev:web": "vite",
+    "vercel-build": "npm run build"
   },
   "dependencies": {
     "@google/genai": "^1.29.0",
