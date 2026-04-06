@@ -19,7 +19,7 @@ export default defineConfig(({ mode }) => {
     build: {
       manifest: true,
       outDir: 'dist',
-      assetsDir: 'assets',
+      assetsDir: 'assets-v2',
       sourcemap: false,
       rollupOptions: {
         output: {
