@@ -146,7 +146,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
   ];
 
   return (
-    <div className="w-full max-w-4xl pb-20">
+    <div className="w-full max-w-6xl pb-20">
       {/* Header */}
       <div className="flex items-center justify-between mb-12 sticky top-0 bg-[#F8F9FA]/80 backdrop-blur-md py-4 z-10">
         <button 

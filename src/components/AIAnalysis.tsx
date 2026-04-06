@@ -196,7 +196,7 @@ It does not constitute a formal medical diagnosis.
   };
 
   return (
-    <div className="w-full max-w-4xl space-y-8">
+    <div className="w-full space-y-8">
       <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
         <div className="flex items-center gap-3 mb-6">
           <div className="p-2 bg-black rounded-xl">

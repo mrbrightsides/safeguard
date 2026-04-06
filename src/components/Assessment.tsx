@@ -96,7 +96,7 @@ export const Assessment: React.FC<AssessmentProps> = ({ onComplete, isAccessibil
 
   if (isTransitioning) {
     return (
-      <div className="w-full max-w-2xl p-12 bg-white rounded-3xl shadow-xl border border-gray-100 text-center space-y-8">
+      <div className="w-full p-12 bg-white rounded-3xl shadow-xl border border-gray-100 text-center space-y-8">
         <div className="relative w-24 h-24 mx-auto">
           <div className="absolute inset-0 border-4 border-teal-100 rounded-full"></div>
           <motion.div 

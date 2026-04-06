@@ -23,7 +23,7 @@ interface AboutProps {
 
 export const About: React.FC<AboutProps> = ({ onGetStarted }) => {
   return (
-    <div className="w-full max-w-4xl space-y-16 pb-20">
+    <div className="w-full space-y-16 pb-20">
       {/* Hero Section */}
       <section className="relative overflow-hidden rounded-[40px] bg-teal-900 p-12 text-white">
         <div className="relative z-10 max-w-2xl">
