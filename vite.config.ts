@@ -17,6 +17,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     build: {
+      manifest: true,
       outDir: 'dist',
       assetsDir: 'assets',
       sourcemap: false,
