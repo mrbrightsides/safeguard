@@ -434,8 +434,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ role, isAccessibilityMode 
       <div className="bg-blue-900 p-8 rounded-[40px] text-white relative overflow-hidden shadow-xl shadow-blue-900/20">
         <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex items-center gap-6">
-            <div className="w-16 h-16 bg-blue-800 rounded-3xl flex items-center justify-center shadow-inner">
-              <Cloud className="w-8 h-8 text-blue-400" />
+            <div className="w-16 h-16 bg-white rounded-3xl flex items-center justify-center shadow-inner overflow-hidden p-2">
+              <img 
+                src="https://i.imgur.com/Hb0ohEc.png" 
+                alt="Kemenkes Logo" 
+                className="w-full h-full object-contain"
+                referrerPolicy="no-referrer"
+              />
             </div>
             <div>
               <div className="flex items-center gap-2 mb-1">
