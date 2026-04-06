@@ -25,26 +25,56 @@ messaging.onBackgroundMessage((payload) => {
   self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
-const CACHE_NAME = 'safeguard-cache-v1';
+const CACHE_NAME = 'safeguard-cache-v2';
 const urlsToCache = [
   '/',
   '/index.html',
-  '/src/main.tsx',
-  '/src/App.tsx',
-  '/src/index.css'
+  '/manifest.json',
+  '/images/logo.png'
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => cache.addAll(urlsToCache))
+      .then(() => self.skipWaiting())
   );
 });
 
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheName !== CACHE_NAME) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    }).then(() => self.clients.claim())
+  );
+});
+
+// Network First Strategy
 self.addEventListener('fetch', (event) => {
+  if (event.request.method !== 'GET') return;
+
   event.respondWith(
-    caches.match(event.request)
-      .then((response) => response || fetch(event.request))
+    fetch(event.request)
+      .then((response) => {
+        // If network request is successful, clone it and save to cache
+        if (response && response.status === 200 && response.type === 'basic') {
+          const responseToCache = response.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
+        }
+        return response;
+      })
+      .catch(() => {
+        // If network fails, try to get from cache
+        return caches.match(event.request);
+      })
   );
 });
 
