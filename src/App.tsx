@@ -139,8 +139,9 @@ export default function App() {
       )}>
         <div className="p-8 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-teal-700 rounded-xl flex items-center justify-center shrink-0">
-              <Shield className="w-6 h-6 text-white" />
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0">
+              {/* <Shield className="w-6 h-6 text-white" /> */}
+              <img src='images/logo.png'></img>
             </div>
             <div>
               <h1 className="font-bold text-xl tracking-tighter">SafeGuard</h1>
@@ -435,8 +436,9 @@ Please provide a clinical risk stratification and recommendations based on these
             >
               <div className="p-8 flex items-center justify-between shrink-0">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-teal-700 rounded-xl flex items-center justify-center shrink-0">
-                    <Shield className="w-6 h-6 text-white" />
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0">
+                    {/* <Shield className="w-6 h-6 text-white" /> */}
+                    <img src='images/logo.png'></img>
                   </div>
                   <div>
                     <h1 className="font-bold text-xl tracking-tighter">SafeGuard</h1>
