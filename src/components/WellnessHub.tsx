@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   BookOpen, 
@@ -114,64 +114,88 @@ Cognitive reframing is a psychological technique that helps you identify and the
 ];
 
 const ResourceModal: React.FC<{ resource: Resource; onClose: () => void }> = ({ resource, onClose }) => {
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+
   return (
     <motion.div 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto"
+      className="fixed inset-0 z-[100] bg-black/60 h-full backdrop-blur-sm"
       onClick={onClose}
     >
-      <motion.div 
-        initial={{ scale: 0.9, y: 20 }}
-        animate={{ scale: 1, y: 0 }}
-        exit={{ scale: 0.9, y: 20 }}
-        className="bg-white rounded-[32px] w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl my-8"
-        onClick={e => e.stopPropagation()}
-      >
-        <div className="relative h-56 sm:h-64 shrink-0">
-          <img src={resource.image} alt={resource.title} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-          <button 
-            onClick={onClose}
-            className="absolute top-4 right-4 sm:top-6 sm:right-6 p-2 bg-white/20 hover:bg-white/40 backdrop-blur-md rounded-full text-white transition-colors"
-          >
-            <X className="w-5 h-5 sm:w-6 sm:h-6" />
-          </button>
-          <div className="absolute bottom-6 left-4 right-4 sm:bottom-8 sm:left-8 sm:right-8">
-            <span className="px-2 py-0.5 sm:px-3 sm:py-1 bg-teal-500 text-white rounded-full text-[9px] sm:text-[10px] font-bold uppercase tracking-widest mb-2 sm:mb-3 inline-block">
-              {resource.category}
-            </span>
-            <h2 className="text-xl sm:text-3xl font-bold text-white leading-tight">{resource.title}</h2>
+      <div className="flex items-center justify-center min-h-screen p-4">
+        <motion.div 
+          initial={{ scale: 0.9, y: 20, opacity: 0 }}
+          animate={{ scale: 1, y: 0, opacity: 1 }}
+          exit={{ scale: 0.9, y: 20, opacity: 0 }}
+          transition={{ type: "spring", damping: 25, stiffness: 300 }}
+          className="bg-white rounded-[32px] w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl relative"
+          onClick={e => e.stopPropagation()}
+        >
+          {/* Header Image Section */}
+          <div className="relative h-48 sm:h-56 md:h-64 shrink-0">
+            <img 
+              src={resource.image} 
+              alt={resource.title} 
+              className="w-full h-full object-cover" 
+              referrerPolicy="no-referrer" 
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+            
+            {/* Close Button */}
+            <button 
+              onClick={onClose}
+              className="absolute top-4 right-4 z-10 p-2 bg-black/50 hover:bg-black/70 backdrop-blur-md rounded-full text-white transition-all hover:scale-110"
+            >
+              <X className="w-5 h-5" />
+            </button>
+            
+            {/* Title Overlay */}
+            <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6">
+              <span className="inline-block px-2 py-0.5 sm:px-3 sm:py-1 bg-teal-500 text-white rounded-full text-[9px] sm:text-[10px] font-bold uppercase tracking-widest mb-2">
+                {resource.category}
+              </span>
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-white leading-tight line-clamp-2">
+                {resource.title}
+              </h2>
+            </div>
           </div>
-        </div>
 
-        <div className="flex-1 overflow-y-auto p-5 sm:p-8 custom-scrollbar">
-          {resource.category === 'Audio' ? (
-            <div className="flex flex-col items-center space-y-6 sm:space-y-8">
-              <div className="w-full aspect-video rounded-xl sm:rounded-2xl overflow-hidden bg-black shadow-lg">
-                <iframe 
-                  width="100%" 
-                  height="100%" 
-                  src={`${resource.audioUrl}?autoplay=0&controls=1`}
-                  title="YouTube video player" 
-                  frameBorder="0" 
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                  allowFullScreen
-                  className="w-full h-full"
-                ></iframe>
+          {/* Scrollable Content */}
+          <div className="flex-1 overflow-y-auto p-5 sm:p-6 md:p-8 custom-scrollbar">
+            {resource.category === 'Audio' ? (
+              <div className="space-y-6">
+                <div className="relative w-full aspect-video rounded-xl overflow-hidden bg-black shadow-lg">
+                  <iframe 
+                    width="100%" 
+                    height="100%" 
+                    src={`${resource.audioUrl}?autoplay=0&controls=1&rel=0`}
+                    title="YouTube video player" 
+                    frameBorder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowFullScreen
+                    className="absolute inset-0 w-full h-full"
+                  ></iframe>
+                </div>
+                <div className="prose prose-teal max-w-none prose-sm sm:prose-base">
+                  <Markdown>{resource.content || resource.description}</Markdown>
+                </div>
               </div>
-              <div className="prose prose-teal max-w-none w-full prose-sm sm:prose-base">
+            ) : (
+              <div className="prose prose-teal max-w-none prose-sm sm:prose-base">
                 <Markdown>{resource.content || resource.description}</Markdown>
               </div>
-            </div>
-          ) : (
-            <div className="prose prose-teal max-w-none prose-sm sm:prose-base">
-              <Markdown>{resource.content || resource.description}</Markdown>
-            </div>
-          )}
-        </div>
-      </motion.div>
+            )}
+          </div>
+        </motion.div>
+      </div>
     </motion.div>
   );
 };
@@ -190,8 +214,7 @@ export const WellnessHub: React.FC = () => {
   );
 
   return (
-    // FIX: Replaced overflow-x-hidden with min-w-0
-    <div className="w-full min-w-0 space-y-6 sm:space-y-8 pb-20">
+    <div className="w-full max-w-full overflow-x-hidden space-y-6 sm:space-y-8 pb-20">
       {/* Hero Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         <div className="lg:col-span-2 relative min-h-[220px] sm:min-h-[256px] rounded-[28px] sm:rounded-[40px] overflow-hidden bg-teal-900 text-white p-6 sm:p-8 md:p-12 flex flex-col justify-center">
@@ -237,9 +260,8 @@ export const WellnessHub: React.FC = () => {
       </AnimatePresence>
 
       {/* Search and Filter */}
-      {/* FIX: Set md:flex-row and added min-w-0 and flex-1 to strictly contain horizontal scrolling */}
-      <div className="flex flex-col md:flex-row gap-4 items-center justify-between w-full min-w-0">
-        <div className="relative w-full md:max-w-xs lg:max-w-sm shrink-0">
+      <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
+        <div className="relative w-full sm:w-80 md:w-96">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input 
             type="text"
@@ -249,7 +271,7 @@ export const WellnessHub: React.FC = () => {
             className="w-full pl-11 pr-4 py-2.5 sm:py-3 bg-white border border-gray-100 rounded-xl sm:rounded-2xl focus:ring-2 focus:ring-teal-500 outline-none transition-all text-sm"
           />
         </div>
-        <div className="flex gap-2 overflow-x-auto pb-2 w-full flex-1 md:justify-end no-scrollbar min-w-0">
+        <div className="flex gap-2 overflow-x-auto pb-2 w-full sm:w-auto no-scrollbar">
           {categories.map(cat => (
             <button
               key={cat}
@@ -277,7 +299,8 @@ export const WellnessHub: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3, delay: i * 0.05 }}
-              className="bg-white rounded-2xl sm:rounded-3xl border border-gray-100 overflow-hidden group hover:shadow-xl hover:shadow-black/5 transition-all flex flex-col h-full"
+              className="bg-white rounded-2xl sm:rounded-3xl border border-gray-100 overflow-hidden group hover:shadow-xl hover:shadow-black/5 transition-all flex flex-col h-full cursor-pointer"
+              onClick={() => setSelectedResource(resource)}
             >
               <div className="relative h-40 sm:h-48 shrink-0">
                 <img 
@@ -291,12 +314,9 @@ export const WellnessHub: React.FC = () => {
                     {resource.category}
                   </span>
                 </div>
-                <div 
-                  className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"
-                  onClick={() => setSelectedResource(resource)}
-                >
+                <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                   <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white rounded-full flex items-center justify-center shadow-xl">
-                    {resource.category === 'Audio' ? <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-black" /> : <BookOpen className="w-4 h-4 sm:w-5 sm:h-5" />}
+                    {resource.category === 'Audio' ? <Play className="w-4 h-4 sm:w-5 sm:h-5 fill-black ml-0.5" /> : <BookOpen className="w-4 h-4 sm:w-5 sm:h-5" />}
                   </div>
                 </div>
               </div>
@@ -312,7 +332,10 @@ export const WellnessHub: React.FC = () => {
                   {resource.description}
                 </p>
                 <button 
-                  onClick={() => setSelectedResource(resource)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedResource(resource);
+                  }}
                   className="flex items-center gap-2 text-[11px] sm:text-xs font-bold text-teal-900 group-hover:gap-3 transition-all"
                 >
                   Start Now
@@ -325,13 +348,13 @@ export const WellnessHub: React.FC = () => {
       </div>
 
       {/* Featured Exercise */}
-      <div className="bg-emerald-50 rounded-[28px] sm:rounded-[40px] p-6 sm:p-8 md:p-12 flex flex-col md:flex-row items-center gap-6 sm:gap-8 md:gap-12 border border-emerald-100 min-w-0">
-        <div className="flex-1 space-y-4 sm:space-y-6 text-center md:text-left min-w-0">
+      <div className="bg-emerald-50 rounded-[28px] sm:rounded-[40px] p-6 sm:p-8 md:p-12 flex flex-col md:flex-row items-center gap-6 sm:gap-8 md:gap-12 border border-emerald-100">
+        <div className="flex-1 space-y-4 sm:space-y-6 text-center md:text-left">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 sm:px-4 sm:py-2 bg-emerald-100 text-emerald-700 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-widest">
             <Wind className="w-3 h-3 sm:w-4 sm:h-4" />
             Daily Practice
           </div>
-          <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-emerald-900 truncate">1-Minute De-stress</h3>
+          <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-emerald-900">1-Minute De-stress</h3>
           <p className="text-emerald-700/70 text-sm sm:text-base md:text-lg">
             A quick breathing exercise designed for busy professionals to reset their focus between tasks.
           </p>
@@ -343,7 +366,7 @@ export const WellnessHub: React.FC = () => {
           </button>
         </div>
         <div className="w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64 bg-white rounded-full flex items-center justify-center shadow-2xl relative shrink-0">
-          <div className="absolute inset-0 border-8 border-emerald-100/20 rounded-full"></div>
+          <div className="absolute inset-0 border-8 border-emerald-100/20 rounded-full animate-pulse"></div>
           <Wind className="w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 text-emerald-500" />
         </div>
       </div>
