@@ -13,8 +13,8 @@ Before you begin, ensure you have the following installed:
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/safeguard-hsil.git
-cd safeguard-hsil
+git clone https://github.com/mrbrightsides/safeguard.git
+cd safeguard
 ```
 
 ### 2. Install Dependencies
