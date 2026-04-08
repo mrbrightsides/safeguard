@@ -10,13 +10,6 @@
 [![OpenAIRE](https://img.shields.io/badge/OpenAIRE-Indexed-blueviolet?style=for-the-badge&logo=openaire&logoColor=white)](https://explore.openaire.eu/search/result?pid=10.5281%2Fzenodo.19468239)
 [![Software Heritage](https://img.shields.io/badge/Software_Heritage-Archived-green?style=for-the-badge&logo=software-heritage&logoColor=white)](https://archive.softwareheritage.org/browse/directory/745cc6ecd0845a539dbf7f723ef78215c65b863c/)
 
-[![AI-Powered](https://img.shields.io/badge/AI--Powered-Teal?style=for-the-badge&logo=google-gemini&logoColor=white)](https://ai.google.dev/)
-[![Accessibility-First](https://img.shields.io/badge/Accessibility--First-Blue?style=for-the-badge&logo=accessibility&logoColor=white)](https://www.w3.org/WAI/standards-guidelines/wcag/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
-
-</div>
-
-
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
