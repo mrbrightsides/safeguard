@@ -208,7 +208,7 @@ It does not constitute a formal medical diagnosis.
           </div>
         </div>
 
-        <div className="relative">
+        <div className="relative flex flex-col">
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -218,7 +218,7 @@ It does not constitute a formal medical diagnosis.
           <button
             onClick={handleAnalyze}
             disabled={loading || !input.trim()}
-            className="absolute bottom-4 right-4 px-6 py-2 bg-black text-white rounded-xl font-medium flex items-center gap-2 hover:bg-gray-800 disabled:opacity-50 transition-all"
+            className="md:absolute md:bottom-4 md:right-4 mt-4 md:mt-0 px-6 py-3 md:py-2 bg-black text-white rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-gray-800 disabled:opacity-50 transition-all w-full md:w-auto"
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
             Analyze Risk
@@ -234,14 +234,16 @@ It does not constitute a formal medical diagnosis.
         >
           <div className="md:col-span-2 space-y-6">
             <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-4">
-                <button 
-                  onClick={() => setShowConsultModal(true)}
+              <div className="hidden md:block absolute top-0 right-0 p-4">
+                <a 
+                  href="https://safespace.elpeef.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="px-4 py-2 bg-black text-white text-[10px] font-bold rounded-xl hover:bg-gray-800 transition-colors flex items-center gap-2 shadow-lg shadow-black/10"
                 >
                   <UserPlus className="w-3 h-3" />
                   Consult Professional
-                </button>
+                </a>
               </div>
               <h3 className="text-sm font-mono uppercase tracking-widest text-gray-400 mb-4">Clinical Summary</h3>
               <p className="text-gray-700 leading-relaxed">{result.summary}</p>
@@ -269,13 +271,15 @@ It does not constitute a formal medical diagnosis.
               </div>
 
               <div className="mt-8 flex flex-wrap gap-4">
-                <button 
-                  onClick={() => setShowConsultModal(true)}
+                <a 
+                  href="https://safespace.elpeef.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="px-6 py-2 bg-black text-white text-xs font-bold rounded-xl hover:bg-gray-800 transition-colors flex items-center gap-2"
                 >
                   <UserPlus className="w-4 h-4" />
                   Consult a Professional
-                </button>
+                </a>
                 <button 
                   onClick={downloadReport}
                   className="px-6 py-2 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-xl hover:bg-emerald-100 transition-colors flex items-center gap-2 border border-emerald-100"
@@ -296,12 +300,14 @@ It does not constitute a formal medical diagnosis.
                       <div className="text-xs text-red-700">Immediate professional consultation is recommended.</div>
                     </div>
                   </div>
-                  <button 
-                    onClick={() => setShowConsultModal(true)}
+                  <a 
+                    href="https://safespace.elpeef.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="px-4 py-2 bg-red-600 text-white text-xs font-bold rounded-xl hover:bg-red-700 transition-colors"
                   >
                     Get Help Now
-                  </button>
+                  </a>
                 </div>
               )}
             </div>
@@ -367,13 +373,15 @@ It does not constitute a formal medical diagnosis.
                     {syncing ? <Loader2 className="w-3 h-3 animate-spin" /> : <ExternalLink className="w-3 h-3" />}
                     {syncing ? 'Syncing...' : 'Sync to SATUSEHAT'}
                   </button>
-                  <button 
-                    onClick={() => setShowConsultModal(true)}
+                  <a 
+                    href="https://safespace.elpeef.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-full flex items-center justify-center gap-2 text-[10px] font-mono uppercase tracking-widest text-gray-600 hover:text-black"
                   >
                     <UserPlus className="w-3 h-3" />
                     Consult a Professional
-                  </button>
+                  </a>
                   <button 
                     onClick={downloadReport}
                     className="w-full flex items-center justify-center gap-2 text-[10px] font-mono uppercase tracking-widest text-emerald-600 hover:text-emerald-700"
@@ -416,9 +424,14 @@ It does not constitute a formal medical diagnosis.
                 <div className="p-4 bg-blue-50 rounded-2xl border border-blue-100">
                   <div className="text-sm font-bold text-blue-900 mb-1">Telemedicine Service</div>
                   <div className="text-xs text-blue-700 mb-3">Connect with a licensed psychologist within 15 minutes.</div>
-                  <button className="w-full py-3 bg-blue-600 text-white text-sm font-bold rounded-xl hover:bg-blue-700 transition-colors">
+                  <a 
+                    href="https://safespace.elpeef.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full py-3 bg-blue-600 text-white text-sm font-bold rounded-xl hover:bg-blue-700 transition-colors text-center"
+                  >
                     Start Virtual Session
-                  </button>
+                  </a>
                 </div>
 
                 <div className="space-y-3">

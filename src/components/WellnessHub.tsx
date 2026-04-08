@@ -12,10 +12,14 @@ import {
   Filter,
   Bot,
   MessageSquare,
-  X
+  X,
+  ExternalLink,
+  Heart,
+  Quote
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import AICounselor from './AICounselor';
+import { BreathingExercise } from './BreathingExercise';
 import Markdown from 'react-markdown';
 
 interface Resource {
@@ -204,6 +208,7 @@ export const WellnessHub: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [isAICounselorOpen, setIsAICounselorOpen] = useState(false);
+  const [isBreathingOpen, setIsBreathingOpen] = useState(false);
   const [selectedResource, setSelectedResource] = useState<Resource | null>(null);
 
   const categories = ['All', 'Article', 'Exercise', 'Audio'];
@@ -252,6 +257,7 @@ export const WellnessHub: React.FC = () => {
       </div>
 
       <AICounselor isOpen={isAICounselorOpen} onClose={() => setIsAICounselorOpen(false)} />
+      <BreathingExercise isOpen={isBreathingOpen} onClose={() => setIsBreathingOpen(false)} />
       
       <AnimatePresence>
         {selectedResource && (
@@ -359,7 +365,7 @@ export const WellnessHub: React.FC = () => {
             A quick breathing exercise designed for busy professionals to reset their focus between tasks.
           </p>
           <button 
-            onClick={() => setSelectedResource(resources[0])}
+            onClick={() => setIsBreathingOpen(true)}
             className="px-6 py-3 sm:px-8 sm:py-4 bg-emerald-600 text-white rounded-xl sm:rounded-2xl font-bold hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20 text-sm sm:text-base"
           >
             Start Session
@@ -368,6 +374,61 @@ export const WellnessHub: React.FC = () => {
         <div className="w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64 bg-white rounded-full flex items-center justify-center shadow-2xl relative shrink-0">
           <div className="absolute inset-0 border-8 border-emerald-100/20 rounded-full animate-pulse"></div>
           <Wind className="w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 text-emerald-500" />
+        </div>
+      </div>
+
+      {/* Companion Ecosystem */}
+      <div className="pt-12 border-t border-gray-100">
+        <div className="flex flex-col space-y-2 mb-8">
+          <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+            <Sparkles className="w-5 h-5 text-teal-600" />
+            Companion Ecosystem
+          </h3>
+          <p className="text-sm text-gray-500">Explore other specialized tools designed for emotional support and processing.</p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Halo Ayah */}
+          <a 
+            href="https://halo-ayah.vercel.app" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="group bg-white p-6 rounded-[32px] border border-gray-100 hover:border-teal-200 hover:shadow-xl hover:shadow-teal-600/5 transition-all flex gap-6 items-center"
+          >
+            <div className="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+              <Heart className="w-8 h-8 text-emerald-600" />
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center justify-between mb-1">
+                <h4 className="font-bold text-gray-900">Halo Ayah (Hey Dad)</h4>
+                <ExternalLink className="w-4 h-4 text-gray-300 group-hover:text-teal-600 transition-colors" />
+              </div>
+              <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">
+                A warm AI companion providing fatherly guidance, life skills, and emotional support.
+              </p>
+            </div>
+          </a>
+
+          {/* Unsaid */}
+          <a 
+            href="https://unsaid.elpeef.com" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="group bg-white p-6 rounded-[32px] border border-gray-100 hover:border-teal-200 hover:shadow-xl hover:shadow-teal-600/5 transition-all flex gap-6 items-center"
+          >
+            <div className="w-16 h-16 bg-purple-50 rounded-2xl flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+              <Quote className="w-8 h-8 text-purple-600" />
+            </div>
+            <div className="flex-1">
+              <div className="flex items-center justify-between mb-1">
+                <h4 className="font-bold text-gray-900">Unsaid</h4>
+                <ExternalLink className="w-4 h-4 text-gray-300 group-hover:text-teal-600 transition-colors" />
+              </div>
+              <p className="text-xs text-gray-500 leading-relaxed line-clamp-2">
+                A safe space for unspoken thoughts. Process what couldn't be said in the moment.
+              </p>
+            </div>
+          </a>
         </div>
       </div>
     </div>

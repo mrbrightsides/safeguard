@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { MessageSquare, Send, X, Bot, User, Loader2, AlertCircle } from 'lucide-react';
+import { MessageSquare, Send, X, Bot, User, Loader2, AlertCircle, Heart, Quote, ExternalLink } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 import Markdown from 'react-markdown';
 
@@ -45,7 +45,7 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
     setIsLoading(true);
 
     try {
-      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+      const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
       const model = "gemini-3-flash-preview";
       
       const chatHistory = messages.map(m => ({
@@ -163,7 +163,7 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
 
           {/* Input */}
           <div className="p-4 border-t border-teal-50 bg-white">
-            <div className="relative flex items-center gap-2">
+            <div className="relative flex items-center gap-2 mb-4">
               <input
                 type="text"
                 value={input}
@@ -179,6 +179,31 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
               >
                 <Send size={18} />
               </button>
+            </div>
+
+            {/* Specialized Companions footer */}
+            <div className="flex items-center justify-center gap-6 pt-2 border-t border-gray-50">
+              <a 
+                href="https://halo-ayah.vercel.app" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-[10px] font-bold text-gray-400 hover:text-emerald-600 transition-colors"
+              >
+                <Heart size={12} />
+                Halo Ayah
+                <ExternalLink size={10} />
+              </a>
+              <div className="w-1 h-1 bg-gray-200 rounded-full" />
+              <a 
+                href="https://unsaid.elpeef.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-[10px] font-bold text-gray-400 hover:text-purple-600 transition-colors"
+              >
+                <Quote size={12} />
+                Unsaid
+                <ExternalLink size={10} />
+              </a>
             </div>
           </div>
         </motion.div>

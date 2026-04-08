@@ -197,4 +197,13 @@ The platform has been optimized for **Full-stack Serverless** deployment:
 
 ---
 
+## 🌐 Ecosystem Partners
+
+SafeGuard is part of a broader ecosystem of AI-driven mental health and emotional support tools:
+
+*   **[Halo Ayah (Hey Dad)](https://halo-ayah.vercel.app)**: A warm AI companion providing fatherly guidance, life skills, and emotional support.
+*   **[Unsaid](https://unsaid.elpeef.com)**: A safe space for unspoken thoughts, helping users process what couldn't be said in the moment.
+
+---
+
 Developed for the **HSIL Hackathon 2026**.
