@@ -72,12 +72,12 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
     doc.setTextColor(0, 0, 0);
     doc.text('3. SWOT Analysis', 20, 135);
     
-    doc.setFontSize(10);
+    doc.setFontSize(9);
     doc.setTextColor(80, 80, 80);
-    doc.text('Strengths: National Alignment (SATUSEHAT), Proactive OSHA Framework, ROI Modeling.', 25, 145);
-    doc.text('Weaknesses: Reporting Bias, Cultural Friction, Scaling Requirements.', 25, 152);
-    doc.text('Opportunities: Industrial Expansion (BUMN), HRIS Integration, Global Standards.', 25, 159);
-    doc.text('Threats: Regulatory Evolution (PDP Law), Generic EAP Competition, Stigma.', 25, 166);
+    doc.text('Strengths: Clinical-Grade AI (ICD-10), SATUSEHAT Integration, ROI 1:4 Modeling, Expert Leadership.', 25, 145);
+    doc.text('Weaknesses: Wearable Device Dependency, Early Stage Data Validation, Initial Integration Complexity.', 25, 151);
+    doc.text('Opportunities: National Digital Health Transformation, BUMN Industrial Expansion, Insurance Partnerships.', 25, 157);
+    doc.text('Threats: Data Privacy Regulations (PDP Law), Mental Health Stigma, Global EAP Competition.', 25, 163);
 
     // Section 4: Economic Case
     doc.setFontSize(16);
@@ -248,22 +248,41 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
               {[
                 { 
                   title: 'Strengths', 
-                  items: ['National Alignment (SATUSEHAT/FHIR)', 'Proactive OSHA Framework', 'Economic ROI Modeling', 'Expert Leadership'],
+                  items: [
+                    'Clinical-Grade AI (ICD-10 Chapter V)', 
+                    'Full SATUSEHAT (HL7 FHIR) Interoperability', 
+                    'Economic ROI 1:4 Modeling', 
+                    'Multidisciplinary Expert Leadership'
+                  ],
                   color: 'bg-emerald-50 text-emerald-700 border-emerald-100'
                 },
                 { 
                   title: 'Weaknesses', 
-                  items: ['Reporting Bias Dependency', 'Cultural Friction in Adoption', 'Scaling Requirements'],
+                  items: [
+                    'Dependency on Wearable Device Adoption', 
+                    'Early-Stage Data Validation Requirements', 
+                    'Initial Legacy System Integration Complexity'
+                  ],
                   color: 'bg-amber-50 text-amber-700 border-amber-100'
                 },
                 { 
                   title: 'Opportunities', 
-                  items: ['Industrial Expansion (BUMN)', 'HRIS/ERP Integration', 'Global WHO/ILO Standards'],
+                  items: [
+                    'National Digital Health Transformation Mandate', 
+                    'BUMN & Enterprise Industrial Expansion', 
+                    'Health Insurance & Premium Reduction Partnerships',
+                    'Alignment with Indonesia Emas 2045 Human Capital Goals'
+                  ],
                   color: 'bg-blue-50 text-blue-700 border-blue-100'
                 },
                 { 
                   title: 'Threats', 
-                  items: ['Regulatory Evolution (PDP Law)', 'Generic EAP Competition', 'Mental Health Stigma'],
+                  items: [
+                    'Strict Data Privacy Regulations (PDP Law)', 
+                    'Persistent Mental Health Stigma in Workforce', 
+                    'Competition from Global EAP Vendors',
+                    'Connectivity Challenges in Remote Industrial Sites'
+                  ],
                   color: 'bg-red-50 text-red-700 border-red-100'
                 },
               ].map((s) => (

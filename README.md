@@ -117,14 +117,16 @@ SafeGuard is developed by a multidisciplinary team of experts in AI, product eng
 
 ## 🎤 The S.A.F.E. Pitch (2-Minute Script)
 
-**Hook:** "Bullying is not a soft issue; it is a leading indicator of mental-health failure and a multi-billion rupiah economic drain."
+**Hook:** "1 fatality is not just an event; it is the visible tip of hundreds of ignored psychosocial signals. In Indonesia, a single psychiatric admission costs Rp12.4M, but the cost of a life is immeasurable."
 
-*   **S (Sense):** "We sense the invisible. SafeGuard collects real-time digital and biometric data to detect early warning signals of psychosocial hazards."
-*   **A (Analyze):** "We analyze the risk. Our AI maps these signals into clinical (ICD-10) and economic (ROI) layers, predicting absenteeism before it happens."
-*   **F (Flag):** "We flag the danger. Automated alerts ensure that high-risk cases (Level 0-L2) are escalated to medical teams instantly."
+*   **S (Sense):** "We sense the invisible. SafeGuard collects real-time digital and biometric data to detect early warning signals of psychosocial hazards before they manifest as physical illness."
+*   **A (Analyze):** "We analyze with clinical precision. Our Gemini-powered AI maps these signals into **ICD-10** clinical layers and **ROI** economic models, predicting absenteeism before it happens."
+*   **F (Flag):** "We flag the danger. Automated alerts ensure that high-risk cases (Level 0-L2) are escalated to medical teams instantly via our **MERP** protocol."
 *   **E (Engage):** "We engage for prevention. Personalized roadmaps and clinical interventions transform high-risk populations into high-value health assets."
 
-**Closing:** "SafeGuard: Bridging the gap between clinical risk and corporate productivity for a High-Value Health System."
+**Credibility Boost:** "SafeGuard is not just a prototype; our framework is globally indexed with a **formal DOI**, ensuring our AI methodology and economic evaluations are transparent, citable, and ready for international research collaboration."
+
+**Closing:** "SafeGuard: Bridging the gap between clinical risk and corporate productivity for a High-Value Health System. **Sense. Analyze. Flag. Engage.**"
 
 ---
 
