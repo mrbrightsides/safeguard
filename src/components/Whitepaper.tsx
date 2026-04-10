@@ -55,20 +55,20 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
     
     doc.setFontSize(11);
     doc.setTextColor(80, 80, 80);
-    const summary = 'SafeGuard is a digital psychosocial early warning system focused on the Tourism & Hospitality sector. It transforms fragmented mental health complaints into accountable economic interventions, addressing high-stress environments in Hotels and FnB industries.';
+    const summary = 'SafeGuard is a digital psychosocial early warning system employing a dual-tier strategy: Tier S (Tourism & Hospitality) for high-risk clinical impact, and Tier A (Startups & IT) for rapid tech-native adoption. It transforms fragmented mental health complaints into accountable economic interventions.';
     const splitSummary = doc.splitTextToSize(summary, 170);
     doc.text(splitSummary, 20, 70);
     
     // Section 2: Strategic Market Valuation
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
-    doc.text('2. Strategic Market Valuation (Tourism)', 20, 95);
+    doc.text('2. Strategic Market Valuation (Dual-Tier)', 20, 95);
     
     doc.setFontSize(11);
     doc.setTextColor(80, 80, 80);
-    doc.text('- TAM (Total Addressable Market): Rp 500-800 Billion (Indonesian Tourism Workforce).', 25, 105);
-    doc.text('- SAM (Serviceable Available Market): Rp 200-300 Billion (Star-rated Hotels & FnB Chains).', 25, 112);
-    doc.text('- SOM (Serviceable Obtainable Market): Rp 70-100 Billion (Bali & Jakarta Tourism Hubs).', 25, 119);
+    doc.text('- Tier S (Tourism): Rp 500-800 Billion TAM (1M+ Workers).', 25, 105);
+    doc.text('- Tier A (Startups/IT): Rp 300-500 Billion TAM (Tech Ecosystem).', 25, 112);
+    doc.text('- Combined SOM: Rp 120-180 Billion (Bali, Jakarta, & Tech Hubs).', 25, 119);
     
     // Section 3: SWOT Analysis
     doc.setFontSize(16);
@@ -98,7 +98,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
     // Section 5: Ethical Clearance
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
-    doc.text('5. Ethical Clearance & Compliance', 20, 80);
+    doc.text('8. Ethical Clearance & Compliance', 20, 80);
     
     doc.setFontSize(11);
     doc.setTextColor(80, 80, 80);
@@ -202,13 +202,25 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
           <section id="economic" className="scroll-mt-32">
             <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
               <TrendingUp className="w-6 h-6 text-teal-600" />
-              2. Strategic Market Valuation (Tourism & FnB Focus)
+              2. Strategic Market Valuation (Dual-Tier Strategy)
             </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div className="p-8 bg-teal-50 rounded-[32px] border border-teal-100">
+                <div className="text-[10px] font-bold uppercase tracking-widest text-teal-600 mb-2">Tier S: Tourism & Hospitality</div>
+                <div className="text-2xl font-bold text-gray-900 mb-2">Rp 500-800B TAM</div>
+                <p className="text-xs text-gray-600 leading-relaxed">High-risk clinical impact with 1M+ workers in Hotels & FnB.</p>
+              </div>
+              <div className="p-8 bg-indigo-50 rounded-[32px] border border-indigo-100">
+                <div className="text-[10px] font-bold uppercase tracking-widest text-indigo-600 mb-2">Tier A: Startups & IT</div>
+                <div className="text-2xl font-bold text-gray-900 mb-2">Rp 300-500B TAM</div>
+                <p className="text-xs text-gray-600 leading-relaxed">High-adoption tech-native ecosystem with high burnout rates.</p>
+              </div>
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
-                { label: 'TAM', value: 'Rp 500-800B', desc: 'Total Addressable Market: 1M+ workers in the Indonesian tourism sector.' },
-                { label: 'SAM', value: 'Rp 200-300B', desc: 'Serviceable Available Market: Star-rated hotels and FnB chains.' },
-                { label: 'SOM', value: 'Rp 70-100B', desc: 'Serviceable Obtainable Market: Early adopters in Bali and Jakarta hubs.' },
+                { label: 'Combined TAM', value: 'Rp 800B+', desc: 'Total market across both high-stress sectors.' },
+                { label: 'Combined SAM', value: 'Rp 350-550B', desc: 'Serviceable market in star-rated hotels & tech hubs.' },
+                { label: 'Combined SOM', value: 'Rp 120-180B', desc: 'Targeted initial pilot in Bali, Jakarta, & Tech Hubs.' },
               ].map((m) => (
                 <div key={m.label} className="p-8 bg-white rounded-3xl border border-gray-100 shadow-sm">
                   <div className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">{m.label}</div>
@@ -231,7 +243,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
                   title: 'Strengths', 
                   items: [
                     'Clinical-Grade AI (ICD-10 Chapter V)', 
-                    'Tourism-Specific Risk Mapping', 
+                    'Dual-Tier Market Strategy (Tier S & A)', 
                     'Economic ROI 1:4 Modeling', 
                     'Proprietary IoT Hardware Ecosystem (Arduino)',
                     'Multidisciplinary Expert Leadership'
@@ -343,7 +355,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
           <section id="impact" className="scroll-mt-32">
             <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
               <BarChart3 className="w-6 h-6 text-teal-600" />
-              4. The Economic Case for Intervention
+              5. The Economic Case for Intervention
             </h2>
             <div className="bg-gray-900 text-white p-10 rounded-[40px] relative overflow-hidden">
               <div className="relative z-10">
@@ -382,7 +394,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
           <section id="pyramid" className="scroll-mt-32">
             <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
               <TrendingUp className="w-6 h-6 text-teal-600" />
-              5. The Psychosocial Incident Pyramid
+              6. The Psychosocial Incident Pyramid
             </h2>
             <IncidentPyramid />
             <div className="mt-8 p-8 bg-teal-50 rounded-[32px] border border-teal-100">
@@ -399,33 +411,36 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
           <section id="sectors" className="scroll-mt-32">
             <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
               <Building2 className="w-6 h-6 text-teal-600" />
-              7. Sector-Specific Risk Profiles (Tourism Focus)
+              7. Dual-Tier Sector Risk Profiles
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {[
                 { 
-                  sector: 'Hotels & Hospitality', 
+                  sector: 'Tier S: Hotels & Hospitality', 
                   risk: 'High Stress + Long Hours', 
                   desc: '24/7 operations, emotional labor, and physically demanding shifts lead to chronic fatigue and burnout.' 
                 },
                 { 
-                  sector: 'Food & Beverage (FnB)', 
+                  sector: 'Tier S: Food & Beverage (FnB)', 
                   risk: 'Job Insecurity', 
                   desc: 'High prevalence of non-permanent staff, risk of termination without severance, and wages often below minimum standards.' 
                 },
                 { 
-                  sector: 'Tourism Services', 
-                  risk: 'Economic Volatility', 
-                  desc: 'Seasonal demand and global events create high anxiety regarding future stability and income.' 
+                  sector: 'Tier A: Startups & IT', 
+                  risk: 'Cognitive Load & Burnout', 
+                  desc: 'High-velocity work, "crunch culture," and tight deadlines lead to cognitive fatigue and presenteeism.' 
                 },
                 { 
-                  sector: 'Industrial / Office', 
-                  risk: 'Cognitive Load', 
-                  desc: 'Invisible hazards like burnout and anxiety lead to presenteeism and hidden productivity loss.' 
+                  sector: 'Tier A: Digital Agencies', 
+                  risk: 'Performance Anxiety', 
+                  desc: 'High-pressure client targets and constant rejection in high-velocity growth environments.' 
                 },
               ].map((s) => (
                 <div key={s.sector} className="p-6 bg-white rounded-3xl border border-gray-100 shadow-sm">
-                  <div className="text-xs font-bold text-teal-600 uppercase tracking-widest mb-2">{s.sector}</div>
+                  <div className={cn(
+                    "text-xs font-bold uppercase tracking-widest mb-2",
+                    s.sector.includes('Tier S') ? "text-teal-600" : "text-indigo-600"
+                  )}>{s.sector}</div>
                   <div className="font-bold text-gray-900 mb-2">{s.risk}</div>
                   <p className="text-xs text-gray-500 leading-relaxed">{s.desc}</p>
                 </div>
@@ -470,7 +485,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
           <section id="team" className="scroll-mt-32">
             <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
               <Users className="w-6 h-6 text-teal-600" />
-              6. The Leadership Team
+              9. The Leadership Team
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[

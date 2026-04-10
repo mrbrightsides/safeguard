@@ -1,0 +1,124 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: users
+    // Document ID: {userId} (matches request.auth.uid)
+    // Fields:
+    //   - uid: string (required, immutable) - Firebase Auth UID
+    //   - displayName: string (optional)
+    //   - email: string (required, email format)
+    //   - role: string (required, enum: ['personal', 'professional', 'admin'])
+    //   - fcmToken: string (optional)
+    //   - createdAt: timestamp (required, immutable)
+    //   - updatedAt: timestamp (required)
+    //
+    // Collection: assessments
+    // Document ID: {assessmentId}
+    // Fields:
+    //   - userId: string (required, matches request.auth.uid)
+    //   - riskLevel: string (required)
+    //   - bpm: number (optional)
+    //   - hrv: number (optional)
+    //   - stressScore: number (optional)
+    //   - timestamp: timestamp (required, immutable)
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isDocOwner() {
+      return isAuthenticated() && request.auth.uid == resource.data.userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && 
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
+         (request.auth.token.email == "khudri@binadarma.ac.id" && request.auth.token.email_verified == true));
+    }
+
+    function isValidEmail(email) {
+      return email is string && email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    function hasOnlyAllowedFields(allowedFields) {
+      return request.resource.data.keys().hasOnly(allowedFields);
+    }
+
+    function hasRequiredFields(requiredFields) {
+      return request.resource.data.keys().hasAll(requiredFields);
+    }
+
+    // ===============================================================
+    // Domain Validators
+    // ===============================================================
+
+    function isValidUser(data) {
+      return hasRequiredFields(['uid', 'email', 'role', 'createdAt', 'updatedAt']) &&
+             hasOnlyAllowedFields(['uid', 'displayName', 'email', 'role', 'fcmToken', 'createdAt', 'updatedAt']) &&
+             data.uid == request.auth.uid &&
+             isValidEmail(data.email) &&
+             data.role in ['personal', 'professional', 'admin'] &&
+             data.createdAt is timestamp &&
+             data.updatedAt is timestamp;
+    }
+
+    function isValidAssessment(data) {
+      return hasRequiredFields(['userId', 'riskLevel', 'timestamp']) &&
+             hasOnlyAllowedFields(['userId', 'riskLevel', 'bpm', 'hrv', 'stressScore', 'timestamp']) &&
+             data.userId == request.auth.uid &&
+             data.riskLevel is string &&
+             data.timestamp is timestamp;
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      
+      allow create: if isOwner(userId) && 
+                      isValidUser(request.resource.data) && 
+                      (request.resource.data.role != 'admin' || isAdmin());
+                      
+      allow update: if isOwner(userId) && 
+                      isValidUser(request.resource.data) &&
+                      request.resource.data.role == resource.data.role &&
+                      request.resource.data.createdAt == resource.data.createdAt &&
+                      request.resource.data.uid == resource.data.uid;
+                      
+      allow delete: if isAdmin();
+    }
+
+    match /assessments/{assessmentId} {
+      allow read: if isDocOwner() || isAdmin();
+      
+      allow create: if isAuthenticated() && 
+                      isValidAssessment(request.resource.data);
+                      
+      allow update: if false; // Assessments are immutable
+      
+      allow delete: if isDocOwner() || isAdmin();
+    }
+  }
+}

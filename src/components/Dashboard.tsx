@@ -129,9 +129,15 @@ export const Dashboard: React.FC<DashboardProps> = ({ role, isAccessibilityMode 
         )}>
           {isPersonal 
             ? (lang === 'EN' ? 'Personalized Prevention Roadmap' : 'Peta Jalan Pencegahan Personal')
-            : (lang === 'EN' ? 'Hospitality Health Surveillance' : 'Surveilans Kesehatan Perhotelan')}
+            : (lang === 'EN' ? 'Dual-Tier Health Surveillance' : 'Surveilans Kesehatan Dua-Tier')}
         </h2>
         <div className="flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-2 px-3 py-1 bg-teal-50 border border-teal-100 rounded-full">
+            <span className="text-[10px] font-bold text-teal-700 uppercase tracking-widest">Tier S: Tourism</span>
+          </div>
+          <div className="hidden sm:flex items-center gap-2 px-3 py-1 bg-indigo-50 border border-indigo-100 rounded-full">
+            <span className="text-[10px] font-bold text-indigo-700 uppercase tracking-widest">Tier A: Startups</span>
+          </div>
           <div className="hidden sm:flex items-center gap-2 px-3 py-1 bg-amber-50 border border-amber-100 rounded-full">
             <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
             <span className="text-[10px] font-bold text-amber-700 uppercase tracking-widest">Ethical Clearance: Pending</span>
