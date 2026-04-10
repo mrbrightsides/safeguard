@@ -7,6 +7,7 @@ import { Shield, Activity, Users, AlertTriangle, TrendingUp, Heart, Globe, Map, 
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
 import { requestFCMToken, onMessageListener } from '../firebase-config';
+import { WearableSync } from './WearableSync';
 
 import { UserRole } from './RoleSelection';
 
@@ -45,7 +46,6 @@ export const Dashboard: React.FC<DashboardProps> = ({ role, isAccessibilityMode 
   );
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [fcmToken, setFcmToken] = useState<string | null>(null);
-  const [isWearableModalOpen, setIsWearableModalOpen] = useState(false);
   const [connectedDevice, setConnectedDevice] = useState<string | null>(null);
   const [isAICounselorOpen, setIsAICounselorOpen] = useState(false);
 
@@ -277,140 +277,19 @@ export const Dashboard: React.FC<DashboardProps> = ({ role, isAccessibilityMode 
       {/* Wearable Sync & Stats Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Wearable Sync Widget */}
-        <div className="lg:col-span-1 bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm relative overflow-hidden">
-          <div className="absolute top-0 right-0 p-8 opacity-5">
-            <Watch className="w-32 h-32" />
-          </div>
-          <div className="relative z-10">
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-rose-50 rounded-2xl flex items-center justify-center">
-                  <Watch className="w-5 h-5 text-rose-600" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-gray-900">Live Biometrics</h3>
-                  <div className="flex items-center gap-1.5">
-                    <div className={cn("w-1.5 h-1.5 rounded-full", isSyncing ? "bg-teal-500 animate-pulse" : "bg-gray-300")}></div>
-                    <span className="text-[10px] font-mono text-gray-400 uppercase tracking-widest">
-                      {isSyncing ? 'Syncing via Bluetooth' : 'Disconnected'}
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <Bluetooth className={cn("w-4 h-4 transition-colors", isSyncing ? "text-blue-500" : "text-gray-300")} />
-            </div>
-
-            <div className="grid grid-cols-2 gap-6">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2 text-rose-600">
-                  <Heart className="w-4 h-4 animate-pulse" />
-                  <span className="text-[10px] font-bold uppercase tracking-widest">Heart Rate</span>
-                </div>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-black text-gray-900">{bpm}</span>
-                  <span className="text-xs text-gray-400 font-medium">BPM</span>
-                </div>
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-2 text-blue-600">
-                  <Zap className="w-4 h-4" />
-                  <span className="text-[10px] font-bold uppercase tracking-widest">HRV Index</span>
-                </div>
-                <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-black text-gray-900">{hrv}</span>
-                  <span className="text-xs text-gray-400 font-medium">ms</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-8 pt-8 border-t border-gray-50">
-              <div className="flex justify-between items-center mb-4">
-                <span className="text-xs text-gray-500">Stress Recovery State</span>
-                <span className="text-xs font-bold text-teal-600">Optimal</span>
-              </div>
-              <div className="w-full h-2 bg-gray-100 rounded-full overflow-hidden mb-6">
-                <motion.div 
-                  initial={{ width: 0 }}
-                  animate={{ width: '75%' }}
-                  className="h-full bg-teal-500 rounded-full"
-                ></motion.div>
-              </div>
-              
-              <button 
-                onClick={() => setIsWearableModalOpen(true)}
-                className={cn(
-                  "w-full py-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2",
-                  connectedDevice 
-                    ? "bg-teal-50 text-teal-700 border border-teal-100" 
-                    : "bg-rose-600 text-white hover:bg-rose-700 shadow-lg shadow-rose-600/20"
-                )}
-              >
-                {connectedDevice ? (
-                  <>
-                    <CheckCircle2 size={14} />
-                    {connectedDevice} Connected
-                  </>
-                ) : (
-                  <>
-                    <Watch size={14} />
-                    Connect Wearable
-                  </>
-                )}
-              </button>
-            </div>
-          </div>
+        <div className="lg:col-span-1">
+          <WearableSync 
+            onDataUpdate={(newBpm, newHrv) => {
+              setBpm(newBpm);
+              setHrv(newHrv);
+              setIsSyncing(true);
+            }}
+            onConnectionChange={(isConnected, deviceName) => {
+              setIsSyncing(isConnected);
+              setConnectedDevice(deviceName);
+            }}
+          />
         </div>
-
-        {/* Wearable Connection Modal */}
-        <AnimatePresence>
-          {isWearableModalOpen && (
-            <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                className="bg-white rounded-[32px] p-8 w-full max-w-md shadow-2xl border border-gray-100"
-              >
-                <div className="flex justify-between items-center mb-6">
-                  <h3 className="text-xl font-bold text-gray-900">Connect Device</h3>
-                  <button onClick={() => setIsWearableModalOpen(false)} className="p-2 hover:bg-gray-100 rounded-full">
-                    <X className="w-5 h-5 text-gray-400" />
-                  </button>
-                </div>
-                <p className="text-sm text-gray-500 mb-8">Select your wearable device to sync real-time HRV and stress data for AI analysis.</p>
-                
-                <div className="space-y-3">
-                  {[
-                    { id: 'apple', name: 'Apple Watch', icon: Watch, color: 'text-gray-900', bg: 'bg-gray-50' },
-                    { id: 'garmin', name: 'Garmin Connect', icon: Activity, color: 'text-blue-600', bg: 'bg-blue-50' },
-                    { id: 'fitbit', name: 'Fitbit Sense', icon: Zap, color: 'text-teal-600', bg: 'bg-teal-50' },
-                  ].map((device) => (
-                    <button
-                      key={device.id}
-                      onClick={() => {
-                        setConnectedDevice(device.name);
-                        setIsSyncing(true);
-                        setIsWearableModalOpen(false);
-                      }}
-                      className={cn(
-                        "w-full p-4 rounded-2xl border border-gray-100 flex items-center justify-between hover:border-teal-500 hover:bg-teal-50/30 transition-all group",
-                        connectedDevice === device.name && "border-teal-500 bg-teal-50/30"
-                      )}
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className={cn("p-3 rounded-xl", device.bg)}>
-                          <device.icon className={cn("w-5 h-5", device.color)} />
-                        </div>
-                        <span className="font-bold text-gray-900">{device.name}</span>
-                      </div>
-                      <ChevronRight className="w-4 h-4 text-gray-300 group-hover:text-teal-500" />
-                    </button>
-                  ))}
-                </div>
-              </motion.div>
-            </div>
-          )}
-        </AnimatePresence>
 
         {/* Stats Grid */}
         <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -625,14 +504,51 @@ export const Dashboard: React.FC<DashboardProps> = ({ role, isAccessibilityMode 
               Sync with your Arduino-powered companion doll for interactive emotional support.
             </p>
             <button 
-              onClick={() => {
-                const title = 'Hardware Sync Initiated';
-                const message = 'Searching for nearby SafeGuard IoT devices via Bluetooth...';
-                
-                // Trigger global notification
-                window.dispatchEvent(new CustomEvent('new-notification', {
-                  detail: { title, message, type: 'info' }
-                }));
+              onClick={async () => {
+                if (!(navigator as any).bluetooth) {
+                  window.dispatchEvent(new CustomEvent('new-notification', {
+                    detail: { 
+                      title: 'Bluetooth Not Supported', 
+                      message: 'Your browser does not support Web Bluetooth. Try Chrome or Edge.', 
+                      type: 'error' 
+                    }
+                  }));
+                  return;
+                }
+
+                try {
+                  window.dispatchEvent(new CustomEvent('new-notification', {
+                    detail: { 
+                      title: 'Hardware Sync Initiated', 
+                      message: 'Searching for nearby SafeGuard IoT devices...', 
+                      type: 'info' 
+                    }
+                  }));
+
+                  // @ts-ignore
+                  const device = await (navigator as any).bluetooth.requestDevice({
+                    acceptAllDevices: true,
+                    optionalServices: ['battery_service'] // Just a common service for demo
+                  });
+
+                  window.dispatchEvent(new CustomEvent('new-notification', {
+                    detail: { 
+                      title: 'Hardware Connected', 
+                      message: `Successfully synced with ${device.name || 'SafeGuard IoT Device'}.`, 
+                      type: 'success' 
+                    }
+                  }));
+                } catch (err: any) {
+                  if (err.name !== 'NotFoundError') {
+                    window.dispatchEvent(new CustomEvent('new-notification', {
+                      detail: { 
+                        title: 'Sync Failed', 
+                        message: err.message || 'Could not establish connection.', 
+                        type: 'error' 
+                      }
+                    }));
+                  }
+                }
               }}
               className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-bold text-sm hover:bg-indigo-700 transition-colors flex items-center gap-2"
             >
@@ -642,7 +558,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ role, isAccessibilityMode 
           </div>
         </div>
 
-        <div className="bg-indigo-900 p-8 rounded-3xl text-white shadow-xl shadow-indigo-900/10 relative overflow-hidden group">
+        <div className="bg-indigo-900 p-8 rounded-3xl text-white shadow-xl shadow-indigo-900/10 relative overflow-hidden group md:hidden">
           <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform">
             <Zap className="w-32 h-32" />
           </div>

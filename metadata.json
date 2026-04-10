@@ -1,5 +1,5 @@
 {
   "name": "SafeGuard",
   "description": "A High-Value Health System leveraging AI for Psychosocial Early Warning (EWS). Transforming fragmented mental health complaints into accountable, boardroom-ready economic interventions.",
-  "requestFramePermissions": []
+  "requestFramePermissions": ["bluetooth"]
 }
