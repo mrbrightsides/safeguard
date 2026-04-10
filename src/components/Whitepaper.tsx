@@ -77,34 +77,77 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
     
     doc.setFontSize(9);
     doc.setTextColor(80, 80, 80);
-    doc.text('Strengths: Clinical-Grade AI, IoT Hardware Ecosystem, Tourism-Specific Risk Mapping.', 25, 145);
+    doc.text('Strengths: Clinical-Grade AI, Dual-Tier Strategy, IoT Hardware Ecosystem.', 25, 145);
     doc.text('Weaknesses: Ethical Clearance Requirements, Early Stage Data Validation.', 25, 151);
     doc.text('Opportunities: Hospitality Wellness Mandate, Subscription-Based SaaS Revenue.', 25, 157);
     doc.text('Threats: High Turnover in FnB, Persistent Mental Health Stigma.', 25, 163);
 
     // Section 4: Operational Costs
-    doc.addPage();
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
-    doc.text('4. Operational Cost Analysis (Per 1000 Users)', 20, 30);
+    doc.text('4. Operational Cost Analysis (Per 1000 Users)', 20, 180);
     
     doc.setFontSize(11);
     doc.setTextColor(80, 80, 80);
-    doc.text('- AI API (Gemini 1.5 Flash): ~$5 - $10 / month.', 25, 40);
-    doc.text('- Cloud Database (Firebase Blaze): ~$15 - $25 / month.', 25, 47);
-    doc.text('- Maintenance & Support: Rp 5 - 10 Million / year.', 25, 54);
-    doc.text('- Subscription Revenue: Rp 50k - 100k / employee / year.', 25, 61);
-    
-    // Section 5: Ethical Clearance
+    doc.text('- AI API (Gemini 1.5 Flash): ~$5 - $10 / month.', 25, 190);
+    doc.text('- Cloud Database (Firebase Blaze): ~$15 - $25 / month.', 25, 197);
+    doc.text('- Maintenance & Support: Rp 5 - 10 Million / year.', 25, 204);
+    doc.text('- Subscription Revenue: Rp 50k - 100k / employee / year.', 25, 211);
+
+    // Section 5: Economic Case
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
-    doc.text('8. Ethical Clearance & Compliance', 20, 80);
+    doc.text('5. The Economic Case for Intervention', 20, 230);
+    
+    doc.setFontSize(11);
+    doc.setTextColor(80, 80, 80);
+    doc.text('- System Implementation: < Rp 1 Billion.', 25, 240);
+    doc.text('- Single Fatal Incident Cost: Up to Rp 20 Billion.', 25, 247);
+    doc.text('- WHO ROI Standard: 1:4 (Rp 1 invested = Rp 4 return).', 25, 254);
+
+    // Section 6: Incident Pyramid
+    doc.addPage();
+    doc.setFontSize(16);
+    doc.setTextColor(0, 0, 0);
+    doc.text('6. The Psychosocial Incident Pyramid', 20, 30);
+    
+    doc.setFontSize(11);
+    doc.setTextColor(80, 80, 80);
+    doc.text('- 1 Fatality is preceded by 600+ Unsafe Acts (Bullying).', 25, 40);
+    doc.text('- SafeGuard detects leading indicators before lagging fatalities.', 25, 47);
+
+    // Section 7: Sector Analysis
+    doc.setFontSize(16);
+    doc.setTextColor(0, 0, 0);
+    doc.text('7. Dual-Tier Sector Risk Profiles', 20, 65);
+    
+    doc.setFontSize(11);
+    doc.setTextColor(80, 80, 80);
+    doc.text('- Tier S: Hotels & FnB (High Stress, Job Insecurity).', 25, 75);
+    doc.text('- Tier A: Startups & IT (Cognitive Load, Burnout).', 25, 82);
+
+    // Section 8: Ethical Clearance
+    doc.setFontSize(16);
+    doc.setTextColor(0, 0, 0);
+    doc.text('8. Ethical Clearance & Compliance', 20, 100);
     
     doc.setFontSize(11);
     doc.setTextColor(80, 80, 80);
     const ethical = 'SafeGuard is committed to obtaining formal ethical clearance from recognized Institutional Review Boards (IRB) to ensure clinical validity and data privacy compliance for corporate deployment. This process includes informed consent protocols and anonymized data handling.';
     const splitEthical = doc.splitTextToSize(ethical, 170);
-    doc.text(splitEthical, 20, 90);
+    doc.text(splitEthical, 20, 110);
+
+    // Section 9: Leadership
+    doc.setFontSize(16);
+    doc.setTextColor(0, 0, 0);
+    doc.text('9. The Leadership Team', 20, 140);
+    
+    doc.setFontSize(11);
+    doc.setTextColor(80, 80, 80);
+    doc.text('- Akhmad Khudri: Team Lead & Product Owner', 25, 150);
+    doc.text('- Stanley Nathanael Wijaya: Lead AI & Product Engineer', 25, 157);
+    doc.text('- Dwiki Aulia Rahman: Health Data & Predictive Insight', 25, 164);
+    doc.text('- dr. M. Rifki Al Ikhsan: Clinical & Occupational Health Advisor', 25, 171);
     
     // Footer
     doc.setFontSize(10);

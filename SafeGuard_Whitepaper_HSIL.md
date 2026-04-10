@@ -14,28 +14,27 @@ SafeGuard is a digital psychosocial early warning system designed to transform f
 
 ---
 
-### 2. Strategic Market Valuation (TAM, SAM, SOM)
-SafeGuard addresses a massive, yet often ignored, economic burden in the workforce.
+### 2. Strategic Market Valuation (Dual-Tier Strategy)
+SafeGuard addresses a massive, yet often ignored, economic burden in the workforce through a specialized dual-tier approach.
 
-*   **TAM (Total Addressable Market): Rp 300–500 Billion**
-    *   Encompasses 250,000+ workers across healthcare and high-risk industries facing productivity loss.
-*   **SAM (Serviceable Available Market): Rp 150–250 Billion**
-    *   Focused on hospitals, universities, and BUMN (State-Owned Enterprises) with high-risk work environments.
-*   **SOM (Serviceable Obtainable Market): Rp 50–80 Billion**
-    *   Targeted initial pilot involving 10–20 early-adopter institutions.
+*   **Tier S (Tourism & Hospitality): Rp 500–800 Billion TAM**
+    *   High-risk clinical impact with 1M+ workers in Hotels & FnB facing burnout and job insecurity.
+*   **Tier A (Startups & IT): Rp 300–500 Billion TAM**
+    *   High-adoption tech-native ecosystem with high cognitive load and "crunch culture" burnout.
+*   **Combined SOM (Serviceable Obtainable Market): Rp 120–180 Billion**
+    *   Targeted initial pilot involving Bali, Jakarta, and major Tech Hubs.
 
 ---
 
-### 3. The Economic Case for Intervention
-The disparity between the cost of prevention and the cost of failure is staggering.
+### 3. Operational Cost & Subscription Model (Per 1000 Users)
+SafeGuard is designed for high scalability with low operational overhead.
 
-| Metric | Value |
-| :--- | :--- |
-| **System Implementation Cost** | **< Rp 1 Billion** |
-| **Single Fatal Incident Cost** | **Up to Rp 20 Billion** |
-| **Total Productivity Loss (TAM)** | **Rp 300–500 Billion** |
+*   **AI API (Gemini 1.5 Flash)**: ~$5 - $10 / month (Based on 10,000 scans).
+*   **Cloud Database (Firebase Blaze)**: ~$15 - $25 / month (Pay-as-you-go).
+*   **Maintenance & Support**: Rp 5 - 10 Million / year.
+*   **Subscription Revenue (B2B SaaS)**: Rp 50,000 - 100,000 per employee / year.
 
-> **"Preventing one case is enough to justify the entire system's expenditure."**
+> **ROI Justification:** Preventing just **one** burnout-related resignation (recruitment cost ~Rp 15M) covers the entire annual subscription cost for a 200-staff hotel.
 
 ---
 
@@ -43,32 +42,30 @@ The disparity between the cost of prevention and the cost of failure is staggeri
 To ensure sustainable growth and impact, SafeGuard's strategic position is analyzed as follows:
 
 #### **Strengths**
-*   **National Alignment**: Fully compatible with SATUSEHAT and HL7 FHIR R4 standards.
-*   **Proactive Framework**: Utilizes the OSHA Incident Pyramid for early risk stratification (UA/UC).
-*   **Economic ROI**: Built-in WHO-standard 1:4 ROI modeling for boardroom accountability.
-*   **Expert Leadership**: Multidisciplinary team spanning Clinical, AI, and Strategy.
+*   **Clinical-Grade AI**: Aligned with ICD-10 Chapter V standards.
+*   **Dual-Tier Strategy**: Diversified risk and adoption profiles (Tier S & A).
+*   **IoT Hardware Ecosystem**: Proprietary Arduino-powered companion tools for engagement.
+*   **Economic ROI**: Built-in WHO-standard 1:4 ROI modeling.
 
 #### **Weaknesses**
-*   **Reporting Bias**: Dependency on the accuracy and honesty of user self-reporting.
-*   **Cultural Friction**: Initial resistance in traditional corporate environments to mental health transparency.
-*   **Scaling Requirements**: Transitioning from mock integration to live, large-scale backend infrastructure.
+*   **Ethical Clearance**: Requires formal IRB approval for clinical deployment.
+*   **Data Validation**: Early-stage requirements for large-scale psychosocial data.
 
 #### **Opportunities**
-*   **Industrial Expansion**: High potential in BUMN, manufacturing, and high-stress healthcare sectors.
-*   **HRIS Integration**: Seamless API-first approach for integration with corporate ERP/HRIS systems.
-*   **Global Standards**: Scalable via WHO/ILO mental health at work frameworks for international markets.
+*   **Hospitality Wellness Mandate**: Increasing regulatory focus on worker wellbeing.
+*   **Hardware-as-a-Service (HaaS)**: Additional revenue stream via IoT companion tools.
+*   **Insurance Partnerships**: Potential for premium reductions based on risk mitigation.
 
 #### **Threats**
-*   **Regulatory Evolution**: Rapidly changing data privacy laws (e.g., Indonesia's PDP Law).
-*   **Generic Competition**: Market saturation from generic Employee Assistance Programs (EAPs).
-*   **Stigma**: Persistent social stigma surrounding mental health reporting in professional settings.
+*   **PDP Law Compliance**: Strict data privacy regulations in Indonesia.
+*   **Mental Health Stigma**: Persistent cultural barriers to transparent reporting.
 
 ---
 
 ### 5. The Psychosocial Incident Pyramid (Harvard Style)
-SafeGuard's predictive model is based on the classical safety pyramid (Heinrich → Bird) upgraded for psychosocial hazards.
+SafeGuard's predictive model is based on the classical safety pyramid (Heinrich) upgraded for psychosocial hazards.
 
-| Level | Ratio | Reality (Bullying Context) |
+| Level | Ratio | Reality (Psychosocial Context) |
 | :--- | :--- | :--- |
 | 💀 **Fatality** | 1 | Suicide / MI / Stroke |
 | 🛑 **RWDC** | 10–30 | Burnout, Absenteeism |
@@ -77,37 +74,34 @@ SafeGuard's predictive model is based on the classical safety pyramid (Heinrich 
 | ⚠️ **UA/UC** | 300–600+ | Bullying, Toxic Culture |
 
 **Strategic Insight:**
-> "Eliminating 300 unsafe acts is more powerful than reacting to 1 fatality."
+> "SafeGuard detects leading indicators (UA/UC) before they escalate into lagging fatalities."
 
 ---
 
-### 6. Sector-Specific Risk Profiles & Populations
-SafeGuard's AI models are tailored to specific industrial sectors and vulnerable populations.
-
-#### **Industrial Sector Analysis**
-1.  **Oil & Gas**: High stress, isolation, and high-consequence operations.
-2.  **Mining**: Remote areas and harsh environments amplify psychosocial hazards.
-3.  **Plantation**: Informal leadership and low reporting culture.
-4.  **Office / Service**: High cognitive load and invisible burnout hazards.
-
-#### **Special Population Vulnerabilities**
-*   **Young Workers**: Higher bullying vulnerability and immature coping mechanisms.
-*   **Geriatric**: High comorbidities; stress triggers CVD fatality.
-*   **Pregnant**: Stress increases cortisol, risking preterm birth.
-*   **Disabled**: Higher discrimination risk and underreported UA/UC.
+### 6. Dual-Tier Sector Risk Profiles
+1.  **Tier S: Hotels & FnB**: 24/7 operations, emotional labor, and high job insecurity.
+2.  **Tier A: Startups & IT**: High-velocity work, cognitive load, and "crunch culture" burnout.
 
 ---
 
 ### 7. Technical Architecture & Interoperability
 SafeGuard is built on the principles of **High-Value Health Systems**:
-*   **FHIR-Native**: Fully compatible with HL7 FHIR standards for seamless interoperability.
-*   **SATUSEHAT Integration**: Ready for integration with Indonesia's national health data platform.
-*   **AI-Driven Prognostics**: Uses Gemini AI to stratify risk into L0–L3 levels, moving from reactive to proactive care.
-*   **ROI-Centric Dashboard**: Real-time calculation of Return on Investment (ROI) based on WHO-standard 1:4 productivity recovery metrics.
+*   **FHIR-Native**: Fully compatible with HL7 FHIR standards.
+*   **SATUSEHAT Integration**: Ready for Indonesia's national health data platform.
+*   **Web Bluetooth API**: Real-time biometric sync with wearable devices.
+*   **AI-Driven Prognostics**: Uses Gemini AI for L0–L3 risk stratification.
 
 ---
 
-### 8. The Leadership Team
+### 8. Ethical Clearance & Clinical Compliance
+SafeGuard is committed to obtaining formal ethical clearance from recognized Institutional Review Boards (IRB) to ensure:
+*   **Clinical Validity**: Ensuring AI models are medically sound.
+*   **Informed Consent**: Transparent protocols for worker data usage.
+*   **Data Anonymization**: Protecting individual identities in aggregate reports.
+
+---
+
+### 9. The Leadership Team
 *   **Akhmad Khudri**: Team Lead & Product Owner (Strategy & SWOT)
 *   **Stanley Nathanael Wijaya**: Lead AI & Product Engineer (Front-end & Integration)
 *   **Dwiki Aulia Rahman**: Health Data & Predictive Insight (AI Architecture & Epidemiology)
