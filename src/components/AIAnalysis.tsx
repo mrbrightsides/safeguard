@@ -87,6 +87,15 @@ export const AIAnalysis: React.FC<AIAnalysisProps> = ({ initialInput, initialSco
             'SafeGuard EWS monitoring'
           ].filter(Boolean)
         });
+
+        // Flag: Analysis Complete
+        window.dispatchEvent(new CustomEvent('new-notification', {
+          detail: {
+            title: '[FLAG] AI Analysis Complete',
+            message: `Risk Level: ${finalRisk}. Clinical recommendations have been generated.`,
+            type: finalRisk === 'Emergency' || finalRisk === 'Severe' ? 'warning' : 'success'
+          }
+        }));
       };
       calculateScoring();
     } else if (initialInput) {
@@ -96,6 +105,15 @@ export const AIAnalysis: React.FC<AIAnalysisProps> = ({ initialInput, initialSco
         try {
           const analysis = await analyzeBehavioralRisk(initialInput);
           setResult(analysis);
+          
+          // Flag: Analysis Complete
+          window.dispatchEvent(new CustomEvent('new-notification', {
+            detail: {
+              title: '[FLAG] AI Analysis Complete',
+              message: `Risk Level: ${analysis.riskLevel}. Clinical recommendations have been generated.`,
+              type: analysis.riskLevel === 'Emergency' || analysis.riskLevel === 'Severe' ? 'warning' : 'success'
+            }
+          }));
         } catch (error) {
           console.error('Analysis failed:', error);
         } finally {

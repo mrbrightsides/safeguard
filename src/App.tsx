@@ -84,6 +84,18 @@ export default function App() {
       read: false
     };
     setNotifications(prev => [newNotif, ...prev]);
+
+    // Browser Push Notification (PWA Feature)
+    if ("Notification" in window) {
+      if (Notification.permission === "granted") {
+        new window.Notification(title, { 
+          body: message, 
+          icon: '/images/logo.png' 
+        });
+      } else if (Notification.permission !== "denied") {
+        Notification.requestPermission();
+      }
+    }
   };
 
   const markAllAsRead = () => {
@@ -96,10 +108,17 @@ export default function App() {
 
     window.addEventListener('open-consultation', handleOpenConsult);
     window.addEventListener('navigate-to-assessment', handleNavigateAssessment);
+    
+    const handleNewNotification = (e: any) => {
+      const { title, message, type } = e.detail;
+      addNotification(title, message, type);
+    };
+    window.addEventListener('new-notification', handleNewNotification);
 
     return () => {
       window.removeEventListener('open-consultation', handleOpenConsult);
       window.removeEventListener('navigate-to-assessment', handleNavigateAssessment);
+      window.removeEventListener('new-notification', handleNewNotification);
     };
   }, []);
 
@@ -145,7 +164,7 @@ export default function App() {
             </div>
             <div>
               <h1 className="font-bold text-xl tracking-tighter">SafeGuard</h1>
-              <p className="text-[10px] font-mono text-gray-400 uppercase tracking-widest">EWS Platform</p>
+              <p className="text-[10px] font-mono text-gray-400 uppercase tracking-widest">EWS System</p>
             </div>
           </div>
           {isPWAInstalled && (
@@ -237,7 +256,7 @@ export default function App() {
         </div>
       </aside>
 
-      <header className="lg:ml-64 h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-40 px-4 sm:px-8 flex items-center justify-between overflow-x-hidden">
+      <header className="lg:ml-64 h-20 bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-40 px-4 sm:px-8 flex items-center justify-between">
         <div className="flex items-center gap-4 min-w-0">
           <button 
             onClick={() => setIsMobileMenuOpen(true)}
@@ -291,7 +310,7 @@ export default function App() {
                       <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 font-mono">Notifications</h3>
                       <span className="text-[10px] font-bold text-gray-400">{notifications.length} Total</span>
                     </div>
-                    <div className="max-h-96 overflow-y-auto">
+                    <div className="max-h-96 overflow-y-auto custom-scrollbar">
                       {notifications.length === 0 ? (
                         <div className="p-8 text-center text-gray-400 text-xs italic">No notifications</div>
                       ) : (
@@ -351,6 +370,14 @@ Please provide a clinical risk stratification and recommendations based on these
                   
                   setPendingAnalysis(summary);
                   setPendingScores(scores);
+                  
+                  // Flag: Notify user that results are ready for analysis
+                  addNotification(
+                    '[FLAG] Scan Results Ready',
+                    'Digital anamnesis complete. AI Risk Detector is now processing your clinical stratification.',
+                    'success'
+                  );
+                  
                   setActiveView('ai-analysis');
                 }} />
               </div>
@@ -553,7 +580,7 @@ Please provide a clinical risk stratification and recommendations based on these
       </AnimatePresence>
 
       <button 
-        onClick={() => setShowMERPModal(true)}
+        onClick={() => window.open('https://safespace.elpeef.com', '_blank')}
         className="fixed bottom-8 right-8 w-14 h-14 sm:w-16 sm:h-16 bg-red-600 text-white rounded-full shadow-2xl shadow-red-600/40 flex items-center justify-center hover:scale-110 active:scale-95 transition-all group z-30"
       >
         <AlertTriangle className="w-6 h-6 sm:w-8 sm:h-8 group-hover:animate-pulse" />
