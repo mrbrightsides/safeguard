@@ -129,15 +129,21 @@ export const Dashboard: React.FC<DashboardProps> = ({ role, isAccessibilityMode 
         )}>
           {isPersonal 
             ? (lang === 'EN' ? 'Personalized Prevention Roadmap' : 'Peta Jalan Pencegahan Personal')
-            : (lang === 'EN' ? 'Population Health Surveillance' : 'Surveilans Kesehatan Populasi')}
+            : (lang === 'EN' ? 'Hospitality Health Surveillance' : 'Surveilans Kesehatan Perhotelan')}
         </h2>
-        <button 
-          onClick={() => setLang(l => l === 'EN' ? 'ID' : 'EN')}
-          className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-100 rounded-xl text-xs font-mono font-bold hover:bg-gray-50 transition-all"
-        >
-          <Globe className="w-4 h-4" />
-          {lang}
-        </button>
+        <div className="flex items-center gap-3">
+          <div className="hidden sm:flex items-center gap-2 px-3 py-1 bg-amber-50 border border-amber-100 rounded-full">
+            <div className="w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
+            <span className="text-[10px] font-bold text-amber-700 uppercase tracking-widest">Ethical Clearance: Pending</span>
+          </div>
+          <button 
+            onClick={() => setLang(l => l === 'EN' ? 'ID' : 'EN')}
+            className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-100 rounded-xl text-xs font-mono font-bold hover:bg-gray-50 transition-all"
+          >
+            <Globe className="w-4 h-4" />
+            {lang}
+          </button>
+        </div>
       </div>
 
       {/* Personalized Prevention Section for Personal Users */}
@@ -596,6 +602,36 @@ export const Dashboard: React.FC<DashboardProps> = ({ role, isAccessibilityMode 
             >
               <Activity className="w-4 h-4" />
               Start Scan
+            </button>
+          </div>
+        </div>
+
+        <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm relative overflow-hidden group">
+          <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:scale-110 transition-transform text-indigo-600">
+            <Bluetooth className="w-32 h-32" />
+          </div>
+          <div className="relative z-10">
+            <div className="inline-flex items-center gap-2 px-2 py-0.5 bg-indigo-50 text-indigo-600 rounded-md text-[10px] font-bold uppercase tracking-wider mb-4">
+              Hardware Innovation
+            </div>
+            <h3 className="text-xl font-bold mb-2 text-gray-900">IoT Companion Tool</h3>
+            <p className="text-gray-500 text-sm mb-6 max-w-xs">
+              Sync with your Arduino-powered companion doll for interactive emotional support.
+            </p>
+            <button 
+              onClick={() => {
+                const title = 'Hardware Sync Initiated';
+                const message = 'Searching for nearby SafeGuard IoT devices via Bluetooth...';
+                
+                // Trigger global notification
+                window.dispatchEvent(new CustomEvent('new-notification', {
+                  detail: { title, message, type: 'info' }
+                }));
+              }}
+              className="px-6 py-3 bg-indigo-600 text-white rounded-xl font-bold text-sm hover:bg-indigo-700 transition-colors flex items-center gap-2"
+            >
+              <Bluetooth className="w-4 h-4" />
+              Sync Hardware
             </button>
           </div>
         </div>

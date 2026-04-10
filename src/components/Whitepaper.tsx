@@ -16,7 +16,10 @@ import {
   Building2,
   Target,
   Activity,
-  Heart
+  Heart,
+  Coins,
+  Database,
+  CheckCircle2
 } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import { cn } from '../lib/utils';
@@ -39,7 +42,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
     
     doc.setFontSize(10);
     doc.setTextColor(150, 150, 150);
-    doc.text(`v1.0 / Generated: ${timestamp}`, 20, 38);
+    doc.text(`v1.0 / Focus: Tourism & Hospitality / Generated: ${timestamp}`, 20, 38);
     
     // Line
     doc.setDrawColor(230, 230, 230);
@@ -52,20 +55,20 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
     
     doc.setFontSize(11);
     doc.setTextColor(80, 80, 80);
-    const summary = 'SafeGuard is a digital psychosocial early warning system designed to transform fragmented mental health complaints into accountable, boardroom-ready economic interventions. By leveraging AI and FHIR, SafeGuard bridges the gap between clinical risk and corporate productivity.';
+    const summary = 'SafeGuard is a digital psychosocial early warning system focused on the Tourism & Hospitality sector. It transforms fragmented mental health complaints into accountable economic interventions, addressing high-stress environments in Hotels and FnB industries.';
     const splitSummary = doc.splitTextToSize(summary, 170);
     doc.text(splitSummary, 20, 70);
     
     // Section 2: Strategic Market Valuation
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
-    doc.text('2. Strategic Market Valuation', 20, 95);
+    doc.text('2. Strategic Market Valuation (Tourism)', 20, 95);
     
     doc.setFontSize(11);
     doc.setTextColor(80, 80, 80);
-    doc.text('- TAM (Total Addressable Market): Rp 300-500 Billion.', 25, 105);
-    doc.text('- SAM (Serviceable Available Market): Rp 150-250 Billion.', 25, 112);
-    doc.text('- SOM (Serviceable Obtainable Market): Rp 50-80 Billion.', 25, 119);
+    doc.text('- TAM (Total Addressable Market): Rp 500-800 Billion (Indonesian Tourism Workforce).', 25, 105);
+    doc.text('- SAM (Serviceable Available Market): Rp 200-300 Billion (Star-rated Hotels & FnB Chains).', 25, 112);
+    doc.text('- SOM (Serviceable Obtainable Market): Rp 70-100 Billion (Bali & Jakarta Tourism Hubs).', 25, 119);
     
     // Section 3: SWOT Analysis
     doc.setFontSize(16);
@@ -74,56 +77,34 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
     
     doc.setFontSize(9);
     doc.setTextColor(80, 80, 80);
-    doc.text('Strengths: Clinical-Grade AI (ICD-10), SATUSEHAT Integration, ROI 1:4 Modeling, Expert Leadership.', 25, 145);
-    doc.text('Weaknesses: Wearable Device Dependency, Early Stage Data Validation, Initial Integration Complexity.', 25, 151);
-    doc.text('Opportunities: National Digital Health Transformation, BUMN Industrial Expansion, Insurance Partnerships.', 25, 157);
-    doc.text('Threats: Data Privacy Regulations (PDP Law), Mental Health Stigma, Global EAP Competition.', 25, 163);
+    doc.text('Strengths: Clinical-Grade AI, IoT Hardware Ecosystem, Tourism-Specific Risk Mapping.', 25, 145);
+    doc.text('Weaknesses: Ethical Clearance Requirements, Early Stage Data Validation.', 25, 151);
+    doc.text('Opportunities: Hospitality Wellness Mandate, Subscription-Based SaaS Revenue.', 25, 157);
+    doc.text('Threats: High Turnover in FnB, Persistent Mental Health Stigma.', 25, 163);
 
-    // Section 4: Economic Case
-    doc.setFontSize(16);
-    doc.setTextColor(0, 0, 0);
-    doc.text('4. The Economic Case for Intervention', 20, 185);
-    
-    doc.setFontSize(11);
-    doc.setTextColor(80, 80, 80);
-    doc.text('- System Implementation Cost: < Rp 1 Billion.', 25, 195);
-    doc.text('- Single Fatal Incident Cost: Up to Rp 20 Billion.', 25, 202);
-    doc.text('- ROI Ratio: 1:4 (WHO Standard).', 25, 209);
-    
-    // Section 5: Incident Pyramid
+    // Section 4: Operational Costs
     doc.addPage();
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
-    doc.text('5. The Psychosocial Incident Pyramid', 20, 30);
+    doc.text('4. Operational Cost Analysis (Per 1000 Users)', 20, 30);
     
-    doc.setFontSize(10);
+    doc.setFontSize(11);
     doc.setTextColor(80, 80, 80);
-    doc.text('1 Fatality (Suicide/CVD) = 600 Unsafe Acts (Bullying/Toxic Culture).', 25, 40);
-    doc.text('Eliminating 300 unsafe acts is more powerful than reacting to 1 fatality.', 25, 47);
+    doc.text('- AI API (Gemini 1.5 Flash): ~$5 - $10 / month.', 25, 40);
+    doc.text('- Cloud Database (Firebase Blaze): ~$15 - $25 / month.', 25, 47);
+    doc.text('- Maintenance & Support: Rp 5 - 10 Million / year.', 25, 54);
+    doc.text('- Subscription Revenue: Rp 50k - 100k / employee / year.', 25, 61);
     
-    // Section 6: Sector Analysis
+    // Section 5: Ethical Clearance
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
-    doc.text('6. Sector-Specific Risk Profiles', 20, 65);
+    doc.text('5. Ethical Clearance & Compliance', 20, 80);
     
-    doc.setFontSize(10);
+    doc.setFontSize(11);
     doc.setTextColor(80, 80, 80);
-    doc.text('- Oil & Gas: High stress, isolation, high consequence operations.', 25, 75);
-    doc.text('- Mining: Remote area, harsh environment, heat stress amplification.', 25, 82);
-    doc.text('- Plantation: Informal leadership, low reporting culture.', 25, 89);
-    doc.text('- Office/Service: High cognitive load, invisible burnout hazards.', 25, 96);
-
-    // Section 7: Team
-    doc.setFontSize(16);
-    doc.setTextColor(0, 0, 0);
-    doc.text('7. The Leadership Team', 20, 115);
-    
-    doc.setFontSize(10);
-    doc.setTextColor(80, 80, 80);
-    doc.text('- Akhmad Khudri: Team Lead & Product Owner', 25, 125);
-    doc.text('- Stanley Nathanael Wijaya: Lead AI & Product Engineer', 25, 132);
-    doc.text('- Dwiki Aulia Rahman: Health Data & Predictive Insight', 25, 139);
-    doc.text('- dr. M. Rifki Al Ikhsan: Clinical & Occupational Health Advisor', 25, 146);
+    const ethical = 'SafeGuard is committed to obtaining formal ethical clearance from recognized Institutional Review Boards (IRB) to ensure clinical validity and data privacy compliance for corporate deployment. This process includes informed consent protocols and anonymized data handling.';
+    const splitEthical = doc.splitTextToSize(ethical, 170);
+    doc.text(splitEthical, 20, 90);
     
     // Footer
     doc.setFontSize(10);
@@ -137,11 +118,11 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
     { id: 'executive', title: 'Executive Summary', icon: FileText },
     { id: 'economic', title: 'Strategic Market Valuation', icon: TrendingUp },
     { id: 'swot', title: 'SWOT Analysis', icon: Target },
+    { id: 'costs', title: 'Operational Cost Analysis', icon: Coins },
     { id: 'impact', title: 'Economic Case for Intervention', icon: BarChart3 },
     { id: 'pyramid', title: 'Incident Pyramid', icon: Activity },
     { id: 'sectors', title: 'Sector Analysis', icon: Building2 },
-    { id: 'populations', title: 'Special Populations', icon: Heart },
-    { id: 'ai-mitigation', title: 'AI/ML Mitigations', icon: ShieldCheck },
+    { id: 'compliance', title: 'Ethical Clearance', icon: ShieldCheck },
     { id: 'team', title: 'Leadership Team', icon: Users },
   ];
 
@@ -221,13 +202,13 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
           <section id="economic" className="scroll-mt-32">
             <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
               <TrendingUp className="w-6 h-6 text-teal-600" />
-              2. Strategic Market Valuation
+              2. Strategic Market Valuation (Tourism & FnB Focus)
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
-                { label: 'TAM', value: 'Rp 300-500B', desc: 'Total Addressable Market: 250,000+ workers facing productivity loss.' },
-                { label: 'SAM', value: 'Rp 150-250B', desc: 'Serviceable Available Market: Hospitals, Universities, and BUMN.' },
-                { label: 'SOM', value: 'Rp 50-80B', desc: 'Serviceable Obtainable Market: 10-20 early-adopter institutions.' },
+                { label: 'TAM', value: 'Rp 500-800B', desc: 'Total Addressable Market: 1M+ workers in the Indonesian tourism sector.' },
+                { label: 'SAM', value: 'Rp 200-300B', desc: 'Serviceable Available Market: Star-rated hotels and FnB chains.' },
+                { label: 'SOM', value: 'Rp 70-100B', desc: 'Serviceable Obtainable Market: Early adopters in Bali and Jakarta hubs.' },
               ].map((m) => (
                 <div key={m.label} className="p-8 bg-white rounded-3xl border border-gray-100 shadow-sm">
                   <div className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2">{m.label}</div>
@@ -250,8 +231,9 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
                   title: 'Strengths', 
                   items: [
                     'Clinical-Grade AI (ICD-10 Chapter V)', 
-                    'Full SATUSEHAT (HL7 FHIR) Interoperability', 
+                    'Tourism-Specific Risk Mapping', 
                     'Economic ROI 1:4 Modeling', 
+                    'Proprietary IoT Hardware Ecosystem (Arduino)',
                     'Multidisciplinary Expert Leadership'
                   ],
                   color: 'bg-emerald-50 text-emerald-700 border-emerald-100'
@@ -259,17 +241,18 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
                 { 
                   title: 'Weaknesses', 
                   items: [
-                    'Dependency on Wearable Device Adoption', 
+                    'Ethical Clearance Requirements (IRB)', 
                     'Early-Stage Data Validation Requirements', 
-                    'Initial Legacy System Integration Complexity'
+                    'High Turnover in Target Sector (FnB)'
                   ],
                   color: 'bg-amber-50 text-amber-700 border-amber-100'
                 },
                 { 
                   title: 'Opportunities', 
                   items: [
-                    'National Digital Health Transformation Mandate', 
-                    'BUMN & Enterprise Industrial Expansion', 
+                    'Hospitality Wellness Mandate', 
+                    'Subscription-Based SaaS Revenue Model', 
+                    'Hardware-as-a-Service (HaaS) Revenue Model',
                     'Health Insurance & Premium Reduction Partnerships',
                     'Alignment with Indonesia Emas 2045 Human Capital Goals'
                   ],
@@ -281,7 +264,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
                     'Strict Data Privacy Regulations (PDP Law)', 
                     'Persistent Mental Health Stigma in Workforce', 
                     'Competition from Global EAP Vendors',
-                    'Connectivity Challenges in Remote Industrial Sites'
+                    'Economic Volatility in Tourism Sector'
                   ],
                   color: 'bg-red-50 text-red-700 border-red-100'
                 },
@@ -298,6 +281,61 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
                   </ul>
                 </div>
               ))}
+            </div>
+          </section>
+
+          {/* Operational Cost Analysis */}
+          <section id="costs" className="scroll-mt-32">
+            <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
+              <Coins className="w-6 h-6 text-teal-600" />
+              4. Operational Cost & Subscription Model
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div className="p-8 bg-white rounded-[40px] border border-gray-100 shadow-sm">
+                <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
+                  <Database className="w-5 h-5 text-indigo-600" />
+                  Cloud & AI Infrastructure (Per 1000 Users)
+                </h3>
+                <div className="space-y-6">
+                  {[
+                    { label: 'AI API (Gemini 1.5 Flash)', cost: '~$5 - $10 / month', desc: 'Based on 10,000 scans/month.' },
+                    { label: 'Cloud Database (Firebase)', cost: '~$15 - $25 / month', desc: 'Blaze Plan (Pay-as-you-go) usage.' },
+                    { label: 'Maintenance & Support', cost: 'Rp 5 - 10M / year', desc: 'Technical updates and server monitoring.' },
+                  ].map((item) => (
+                    <div key={item.label} className="flex justify-between items-start border-b border-gray-50 pb-4">
+                      <div>
+                        <p className="text-sm font-bold text-gray-900">{item.label}</p>
+                        <p className="text-[10px] text-gray-500">{item.desc}</p>
+                      </div>
+                      <div className="text-sm font-mono font-bold text-teal-600">{item.cost}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="p-8 bg-teal-900 text-white rounded-[40px] shadow-xl shadow-teal-900/10">
+                <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
+                  <Building2 className="w-5 h-5 text-teal-400" />
+                  Subscription Model (B2B SaaS)
+                </h3>
+                <div className="space-y-8">
+                  <div className="text-center p-6 bg-white/5 rounded-3xl border border-white/10">
+                    <p className="text-xs font-mono text-teal-400 uppercase tracking-widest mb-2">Standard Rate</p>
+                    <p className="text-3xl font-bold">Rp 50.000 - 100.000</p>
+                    <p className="text-xs text-teal-200/60 mt-1">per Employee / Year</p>
+                  </div>
+                  <div className="space-y-4">
+                    <p className="text-xs text-teal-100/70 leading-relaxed">
+                      For a typical hotel with 200 staff, the annual investment is approximately <b>Rp 10M - 20M</b>. 
+                    </p>
+                    <div className="p-4 bg-teal-800/50 rounded-2xl border border-teal-700/50">
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-teal-400 mb-1">ROI Justification</p>
+                      <p className="text-xs leading-relaxed">
+                        Preventing just <b>one</b> burnout-related resignation (recruitment cost ~Rp 15M) covers the entire annual subscription cost.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
 
@@ -361,27 +399,27 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
           <section id="sectors" className="scroll-mt-32">
             <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
               <Building2 className="w-6 h-6 text-teal-600" />
-              6. Sector-Specific Risk Profiles
+              7. Sector-Specific Risk Profiles (Tourism Focus)
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {[
                 { 
-                  sector: 'Oil & Gas', 
-                  risk: 'High Stress + High Risk', 
-                  desc: 'Long shifts, isolation, and high-consequence operations lead to sleep disturbance and sudden death risk.' 
+                  sector: 'Hotels & Hospitality', 
+                  risk: 'High Stress + Long Hours', 
+                  desc: '24/7 operations, emotional labor, and physically demanding shifts lead to chronic fatigue and burnout.' 
                 },
                 { 
-                  sector: 'Mining', 
-                  risk: 'Harsh Environments', 
-                  desc: 'Remote areas and heat stress amplify psychosocial hazards, creating a synergy of physical and mental risk.' 
+                  sector: 'Food & Beverage (FnB)', 
+                  risk: 'Job Insecurity', 
+                  desc: 'High prevalence of non-permanent staff, risk of termination without severance, and wages often below minimum standards.' 
                 },
                 { 
-                  sector: 'Plantation', 
-                  risk: 'Informal Leadership', 
-                  desc: 'Low reporting culture means UA/UC are often undetected until they escalate into medical emergencies.' 
+                  sector: 'Tourism Services', 
+                  risk: 'Economic Volatility', 
+                  desc: 'Seasonal demand and global events create high anxiety regarding future stability and income.' 
                 },
                 { 
-                  sector: 'Office / Service', 
+                  sector: 'Industrial / Office', 
                   risk: 'Cognitive Load', 
                   desc: 'Invisible hazards like burnout and anxiety lead to presenteeism and hidden productivity loss.' 
                 },
@@ -395,55 +433,36 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
             </div>
           </section>
 
-          {/* Special Populations */}
-          <section id="populations" className="scroll-mt-32">
-            <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
-              <Heart className="w-6 h-6 text-teal-600" />
-              7. Special Population Vulnerabilities
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              {[
-                { label: 'Young Workers', desc: 'Higher bullying vulnerability, immature coping.' },
-                { label: 'Geriatric', desc: 'High comorbidities; stress triggers CVD fatality.' },
-                { label: 'Pregnant', desc: 'Stress increases cortisol; risk of preterm birth.' },
-                { label: 'Disabled', desc: 'Higher discrimination risk; underreported UA/UC.' },
-              ].map((p) => (
-                <div key={p.label} className="p-6 bg-gray-50 rounded-2xl border border-gray-100">
-                  <div className="font-bold text-gray-900 text-sm mb-2">{p.label}</div>
-                  <p className="text-[10px] text-gray-500 leading-tight">{p.desc}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          {/* AI/ML Mitigations */}
-          <section id="ai-mitigation" className="scroll-mt-32">
+          {/* Ethical Clearance */}
+          <section id="compliance" className="scroll-mt-32">
             <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
               <ShieldCheck className="w-6 h-6 text-teal-600" />
-              5. AI/ML Mitigations
+              8. Ethical Clearance & Clinical Compliance
             </h2>
-            <div className="overflow-hidden rounded-[40px] border border-gray-100 shadow-sm">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-gray-50">
-                    <th className="p-6 text-xs font-bold uppercase tracking-widest text-gray-400 font-mono">Risk Factor</th>
-                    <th className="p-6 text-xs font-bold uppercase tracking-widest text-gray-400 font-mono">Mitigation Strategy</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-50">
+            <div className="p-10 bg-gray-50 rounded-[40px] border border-gray-100">
+              <div className="max-w-3xl space-y-6">
+                <p className="text-gray-600 leading-relaxed">
+                  SafeGuard recognizes that corporate deployment of psychosocial surveillance requires the highest level of ethical scrutiny. We are committed to the following compliance roadmap:
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {[
-                    { risk: 'AI Hallucination', mitigation: 'Human-in-the-loop validation (mandatory)' },
-                    { risk: 'Data Bias', mitigation: 'Multi-source data (Survey + Behavior)' },
-                    { risk: 'Privacy Risk', mitigation: 'End-to-end encryption + Consent' },
-                    { risk: 'Alert Fatigue', mitigation: 'Risk-based smart prioritization' },
-                  ].map((row) => (
-                    <tr key={row.risk} className="hover:bg-gray-50/50 transition-colors">
-                      <td className="p-6 font-bold text-sm text-gray-900">{row.risk}</td>
-                      <td className="p-6 text-sm text-gray-500">{row.mitigation}</td>
-                    </tr>
+                    { title: 'IRB Approval', desc: 'Obtaining ethical clearance from Institutional Review Boards for clinical data handling.' },
+                    { title: 'Informed Consent', desc: 'Transparent user agreements ensuring workers understand how their data is used.' },
+                    { title: 'Data Anonymization', desc: 'Strict protocols to ensure aggregate reporting never exposes individual identities.' },
+                    { title: 'PDP Law Compliance', desc: 'Alignment with Indonesian Personal Data Protection (PDP) regulations.' },
+                  ].map((item) => (
+                    <div key={item.title} className="flex gap-4">
+                      <div className="w-6 h-6 rounded-full bg-teal-100 flex items-center justify-center shrink-0">
+                        <CheckCircle2 className="w-4 h-4 text-teal-600" />
+                      </div>
+                      <div>
+                        <p className="font-bold text-sm text-gray-900">{item.title}</p>
+                        <p className="text-xs text-gray-500">{item.desc}</p>
+                      </div>
+                    </div>
                   ))}
-                </tbody>
-              </table>
+                </div>
+              </div>
             </div>
           </section>
 

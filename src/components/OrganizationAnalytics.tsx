@@ -110,15 +110,15 @@ export const OrganizationAnalytics: React.FC = () => {
     doc.setFontSize(10);
     doc.text(`Generated on: ${timestamp}`, 20, 32);
 
-    // Summary Section
+    // Section 1: Executive Summary
     doc.setTextColor(0, 0, 0);
     doc.setFontSize(16);
-    doc.text('Executive Summary', 20, 55);
+    doc.text('Executive Summary (Tourism & FnB)', 20, 55);
     doc.setFontSize(11);
     doc.text([
-      'SafeGuard predictive surveillance has identified significant ROI opportunities.',
-      'By monitoring leading psychosocial indicators (UA/UC), the system mitigates',
-      'the Rp 500 Billion productivity loss through early ICD-10 prognostic detection.',
+      'SafeGuard predictive surveillance has identified significant ROI opportunities in the Tourism sector.',
+      'By monitoring leading psychosocial indicators in high-pressure hospitality environments,',
+      'the system mitigates the Rp 800 Billion productivity loss through early ICD-10 prognostic detection.',
       '',
       `Current ROI Standard: 1:4 (WHO Standard)`,
       `Exchange Rate: Rp ${exchangeRate.toLocaleString()}/USD`,
@@ -167,12 +167,12 @@ export const OrganizationAnalytics: React.FC = () => {
   };
 
   const surveillanceLogs = [
-    { id: 'LOG-001', time: '2026-04-03 14:20', dept: 'Sales', level: 'L0', event: 'Suicidal ideation markers detected in pulse check', status: 'Escalated', action: 'MERP Triggered' },
-    { id: 'LOG-002', time: '2026-04-03 11:45', dept: 'Engineering', level: 'L2', event: 'Cluster of F41.0 (Panic) symptoms in Site B', status: 'Active', action: 'Group Counseling' },
-    { id: 'LOG-003', time: '2026-04-02 22:10', dept: 'Operations', level: 'L1', event: 'Suspected substance use pattern in night shift', status: 'Monitoring', action: 'Supervisor Briefed' },
-    { id: 'LOG-004', time: '2026-04-02 16:30', dept: 'HR', level: 'L3', event: 'High burnout markers in recruitment team', status: 'Resolved', action: 'Workload Adjusted' },
-    { id: 'LOG-005', time: '2026-04-02 09:15', dept: 'Finance', level: 'L2', event: 'Persistent anxiety reports during audit', status: 'Active', action: 'Peer Support' },
-    { id: 'LOG-006', time: '2026-04-01 14:00', dept: 'IT', level: 'L3', event: 'Role ambiguity leading to stress cluster', status: 'Resolved', action: 'Role Definition Review' },
+    { id: 'LOG-001', time: '2026-04-03 14:20', dept: 'Front Office', level: 'L0', event: 'Suicidal ideation markers detected in pulse check', status: 'Escalated', action: 'MERP Triggered' },
+    { id: 'LOG-002', time: '2026-04-03 11:45', dept: 'Housekeeping', level: 'L2', event: 'Cluster of F41.0 (Panic) symptoms in Site B', status: 'Active', action: 'Group Counseling' },
+    { id: 'LOG-003', time: '2026-04-02 22:10', dept: 'Kitchen Staff', level: 'L1', event: 'Suspected substance use pattern in night shift', status: 'Monitoring', action: 'Supervisor Briefed' },
+    { id: 'LOG-004', time: '2026-04-02 16:30', dept: 'Management', level: 'L3', event: 'High burnout markers in recruitment team', status: 'Resolved', action: 'Workload Adjusted' },
+    { id: 'LOG-005', time: '2026-04-02 09:15', dept: 'FnB Service', level: 'L2', event: 'Persistent anxiety reports during audit', status: 'Active', action: 'Peer Support' },
+    { id: 'LOG-006', time: '2026-04-01 14:00', dept: 'Security', level: 'L3', event: 'Role ambiguity leading to stress cluster', status: 'Resolved', action: 'Role Definition Review' },
   ];
 
   return (
@@ -227,9 +227,9 @@ export const OrganizationAnalytics: React.FC = () => {
       {/* Strategic Market Valuation (TAM/SAM/SOM) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {[
-          { label: 'TAM: Total Addressable Market', value: 'Rp 300-500B', desc: '250,000+ workers across healthcare & high-risk industries', color: 'text-blue-600', bg: 'bg-blue-50' },
-          { label: 'SAM: Serviceable Available Market', value: 'Rp 150-250B', desc: 'Focused on hospitals, universities, and BUMN', color: 'text-emerald-600', bg: 'bg-emerald-50' },
-          { label: 'SOM: Serviceable Obtainable Market', value: 'Rp 50-80B', desc: 'Targeted initial pilot (10-20 institutions)', color: 'text-amber-600', bg: 'bg-amber-50' },
+          { label: 'TAM: Total Addressable Market', value: 'Rp 500-800B', desc: '1M+ workers in the Indonesian Tourism & Hospitality sector', color: 'text-blue-600', bg: 'bg-blue-50' },
+          { label: 'SAM: Serviceable Available Market', value: 'Rp 200-300B', desc: 'Focused on star-rated hotels and FnB chains', color: 'text-emerald-600', bg: 'bg-emerald-50' },
+          { label: 'SOM: Serviceable Obtainable Market', value: 'Rp 70-100B', desc: 'Targeted initial pilot in Bali & Jakarta hubs', color: 'text-amber-600', bg: 'bg-amber-50' },
         ].map((item, i) => (
           <div key={i} className={cn("p-8 rounded-[32px] border border-transparent shadow-sm transition-all hover:shadow-md", item.bg)}>
             <div className="text-[10px] font-bold uppercase tracking-widest text-gray-500 mb-4">{item.label}</div>

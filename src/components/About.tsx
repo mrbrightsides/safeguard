@@ -12,7 +12,9 @@ import {
   ArrowRight,
   Github,
   Twitter,
-  Linkedin
+  Linkedin,
+  Zap,
+  CheckCircle2
 } from 'lucide-react';
 
 import { IncidentPyramid } from './IncidentPyramid';
@@ -65,6 +67,50 @@ export const About: React.FC<AboutProps> = ({ onGetStarted }) => {
       {/* Incident Pyramid Section */}
       <section className="scroll-mt-32">
         <IncidentPyramid />
+      </section>
+
+      {/* Hardware Innovation Section */}
+      <section className="p-12 bg-indigo-900 rounded-[40px] text-white relative overflow-hidden">
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div>
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-indigo-800 text-indigo-300 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6">
+              Hardware Innovation
+            </div>
+            <h2 className="text-3xl font-bold mb-6 tracking-tight">The IoT Companion Tool</h2>
+            <p className="text-indigo-100/70 leading-relaxed mb-8">
+              Beyond digital screens, SafeGuard is expanding into physical touchpoints. Our team is developing proprietary <b>Arduino-based IoT hardware</b> designed to be integrated into companion dolls and interactive tools.
+            </p>
+            <ul className="space-y-4">
+              {[
+                { title: 'Interactive TTS', desc: 'Integrated Text-to-Speech for empathetic, voice-driven engagement.' },
+                { title: 'Multi-Age Design', desc: 'Tailored for school-age children to university students.' },
+                { title: 'Biometric Sensing', desc: 'Future-ready sensors for real-time physiological feedback.' }
+              ].map((item) => (
+                <li key={item.title} className="flex gap-4">
+                  <div className="w-6 h-6 rounded-full bg-indigo-500 flex items-center justify-center shrink-0">
+                    <CheckCircle2 className="w-4 h-4 text-white" />
+                  </div>
+                  <div>
+                    <p className="font-bold text-sm">{item.title}</p>
+                    <p className="text-xs text-indigo-200/60">{item.desc}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="relative">
+            <div className="aspect-square bg-indigo-800/50 rounded-[60px] flex items-center justify-center border border-indigo-700/50 relative group">
+              <div className="absolute inset-0 bg-indigo-500/10 blur-3xl rounded-full"></div>
+              <div className="text-center space-y-4 relative z-10">
+                <div className="w-24 h-24 bg-indigo-600 rounded-3xl flex items-center justify-center mx-auto shadow-2xl group-hover:scale-110 transition-transform">
+                  <Zap className="w-12 h-12 text-white" />
+                </div>
+                <p className="text-xs font-mono text-indigo-300 uppercase tracking-widest">Arduino-Powered</p>
+                <p className="text-2xl font-bold">Companion AI v1.0</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Core Values */}
