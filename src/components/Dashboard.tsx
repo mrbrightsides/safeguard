@@ -47,6 +47,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ role, isAccessibilityMode 
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [fcmToken, setFcmToken] = useState<string | null>(null);
   const [connectedDevice, setConnectedDevice] = useState<string | null>(null);
+  const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [isAICounselorOpen, setIsAICounselorOpen] = useState(false);
 
   useEffect(() => {
@@ -295,8 +296,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ role, isAccessibilityMode 
         <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
           {[
             { label: lang === 'EN' ? 'Active Surveillance' : 'Surveilans Aktif', value: '1,284', icon: Activity, color: 'text-teal-600' },
-            { label: lang === 'EN' ? 'High Risk Alerts' : 'Peringatan Risiko Tinggi', value: '12', icon: AlertTriangle, color: 'text-orange-600' },
-            { label: lang === 'EN' ? 'Well-being Index' : 'Indeks Kesejahteraan', value: '84%', icon: Heart, color: 'text-rose-600' },
+            { label: lang === 'EN' ? 'High Risk Alerts' : 'Peringatan Risiko Tinggi', value: selectedMood === 'Stressed' ? '13' : '12', icon: AlertTriangle, color: 'text-orange-600' },
+            { 
+              label: lang === 'EN' ? 'Well-being Index' : 'Indeks Kesejahteraan', 
+              value: selectedMood === 'Stressed' ? '72%' : selectedMood === 'Great' ? '92%' : '84%', 
+              icon: Heart, 
+              color: 'text-rose-600' 
+            },
             { label: lang === 'EN' ? 'Population Coverage' : 'Cakupan Populasi', value: '92%', icon: Users, color: 'text-teal-600' },
           ].map((stat, i) => (
             <motion.div
@@ -425,20 +431,57 @@ export const Dashboard: React.FC<DashboardProps> = ({ role, isAccessibilityMode 
           </div>
           <div className="flex gap-4 sm:gap-6">
             {[
-              { emoji: '😔', label: 'Stressed', color: 'hover:bg-red-50 hover:text-red-600' },
-              { emoji: '😐', label: 'Neutral', color: 'hover:bg-gray-50 hover:text-gray-600' },
-              { emoji: '😊', label: 'Good', color: 'hover:bg-teal-50 hover:text-teal-600' },
-              { emoji: '🤩', label: 'Great', color: 'hover:bg-teal-50 hover:text-teal-600' },
+              { emoji: '😔', label: 'Stressed', color: 'hover:bg-red-50 hover:text-red-600', active: 'bg-red-50 text-red-600 border-red-200' },
+              { emoji: '😐', label: 'Neutral', color: 'hover:bg-gray-50 hover:text-gray-600', active: 'bg-gray-100 text-gray-900 border-gray-300' },
+              { emoji: '😊', label: 'Good', color: 'hover:bg-teal-50 hover:text-teal-600', active: 'bg-teal-50 text-teal-600 border-teal-200' },
+              { emoji: '🤩', label: 'Great', color: 'hover:bg-teal-50 hover:text-teal-600', active: 'bg-teal-50 text-teal-600 border-teal-200' },
             ].map((mood) => (
               <button 
                 key={mood.label}
+                onClick={() => {
+                  setSelectedMood(mood.label);
+                  
+                  // Trigger notification
+                  window.dispatchEvent(new CustomEvent('new-notification', {
+                    detail: {
+                      id: Date.now().toString(),
+                      title: 'Mood Check-in Received',
+                      message: mood.label === 'Stressed' 
+                        ? 'We noticed you are feeling stressed. AI Analysis initiated for psychosocial support.' 
+                        : `Glad you are feeling ${mood.label.toLowerCase()}! Data synced to your wellness roadmap.`,
+                      type: mood.label === 'Stressed' ? 'alert' : 'success',
+                      time: 'Just now'
+                    }
+                  }));
+
+                  if (mood.label === 'Stressed') {
+                    // Simulate an automated intervention
+                    setTimeout(() => {
+                      window.dispatchEvent(new CustomEvent('new-notification', {
+                        detail: {
+                          id: Date.now().toString() + '1',
+                          title: '[AI] Intervention Suggested',
+                          message: 'Based on your stress level, we suggest a 5-minute Box Breathing session.',
+                          type: 'info',
+                          time: 'Just now'
+                        }
+                      }));
+                    }, 1500);
+                  }
+                }}
                 className={cn(
-                  "flex flex-col items-center gap-2 p-4 rounded-3xl transition-all group",
-                  mood.color
+                  "flex flex-col items-center gap-2 p-4 rounded-3xl transition-all group border border-transparent",
+                  selectedMood === mood.label ? mood.active : mood.color
                 )}
               >
-                <span className="text-3xl group-hover:scale-125 transition-transform">{mood.emoji}</span>
-                <span className="text-[10px] font-bold uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                <span className={cn(
+                  "text-3xl transition-transform",
+                  selectedMood === mood.label ? "scale-110" : "group-hover:scale-125"
+                )}>{mood.emoji}</span>
+                <span className={cn(
+                  "text-[10px] font-bold uppercase tracking-widest transition-opacity",
+                  selectedMood === mood.label ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+                )}>
                   {mood.label}
                 </span>
               </button>
@@ -496,9 +539,9 @@ export const Dashboard: React.FC<DashboardProps> = ({ role, isAccessibilityMode 
             <Bluetooth className="w-32 h-32" />
           </div>
           <div className="relative z-10">
-            <div className="inline-flex items-center gap-2 px-2 py-0.5 bg-indigo-50 text-indigo-600 rounded-md text-[10px] font-bold uppercase tracking-wider mb-4">
+            { /* <div className="inline-flex items-center gap-2 px-2 py-0.5 bg-indigo-50 text-indigo-600 rounded-md text-[10px] font-bold uppercase tracking-wider mb-4">
               Hardware Innovation
-            </div>
+            </div> */ }
             <h3 className="text-xl font-bold mb-2 text-gray-900">IoT Companion Tool</h3>
             <p className="text-gray-500 text-sm mb-6 max-w-xs">
               Sync with your Arduino-powered companion doll for interactive emotional support.
