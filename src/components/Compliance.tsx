@@ -22,6 +22,51 @@ interface ComplianceProps {
 
 export const Compliance: React.FC<ComplianceProps> = ({ onBack }) => {
   const [activeTab, setActiveTab] = useState<'privacy' | 'terms' | 'ai-ethics'>('privacy');
+  const [isDownloading, setIsDownloading] = useState(false);
+
+  const handleDownload = () => {
+    setIsDownloading(true);
+    
+    // Simulate a small delay for "generating" the document
+    setTimeout(() => {
+      const timestamp = new Date().toLocaleDateString();
+      const content = `
+SAFEGUARD EWS - ${activeTab.toUpperCase()} POLICY
+Generated on: ${timestamp}
+Last Updated: April 10, 2026
+Version: 2.4.0 (PDP Compliant)
+
+==================================================
+
+${activeTab === 'privacy' ? privacySections.map(s => `[${s.title}]\n${s.content}\n`).join('\n') : ''}
+${activeTab === 'terms' ? `[Terms of Service]
+By using SafeGuard, you agree to provide accurate information for the purpose of psychosocial risk assessment. 
+You understand that the system uses AI to analyze patterns and provide wellness recommendations.
+
+1. User Eligibility: Users must be at least 18 years of age.
+2. Subscription: Access is granted based on organization tier.
+3. Liability: SafeGuard is not a medical diagnostic tool.` : ''}
+${activeTab === 'ai-ethics' ? aiEthicsSections.map(s => `[${s.title}]\n${s.content}\n`).join('\n') : ''}
+
+==================================================
+This document is a digital copy of the SafeGuard ${activeTab} policy.
+For the latest version, please visit the SafeGuard Trust Center.
+
+© 2026 SafeGuard. All Rights Reserved.
+      `;
+      
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `SafeGuard_${activeTab}_Policy.txt`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      setIsDownloading(false);
+    }, 800);
+  };
 
   const tabs = [
     { id: 'privacy', label: 'Privacy Policy', icon: Lock },
@@ -143,9 +188,17 @@ export const Compliance: React.FC<ComplianceProps> = ({ onBack }) => {
                     <p className="text-sm font-bold text-gray-900">Last Updated: April 10, 2026</p>
                     <p className="text-xs text-gray-400">Version 2.4.0 (PDP Compliant)</p>
                   </div>
-                  <button className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-xl text-xs font-bold hover:bg-gray-800 transition-all">
-                    <Download className="w-4 h-4" />
-                    Download PDF Policy
+                  <button 
+                    onClick={handleDownload}
+                    disabled={isDownloading}
+                    className="flex items-center gap-2 px-4 py-2 bg-gray-900 text-white rounded-xl text-xs font-bold hover:bg-gray-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isDownloading ? (
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      <Download className="w-4 h-4" />
+                    )}
+                    {isDownloading ? 'Generating...' : 'Download PDF Policy'}
                   </button>
                 </div>
               </div>
@@ -171,6 +224,20 @@ export const Compliance: React.FC<ComplianceProps> = ({ onBack }) => {
                 <p>Access is granted based on your organization's subscription tier. Misuse of the platform or attempting to reverse-engineer the AI models is strictly prohibited.</p>
                 <h4 className="text-gray-900 font-bold">3. Limitation of Liability</h4>
                 <p>SafeGuard is not liable for outcomes resulting from the failure to seek professional medical advice. Our system provides "leading indicators" to help prevent incidents, but is not a guarantee of safety.</p>
+              </div>
+              <div className="mt-12 pt-8 border-t border-gray-100 flex justify-end">
+                <button 
+                  onClick={handleDownload}
+                  disabled={isDownloading}
+                  className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-2xl text-sm font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20 disabled:opacity-50"
+                >
+                  {isDownloading ? (
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  ) : (
+                    <Download className="w-4 h-4" />
+                  )}
+                  {isDownloading ? 'Preparing Document...' : 'Download Terms of Service'}
+                </button>
               </div>
             </div>
           )}
@@ -203,6 +270,20 @@ export const Compliance: React.FC<ComplianceProps> = ({ onBack }) => {
                 <p className="text-sm text-blue-800 leading-relaxed">
                   SafeGuard's AI implementation is designed to align with the <b>EU AI Act</b> (High-Risk Category requirements) and the <b>Indonesian Ministry of Communication and Informatics (Kominfo)</b> ethical guidelines for Artificial Intelligence.
                 </p>
+              </div>
+              <div className="flex justify-center pt-4">
+                <button 
+                  onClick={handleDownload}
+                  disabled={isDownloading}
+                  className="flex items-center gap-3 px-8 py-4 bg-indigo-900 text-white rounded-2xl font-bold hover:bg-indigo-950 transition-all shadow-xl shadow-indigo-900/10 disabled:opacity-50"
+                >
+                  {isDownloading ? (
+                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                  ) : (
+                    <Download className="w-5 h-5" />
+                  )}
+                  {isDownloading ? 'Generating Manifesto...' : 'Download AI Ethics Manifesto'}
+                </button>
               </div>
             </div>
           )}
