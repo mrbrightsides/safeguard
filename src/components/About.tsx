@@ -280,6 +280,35 @@ export const About: React.FC<AboutProps> = ({ onGetStarted }) => {
           <ArrowRight className="w-5 h-5" />
         </button>
       </section>
+
+      {/* Footer */}
+      <footer className="pt-12 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="flex items-center gap-2">
+          <Shield className="w-5 h-5 text-teal-600" />
+          <span className="font-bold text-gray-900">SafeGuard EWS</span>
+        </div>
+        <div className="flex items-center gap-8">
+          <button 
+            onClick={() => window.dispatchEvent(new CustomEvent('navigate-to-compliance'))}
+            className="text-sm text-gray-500 hover:text-teal-600 transition-colors"
+          >
+            Privacy Policy
+          </button>
+          <button 
+            onClick={() => window.dispatchEvent(new CustomEvent('navigate-to-compliance'))}
+            className="text-sm text-gray-500 hover:text-teal-600 transition-colors"
+          >
+            Terms of Service
+          </button>
+          <button 
+            onClick={() => window.dispatchEvent(new CustomEvent('navigate-to-compliance'))}
+            className="text-sm text-gray-500 hover:text-teal-600 transition-colors"
+          >
+            AI Ethics
+          </button>
+        </div>
+        <p className="text-xs text-gray-400 font-mono">© 2026 SafeGuard. All Rights Reserved.</p>
+      </footer>
     </div>
   );
 };

@@ -31,12 +31,13 @@ import { WellnessHub } from './components/WellnessHub';
 import { Whitepaper } from './components/Whitepaper';
 import { ScalingStrategy } from './components/ScalingStrategy';
 import { About } from './components/About';
+import { Compliance } from './components/Compliance';
 import { ConsultModal } from './components/ConsultModal';
 import { MERPModal } from './components/MERPModal';
 import { RoleSelection, UserRole } from './components/RoleSelection';
 import { cn } from './lib/utils';
 
-type View = 'dashboard' | 'assessment' | 'ai-analysis' | 'analytics' | 'wellness' | 'settings' | 'whitepaper' | 'about' | 'scaling';
+type View = 'dashboard' | 'assessment' | 'ai-analysis' | 'analytics' | 'wellness' | 'settings' | 'whitepaper' | 'about' | 'scaling' | 'compliance';
 
 interface Notification {
   id: string;
@@ -108,9 +109,11 @@ export default function App() {
   useEffect(() => {
     const handleOpenConsult = () => setShowGlobalConsultModal(true);
     const handleNavigateAssessment = () => setActiveView('assessment');
+    const handleNavigateCompliance = () => setActiveView('compliance');
 
     window.addEventListener('open-consultation', handleOpenConsult);
     window.addEventListener('navigate-to-assessment', handleNavigateAssessment);
+    window.addEventListener('navigate-to-compliance', handleNavigateCompliance);
     
     const handleNewNotification = (e: any) => {
       const { title, message, type } = e.detail;
@@ -121,6 +124,7 @@ export default function App() {
     return () => {
       window.removeEventListener('open-consultation', handleOpenConsult);
       window.removeEventListener('navigate-to-assessment', handleNavigateAssessment);
+      window.removeEventListener('navigate-to-compliance', handleNavigateCompliance);
       window.removeEventListener('new-notification', handleNewNotification);
     };
   }, []);
@@ -133,6 +137,7 @@ export default function App() {
     { id: 'wellness', label: 'Wellness Hub', icon: Heart, roles: ['personal', 'corporate'] },
     { id: 'scaling', label: 'Scaling & Monetization', icon: TrendingUp, roles: ['corporate'] },
     { id: 'about', label: 'About SafeGuard', icon: Info, roles: ['personal', 'corporate'] },
+    { id: 'compliance', label: 'Trust & Compliance', icon: ShieldCheck, roles: ['personal', 'corporate'] },
     { id: 'settings', label: 'System Config', icon: Settings, roles: ['corporate'] },
   ].filter(item => !role || item.roles.includes(role));
 
@@ -402,6 +407,7 @@ Please provide a clinical risk stratification and recommendations based on these
             {activeView === 'wellness' && <WellnessHub />}
             {activeView === 'scaling' && <ScalingStrategy />}
             {activeView === 'about' && <About onGetStarted={() => setActiveView('assessment')} />}
+            {activeView === 'compliance' && <Compliance onBack={() => setActiveView(role === 'corporate' ? 'dashboard' : 'assessment')} />}
             {activeView === 'whitepaper' && <Whitepaper onBack={() => setActiveView(role === 'corporate' ? 'dashboard' : 'assessment')} />}
             {activeView === 'settings' && (
               <div className="bg-white p-6 sm:p-8 rounded-3xl border border-gray-100 shadow-sm overflow-x-hidden">
