@@ -29,7 +29,7 @@ SafeGuard transforms **Fatality (Suicide/CVD)** from a lagging indicator into a 
 
 ## 🛡️ The SAFE Framework
 SafeGuard operates on the **SAFE** mnemonic to ensure comprehensive mental health surveillance:
-- **S**ense: Real-time biometric and digital anamnesis data collection.
+- **S**ense: Digital anamnesis and psychosocial screening via AI-driven scans.
 - **A**nalyze: AI-driven risk stratification and prognostic modeling.
 - **F**lag: Automated alerting for Level 0-L2 clinical risks.
 - **E**ngage: Personalized wellness roadmaps and clinical escalation.
@@ -119,7 +119,7 @@ SafeGuard is developed by a multidisciplinary team of experts in AI, product eng
 
 **Hook:** "1 fatality is not just an event; it is the visible tip of hundreds of ignored psychosocial signals. In Indonesia, a single psychiatric admission costs Rp12.4M, but the cost of a life is immeasurable."
 
-*   **S (Sense):** "We sense the invisible. SafeGuard collects real-time digital and biometric data to detect early warning signals of psychosocial hazards before they manifest as physical illness."
+*   **S (Sense):** "We sense the invisible. SafeGuard utilizes advanced digital anamnesis to scan for early warning signals of psychosocial hazards, identifying risks before they manifest as physical illness."
 *   **A (Analyze):** "We analyze with clinical precision. Our Gemini-powered AI maps these signals into **ICD-10** clinical layers and **ROI** economic models, predicting absenteeism before it happens."
 *   **F (Flag):** "We flag the danger. Automated alerts ensure that high-risk cases (Level 0-L2) are escalated to medical teams instantly via our **MERP** protocol."
 *   **E (Engage):** "We engage for prevention. Personalized roadmaps and clinical interventions transform high-risk populations into high-value health assets."

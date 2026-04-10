@@ -569,7 +569,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ role, isAccessibilityMode 
             </p>
             <button 
               onClick={() => {
-                window.dispatchEvent(new CustomEvent('open-consultation'));
+                window.open('https://safespace.elpeef.com', '_blank');
               }}
               className="px-6 py-3 bg-white text-teal-900 rounded-xl font-bold text-sm hover:bg-gray-100 transition-colors flex items-center gap-2"
             >
@@ -584,7 +584,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ role, isAccessibilityMode 
             <Shield className="w-32 h-32" />
           </div>
           <div className="relative z-10">
-            <h3 className="text-xl font-bold mb-2 text-gray-900">Digital Anamnesis</h3>
+            <h3 className="text-xl font-bold mb-2 text-gray-900">Digital Anamnesis Scan</h3>
             <p className="text-gray-500 text-sm mb-6 max-w-xs">
               Complete your psychosocial self-assessment for AI risk stratification.
             </p>
@@ -595,7 +595,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ role, isAccessibilityMode 
               className="px-6 py-3 bg-teal-900 text-white rounded-xl font-bold text-sm hover:bg-teal-950 transition-colors flex items-center gap-2"
             >
               <Activity className="w-4 h-4" />
-              Start Assessment
+              Start Scan
             </button>
           </div>
         </div>

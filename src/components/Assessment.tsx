@@ -107,14 +107,14 @@ export const Assessment: React.FC<AssessmentProps> = ({ onComplete, isAccessibil
           <CheckCircle2 className="absolute inset-0 m-auto w-10 h-10 text-teal-600" />
         </div>
         <div className="space-y-3">
-          <h2 className="text-2xl font-bold text-gray-900">Diagnostic Phase Complete</h2>
+          <h2 className="text-2xl font-bold text-gray-900">Scan Phase Complete</h2>
           <p className="text-gray-500 max-w-sm mx-auto">
             SafeGuard AI is now analyzing your psychosocial profile to generate a personalized therapeutic roadmap.
           </p>
         </div>
         <div className="flex items-center justify-center gap-2 text-xs font-mono text-teal-600 uppercase tracking-widest animate-pulse">
           <BrainCircuit className="w-4 h-4" />
-          Transitioning to Virtual Therapeutic Mode...
+          Processing Scan Results...
         </div>
       </div>
     );
@@ -128,8 +128,8 @@ export const Assessment: React.FC<AssessmentProps> = ({ onComplete, isAccessibil
       <div className="mb-8">
         <div className="flex justify-between items-center mb-2">
           <div className="flex flex-col">
-            <span className="text-xs font-mono text-gray-400 uppercase tracking-widest">Adaptive Anamnesis Engine</span>
-            <span className="text-[10px] text-teal-600 font-bold uppercase tracking-tighter">AI-Driven Branching Active</span>
+            <span className="text-xs font-mono text-gray-400 uppercase tracking-widest">Adaptive Anamnesis Scan Engine</span>
+            <span className="text-[10px] text-teal-600 font-bold uppercase tracking-tighter">AI-Driven Scan Active</span>
           </div>
           <div className="flex items-center gap-4">
             <button 
