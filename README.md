@@ -20,16 +20,20 @@
 
 </div>
 
-SafeGuard is an enterprise-grade psychosocial health surveillance system that integrates advanced **Safespace AI/ML** prognostic models with robust **Health Economic Evaluation (HEE)**. Designed for large organizations and healthcare providers, it monitors, detects, and mitigates mental health burdens using WHO-standard ROI modeling and ICD-10 clinical frameworks.
+SafeGuard is an enterprise-grade psychosocial health surveillance system focused on high-pressure environments. We employ a dual-tier market strategy:
+- **Tier S (High Risk/High Impact)**: Tourism & Hospitality sector (Hotels, FnB).
+- **Tier A (High Adoption/Tech-Native)**: Startups, IT companies, and Digital Agencies.
+
+It integrates advanced **Safespace AI/ML** prognostic models with robust **Health Economic Evaluation (HEE)**. Designed for modern organizations, it monitors, detects, and mitigates mental health burdens using WHO-standard ROI modeling and ICD-10 clinical frameworks.
 
 ### 🔺 THE MASTER HOOK
 > **“1 fatality is not 1 event — it is the visible tip of hundreds of ignored psychosocial signals.”**
 
-SafeGuard transforms **Fatality (Suicide/CVD)** from a lagging indicator into a preventable outcome by monitoring **Bullying (UA/UC)** as a leading indicator.
+SafeGuard transforms **Fatality (Suicide/CVD)** from a lagging indicator into a preventable outcome by monitoring **Bullying (UA/UC)** and workplace stressors as leading indicators in high-pressure service environments.
 
 ## 🛡️ The SAFE Framework
 SafeGuard operates on the **SAFE** mnemonic to ensure comprehensive mental health surveillance:
-- **S**ense: Digital anamnesis and psychosocial screening via AI-driven scans.
+- **S**ense: Digital anamnesis, wearable sync, and IoT-driven companion hardware scans.
 - **A**nalyze: AI-driven risk stratification and prognostic modeling.
 - **F**lag: Automated alerting for Level 0-L2 clinical risks.
 - **E**ngage: Personalized wellness roadmaps and clinical escalation.
@@ -38,11 +42,11 @@ SafeGuard operates on the **SAFE** mnemonic to ensure comprehensive mental healt
 
 ## 🚀 Key Features
 
-### 1. **Safespace AI Risk Detector (Analytical Engine)**
-*   **Hierarchical Risk Stratification**: Automated triaging from **Level 0 (Psychiatric Emergency/Suicidal)** to **Level 3 (Prognostic/Functioning)** based on biometric and survey data.
-*   **Prognostic Surveillance**: 90-day predictive modeling for absenteeism, presenteeism, and relapse risk using psychosocial stressors (L3).
-*   **Digital Anamnesis Analysis**: Real-time processing of DASS-21 and SRQ-20 assessments to identify early warning signals.
-*   **AI Personalized Insight**: Provides data-driven risk scores and behavioral patterns for management and clinical advisors.
+### 1. **Dual-Tier Risk Detection**
+*   **Tier S: Hospitality Stress Mapping**: Specialized triaging for high-stress roles (Kitchen, Front Office, Housekeeping) facing long hours and emotional labor.
+*   **Tier A: Startup Burnout Surveillance**: Monitoring high-velocity work environments, "crunch culture," and cognitive load in the IT and Digital sectors.
+*   **Hierarchical Risk Stratification**: Automated triaging from **Level 0 (Psychiatric Emergency)** to **Level 3 (Prognostic/Functioning)**.
+*   **Digital Anamnesis Analysis**: Real-time processing of DASS-21 and SRQ-20 assessments tailored for both service and tech industry stressors.
 
 ### 2. **AI Chatbot Counselor (Conversational Support)**
 *   **Gemini-Powered Empathy**: Uses Google Gemini 3 Flash to provide 24/7 initial psychosocial support and empathetic listening.
@@ -71,10 +75,11 @@ SafeGuard operates on the **SAFE** mnemonic to ensure comprehensive mental healt
 *   **L3 Prognostic Predictors**: Monitoring of workplace conflict, peer support quality, and psychosocial stressors.
 *   **Personal ROI**: Individualized estimates of annual healthcare savings and productivity value in IDR.
 
-### 7. **Digital Anamnesis & Wearable Sync**
+### 7. **Digital Anamnesis & Multi-Source Sensing**
 *   **DASS-21 & SRQ-20 Integration**: Comprehensive psychosocial self-assessment for AI-driven risk detection.
 *   **Multi-Device Wearable Sync**: Real-time data syncing for **Apple Watch**, **Garmin**, and **Fitbit** to monitor autonomic nervous system regulation (BPM & HRV).
-*   **Autonomic Nervous System Monitoring**: Tracks Heart Rate Variability (HRV) as a physiological marker of stress and resilience.
+*   **IoT Companion Hardware (Arduino)**: Proprietary IoT tool integrated into toys and companion dolls for school-to-university engagement.
+*   **Hardware-Level TTS**: Built-in Text-to-Speech (TTS) capabilities for interactive emotional support and data collection.
 
 ### 8. **Wellness Hub & Digital Therapeutics**
 *   **Curated Resource Library**: Evidence-based articles on burnout management and cognitive reframing.
@@ -99,6 +104,24 @@ SafeGuard operates on the **SAFE** mnemonic to ensure comprehensive mental healt
 *   **Real-time Firebase Sync**: Instant data synchronization between patients and providers using NoSQL listeners.
 *   **Push Notifications**: Real-time behavioral health alerts via Firebase Cloud Messaging (FCM).
 
+### 12. **Ethical Clearance & Clinical Compliance**
+*   **IRB Roadmap**: Formal commitment to obtaining Institutional Review Board (IRB) clearance for corporate deployment.
+*   **Informed Consent**: Transparent protocols for worker data usage and privacy protection.
+*   **Anonymized Reporting**: Aggregate analytics that protect individual worker identities while providing management with actionable insights.
+
+---
+
+## 💰 Business Model & Operational Costs
+
+### 1. **Subscription Model (B2B SaaS)**
+*   **Standard Rate**: Rp 50.000 - 100.000 / employee / year.
+*   **ROI Justification**: For a hotel with 200 staff, the cost (Rp 10-20M) is fully offset by preventing just **one** burnout-related resignation (recruitment cost ~Rp 15M).
+
+### 2. **Operational Cost Analysis (Per 1000 Users)**
+*   **AI API (Gemini 1.5 Flash)**: ~$5 - $10 / month (based on 10,000 scans).
+*   **Cloud Database (Firebase Blaze)**: ~$15 - $25 / month (pay-as-you-go).
+*   **Maintenance**: Rp 5 - 10 Million / year for technical support and monitoring.
+
 ---
 
 ## 👥 The Leadership Team
@@ -119,7 +142,7 @@ SafeGuard is developed by a multidisciplinary team of experts in AI, product eng
 
 **Hook:** "1 fatality is not just an event; it is the visible tip of hundreds of ignored psychosocial signals. In Indonesia, a single psychiatric admission costs Rp12.4M, but the cost of a life is immeasurable."
 
-*   **S (Sense):** "We sense the invisible. SafeGuard utilizes advanced digital anamnesis to scan for early warning signals of psychosocial hazards, identifying risks before they manifest as physical illness."
+*   **S (Sense):** "We sense the invisible. SafeGuard utilizes advanced digital anamnesis, wearable biometrics, and proprietary IoT companion hardware to scan for early warning signals of psychosocial hazards."
 *   **A (Analyze):** "We analyze with clinical precision. Our Gemini-powered AI maps these signals into **ICD-10** clinical layers and **ROI** economic models, predicting absenteeism before it happens."
 *   **F (Flag):** "We flag the danger. Automated alerts ensure that high-risk cases (Level 0-L2) are escalated to medical teams instantly via our **MERP** protocol."
 *   **E (Engage):** "We engage for prevention. Personalized roadmaps and clinical interventions transform high-risk populations into high-value health assets."
@@ -133,10 +156,10 @@ SafeGuard is developed by a multidisciplinary team of experts in AI, product eng
 ## 🎯 Why SafeGuard Matters (HSIL 2026 Focus)
 
 SafeGuard aligns with the **HSIL Harvard Hackathon's** focus on **High-Value Health Systems**:
-- **Economic Impact:** Transforms fragmented mental health data into boardroom-ready ROI models.
+- **Economic Impact:** Transforms fragmented mental health data into boardroom-ready ROI models for the Tourism sector.
 - **Interoperability:** Uses **HL7 FHIR R4** standards for seamless integration with **SATUSEHAT**.
-- **Proactive Care:** Shifts the paradigm from reactive crisis management to proactive psychosocial surveillance.
-- **Scalability:** Designed for large-scale industrial and educational ecosystems (BUMN, Universities).
+- **Proactive Care:** Shifts the paradigm from reactive crisis management to proactive psychosocial surveillance in high-pressure service environments.
+- **Scalability:** Subscription-based model designed for large-scale hospitality ecosystems.
 
 ---
 
@@ -166,6 +189,7 @@ SafeGuard is built on privacy-first principles.
 - [x] **AI Chatbot Counselor**: 24/7 initial support and crisis triaging using Gemini 3 Flash.
 - [x] **Wearable Integration (Simulated)**: Real-time data syncing from Apple Watch, Garmin, and Fitbit.
 - [x] **Wellness Hub Enhancements**: Interactive exercises and real-world content integration.
+- [ ] **IoT Hardware Commercialization**: Mass production of Arduino-based companion dolls with integrated TTS for educational sectors.
 - [ ] **TWA (Trusted Web Activity)**: Native Android deployment for Google Play Store.
 - [ ] **Full Wearable API Integration**: Live production data from HealthKit/Google Fit.
 - [ ] **Manager/Jury Dashboard**: Advanced view for stakeholders with deep-dive ROI simulation tools.
@@ -206,4 +230,4 @@ SafeGuard is part of a broader ecosystem of AI-driven mental health and emotiona
 
 ---
 
-Developed for the **HSIL Hackathon 2026**.
+Developed for the **HSIL Hackathon 2026**
