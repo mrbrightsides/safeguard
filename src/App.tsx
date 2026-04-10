@@ -12,6 +12,7 @@ import {
   X,
   Activity,
   Heart,
+  TrendingUp,
   AlertTriangle,
   LogOut,
   FileText,
@@ -19,7 +20,8 @@ import {
   ShieldCheck,
   ChevronRight,
   Globe,
-  Github
+  Github,
+  Mail
 } from 'lucide-react';
 import { Dashboard } from './components/Dashboard';
 import { Assessment } from './components/Assessment';
@@ -27,13 +29,14 @@ import { AIAnalysis } from './components/AIAnalysis';
 import { OrganizationAnalytics } from './components/OrganizationAnalytics';
 import { WellnessHub } from './components/WellnessHub';
 import { Whitepaper } from './components/Whitepaper';
+import { ScalingStrategy } from './components/ScalingStrategy';
 import { About } from './components/About';
 import { ConsultModal } from './components/ConsultModal';
 import { MERPModal } from './components/MERPModal';
 import { RoleSelection, UserRole } from './components/RoleSelection';
 import { cn } from './lib/utils';
 
-type View = 'dashboard' | 'assessment' | 'ai-analysis' | 'analytics' | 'wellness' | 'settings' | 'whitepaper' | 'about';
+type View = 'dashboard' | 'assessment' | 'ai-analysis' | 'analytics' | 'wellness' | 'settings' | 'whitepaper' | 'about' | 'scaling';
 
 interface Notification {
   id: string;
@@ -128,6 +131,7 @@ export default function App() {
     { id: 'assessment', label: 'Digital Anamnesis', icon: ClipboardCheck, roles: ['personal', 'corporate'] },
     { id: 'ai-analysis', label: 'AI Risk Detector', icon: BrainCircuit, roles: ['personal', 'corporate'] },
     { id: 'wellness', label: 'Wellness Hub', icon: Heart, roles: ['personal', 'corporate'] },
+    { id: 'scaling', label: 'Scaling & Monetization', icon: TrendingUp, roles: ['corporate'] },
     { id: 'about', label: 'About SafeGuard', icon: Info, roles: ['personal', 'corporate'] },
     { id: 'settings', label: 'System Config', icon: Settings, roles: ['corporate'] },
   ].filter(item => !role || item.roles.includes(role));
@@ -271,6 +275,13 @@ export default function App() {
 
         <div className="flex items-center gap-2 sm:gap-4 shrink-0">
           <a 
+            href="mailto:safeguard@elpeef.com" 
+            className="p-2 text-gray-400 hover:text-teal-600 transition-colors shrink-0"
+            title="Contact Support"
+          >
+            <Mail className="w-5 h-5" />
+          </a>
+          <a 
             href="https://github.com/mrbrightsides/safeguard" 
             target="_blank" 
             rel="noopener noreferrer"
@@ -389,6 +400,7 @@ Please provide a clinical risk stratification and recommendations based on these
               />
             )}
             {activeView === 'wellness' && <WellnessHub />}
+            {activeView === 'scaling' && <ScalingStrategy />}
             {activeView === 'about' && <About onGetStarted={() => setActiveView('assessment')} />}
             {activeView === 'whitepaper' && <Whitepaper onBack={() => setActiveView(role === 'corporate' ? 'dashboard' : 'assessment')} />}
             {activeView === 'settings' && (

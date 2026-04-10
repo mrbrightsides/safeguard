@@ -14,7 +14,8 @@ import {
   Twitter,
   Linkedin,
   Zap,
-  CheckCircle2
+  CheckCircle2,
+  Mail
 } from 'lucide-react';
 
 import { IncidentPyramid } from './IncidentPyramid';
@@ -216,6 +217,9 @@ export const About: React.FC<AboutProps> = ({ onGetStarted }) => {
                   </div>
                 </div>
                 <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <a href="mailto:safeguard@elpeef.com" className="p-2 hover:bg-gray-50 rounded-full transition-colors">
+                    <Mail className="w-4 h-4 text-gray-400 hover:text-teal-600" />
+                  </a>
                   {member.linkedin && (
                     <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="p-2 hover:bg-gray-50 rounded-full transition-colors">
                       <Linkedin className="w-4 h-4 text-gray-400 hover:text-blue-600" />

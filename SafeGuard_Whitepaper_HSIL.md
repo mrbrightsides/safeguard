@@ -26,19 +26,7 @@ SafeGuard addresses a massive, yet often ignored, economic burden in the workfor
 
 ---
 
-### 3. Operational Cost & Subscription Model (Per 1000 Users)
-SafeGuard is designed for high scalability with low operational overhead.
-
-*   **AI API (Gemini 1.5 Flash)**: ~$5 - $10 / month (Based on 10,000 scans).
-*   **Cloud Database (Firebase Blaze)**: ~$15 - $25 / month (Pay-as-you-go).
-*   **Maintenance & Support**: Rp 5 - 10 Million / year.
-*   **Subscription Revenue (B2B SaaS)**: Rp 50,000 - 100,000 per employee / year.
-
-> **ROI Justification:** Preventing just **one** burnout-related resignation (recruitment cost ~Rp 15M) covers the entire annual subscription cost for a 200-staff hotel.
-
----
-
-### 4. SWOT Analysis: Strategic Positioning
+### 3. SWOT Analysis: Strategic Positioning
 To ensure sustainable growth and impact, SafeGuard's strategic position is analyzed as follows:
 
 #### **Strengths**
@@ -62,7 +50,49 @@ To ensure sustainable growth and impact, SafeGuard's strategic position is analy
 
 ---
 
-### 5. The Psychosocial Incident Pyramid (Harvard Style)
+### 4. Operational Cost Analysis (Per 1000 Users)
+SafeGuard is designed for high scalability with low operational overhead.
+
+*   **AI API (Gemini 1.5 Flash)**: ~$5 - $10 / month (Based on 10,000 scans).
+*   **Cloud Database (Firebase Blaze)**: ~$15 - $25 / month (Pay-as-you-go).
+*   **Maintenance & Support**: Rp 5 - 10 Million / year.
+
+---
+
+### 5. Scaling & Monetization Strategy (B2B SaaS)
+SafeGuard utilizes a tiered subscription model to ensure accessibility for SMEs while providing deep value for large enterprises.
+
+*   **Tier 1: Basic (Preventive)**
+    *   **Pricing**: Rp 5,000 / user / month or Rp 50,000 / user / year (Save 20%).
+    *   **Requirement**: Minimum 50 subscribers per organization.
+    *   **Focus**: Digital Anamnesis, Basic EWS, Personal Wellness Roadmap.
+*   **Tier 2: Pro (Predictive)**
+    *   **Pricing**: Rp 15,000 / user / month or Rp 150,000 / user / year (Save 20%).
+    *   **Requirement**: Minimum 50 subscribers per organization.
+    *   **Focus**: Wearable Device Sync, Real-time Biometrics, IoT Companion Support.
+*   **Tier 3: Enterprise (Prescriptive)**
+    *   **Pricing**: Custom Pricing.
+    *   **Requirement**: Minimum 100 subscribers per organization.
+    *   **Focus**: Full HRIS Integration, Custom AI Models, On-site Clinical Support.
+
+#### **Volume-Based Discounts**
+*   **101 - 500 Employees**: 15% Discount on total annual contract.
+*   **> 500 Employees**: Custom high-volume rates.
+
+> **Contact**: safeguard@elpeef.com for custom quotes and enterprise onboarding.
+
+---
+
+### 6. The Economic Case for Intervention
+*   **System Implementation**: < Rp 1 Billion.
+*   **Single Fatal Incident Cost**: Up to Rp 20 Billion.
+*   **WHO ROI Standard**: 1:4 (Rp 1 invested = Rp 4 return).
+
+> **ROI Justification:** Preventing just **one** burnout-related resignation (recruitment cost ~Rp 15M) covers the entire annual subscription cost for a 200-staff hotel.
+
+---
+
+### 7. The Psychosocial Incident Pyramid (Harvard Style)
 SafeGuard's predictive model is based on the classical safety pyramid (Heinrich) upgraded for psychosocial hazards.
 
 | Level | Ratio | Reality (Psychosocial Context) |
@@ -78,13 +108,13 @@ SafeGuard's predictive model is based on the classical safety pyramid (Heinrich)
 
 ---
 
-### 6. Dual-Tier Sector Risk Profiles
+### 8. Dual-Tier Sector Risk Profiles
 1.  **Tier S: Hotels & FnB**: 24/7 operations, emotional labor, and high job insecurity.
 2.  **Tier A: Startups & IT**: High-velocity work, cognitive load, and "crunch culture" burnout.
 
 ---
 
-### 7. Technical Architecture & Interoperability
+### 9. Technical Architecture & Interoperability
 SafeGuard is built on the principles of **High-Value Health Systems**:
 *   **FHIR-Native**: Fully compatible with HL7 FHIR standards.
 *   **SATUSEHAT Integration**: Ready for Indonesia's national health data platform.
@@ -93,7 +123,7 @@ SafeGuard is built on the principles of **High-Value Health Systems**:
 
 ---
 
-### 8. Ethical Clearance & Clinical Compliance
+### 10. Ethical Clearance & Clinical Compliance
 SafeGuard is committed to obtaining formal ethical clearance from recognized Institutional Review Boards (IRB) to ensure:
 *   **Clinical Validity**: Ensuring AI models are medically sound.
 *   **Informed Consent**: Transparent protocols for worker data usage.
@@ -101,7 +131,7 @@ SafeGuard is committed to obtaining formal ethical clearance from recognized Ins
 
 ---
 
-### 9. The Leadership Team
+### 11. The Leadership Team
 *   **Akhmad Khudri**: Team Lead & Product Owner (Strategy & SWOT)
 *   **Stanley Nathanael Wijaya**: Lead AI & Product Engineer (Front-end & Integration)
 *   **Dwiki Aulia Rahman**: Health Data & Predictive Insight (AI Architecture & Epidemiology)

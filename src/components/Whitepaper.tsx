@@ -19,6 +19,7 @@ import {
   Heart,
   Coins,
   Database,
+  Rocket,
   CheckCircle2
 } from 'lucide-react';
 import { jsPDF } from 'jspdf';
@@ -92,62 +93,74 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
     doc.text('- AI API (Gemini 1.5 Flash): ~$5 - $10 / month.', 25, 190);
     doc.text('- Cloud Database (Firebase Blaze): ~$15 - $25 / month.', 25, 197);
     doc.text('- Maintenance & Support: Rp 5 - 10 Million / year.', 25, 204);
-    doc.text('- Subscription Revenue: Rp 50k - 100k / employee / year.', 25, 211);
 
-    // Section 5: Economic Case
+    // Section 5: Scaling Strategy
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
-    doc.text('5. The Economic Case for Intervention', 20, 230);
+    doc.text('5. Scaling & Monetization Strategy', 20, 230);
     
     doc.setFontSize(11);
     doc.setTextColor(80, 80, 80);
-    doc.text('- System Implementation: < Rp 1 Billion.', 25, 240);
-    doc.text('- Single Fatal Incident Cost: Up to Rp 20 Billion.', 25, 247);
-    doc.text('- WHO ROI Standard: 1:4 (Rp 1 invested = Rp 4 return).', 25, 254);
+    doc.text('- Basic Tier: Rp 5k/mo or Rp 50k/year (Min. 50 users).', 25, 240);
+    doc.text('- Pro Tier: Rp 15k/mo or Rp 150k/year (Min. 50 users).', 25, 247);
+    doc.text('- Enterprise: Custom Pricing (Min. 100 users).', 25, 254);
+    doc.text('- Volume Discounts: 15% off for 100-500 users.', 25, 261);
+    doc.text('- Contact: safeguard@elpeef.com for custom quotes.', 25, 268);
 
-    // Section 6: Incident Pyramid
+    // Section 6: Economic Case
     doc.addPage();
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
-    doc.text('6. The Psychosocial Incident Pyramid', 20, 30);
+    doc.text('6. The Economic Case for Intervention', 20, 30);
     
     doc.setFontSize(11);
     doc.setTextColor(80, 80, 80);
-    doc.text('- 1 Fatality is preceded by 600+ Unsafe Acts (Bullying).', 25, 40);
-    doc.text('- SafeGuard detects leading indicators before lagging fatalities.', 25, 47);
+    doc.text('- System Implementation: < Rp 1 Billion.', 25, 40);
+    doc.text('- Single Fatal Incident Cost: Up to Rp 20 Billion.', 25, 47);
+    doc.text('- WHO ROI Standard: 1:4 (Rp 1 invested = Rp 4 return).', 25, 54);
 
-    // Section 7: Sector Analysis
+    // Section 7: Incident Pyramid
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
-    doc.text('7. Dual-Tier Sector Risk Profiles', 20, 65);
+    doc.text('7. The Psychosocial Incident Pyramid', 20, 75);
     
     doc.setFontSize(11);
     doc.setTextColor(80, 80, 80);
-    doc.text('- Tier S: Hotels & FnB (High Stress, Job Insecurity).', 25, 75);
-    doc.text('- Tier A: Startups & IT (Cognitive Load, Burnout).', 25, 82);
+    doc.text('- 1 Fatality is preceded by 600+ Unsafe Acts (Bullying).', 25, 85);
+    doc.text('- SafeGuard detects leading indicators before lagging fatalities.', 25, 92);
 
-    // Section 8: Ethical Clearance
+    // Section 8: Sector Analysis
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
-    doc.text('8. Ethical Clearance & Compliance', 20, 100);
+    doc.text('8. Dual-Tier Sector Risk Profiles', 20, 115);
+    
+    doc.setFontSize(11);
+    doc.setTextColor(80, 80, 80);
+    doc.text('- Tier S: Hotels & FnB (High Stress, Job Insecurity).', 25, 125);
+    doc.text('- Tier A: Startups & IT (Cognitive Load, Burnout).', 25, 132);
+
+    // Section 9: Ethical Clearance
+    doc.setFontSize(16);
+    doc.setTextColor(0, 0, 0);
+    doc.text('9. Ethical Clearance & Compliance', 20, 155);
     
     doc.setFontSize(11);
     doc.setTextColor(80, 80, 80);
     const ethical = 'SafeGuard is committed to obtaining formal ethical clearance from recognized Institutional Review Boards (IRB) to ensure clinical validity and data privacy compliance for corporate deployment. This process includes informed consent protocols and anonymized data handling.';
     const splitEthical = doc.splitTextToSize(ethical, 170);
-    doc.text(splitEthical, 20, 110);
+    doc.text(splitEthical, 20, 165);
 
-    // Section 9: Leadership
+    // Section 10: Leadership
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
-    doc.text('9. The Leadership Team', 20, 140);
+    doc.text('10. The Leadership Team', 20, 195);
     
     doc.setFontSize(11);
     doc.setTextColor(80, 80, 80);
-    doc.text('- Akhmad Khudri: Team Lead & Product Owner', 25, 150);
-    doc.text('- Stanley Nathanael Wijaya: Lead AI & Product Engineer', 25, 157);
-    doc.text('- Dwiki Aulia Rahman: Health Data & Predictive Insight', 25, 164);
-    doc.text('- dr. M. Rifki Al Ikhsan: Clinical & Occupational Health Advisor', 25, 171);
+    doc.text('- Akhmad Khudri: Team Lead & Product Owner', 25, 205);
+    doc.text('- Stanley Nathanael Wijaya: Lead AI & Product Engineer', 25, 212);
+    doc.text('- Dwiki Aulia Rahman: Health Data & Predictive Insight', 25, 219);
+    doc.text('- dr. M. Rifki Al Ikhsan: Clinical & Occupational Health Advisor', 25, 226);
     
     // Footer
     doc.setFontSize(10);
@@ -162,6 +175,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
     { id: 'economic', title: 'Strategic Market Valuation', icon: TrendingUp },
     { id: 'swot', title: 'SWOT Analysis', icon: Target },
     { id: 'costs', title: 'Operational Cost Analysis', icon: Coins },
+    { id: 'scaling', title: 'Scaling & Monetization', icon: Rocket },
     { id: 'impact', title: 'Economic Case for Intervention', icon: BarChart3 },
     { id: 'pyramid', title: 'Incident Pyramid', icon: Activity },
     { id: 'sectors', title: 'Sector Analysis', icon: Building2 },
@@ -343,54 +357,60 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
           <section id="costs" className="scroll-mt-32">
             <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
               <Coins className="w-6 h-6 text-teal-600" />
-              4. Operational Cost & Subscription Model
+              4. Operational Cost Analysis
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="p-8 bg-white rounded-[40px] border border-gray-100 shadow-sm">
-                <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
-                  <Database className="w-5 h-5 text-indigo-600" />
-                  Cloud & AI Infrastructure (Per 1000 Users)
-                </h3>
-                <div className="space-y-6">
-                  {[
-                    { label: 'AI API (Gemini 1.5 Flash)', cost: '~$5 - $10 / month', desc: 'Based on 10,000 scans/month.' },
-                    { label: 'Cloud Database (Firebase)', cost: '~$15 - $25 / month', desc: 'Blaze Plan (Pay-as-you-go) usage.' },
-                    { label: 'Maintenance & Support', cost: 'Rp 5 - 10M / year', desc: 'Technical updates and server monitoring.' },
-                  ].map((item) => (
-                    <div key={item.label} className="flex justify-between items-start border-b border-gray-50 pb-4">
-                      <div>
-                        <p className="text-sm font-bold text-gray-900">{item.label}</p>
-                        <p className="text-[10px] text-gray-500">{item.desc}</p>
-                      </div>
-                      <div className="text-sm font-mono font-bold text-teal-600">{item.cost}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="p-8 bg-teal-900 text-white rounded-[40px] shadow-xl shadow-teal-900/10">
-                <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
-                  <Building2 className="w-5 h-5 text-teal-400" />
-                  Subscription Model (B2B SaaS)
-                </h3>
-                <div className="space-y-8">
-                  <div className="text-center p-6 bg-white/5 rounded-3xl border border-white/10">
-                    <p className="text-xs font-mono text-teal-400 uppercase tracking-widest mb-2">Standard Rate</p>
-                    <p className="text-3xl font-bold">Rp 50.000 - 100.000</p>
-                    <p className="text-xs text-teal-200/60 mt-1">per Employee / Year</p>
+            <div className="p-8 bg-white rounded-[40px] border border-gray-100 shadow-sm">
+              <p className="text-gray-600 leading-relaxed mb-6">
+                SafeGuard maintains low operational overhead by leveraging efficient AI models and cloud-native infrastructure.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {[
+                  { label: 'AI API', cost: '~$5-10/mo', desc: 'Gemini 1.5 Flash' },
+                  { label: 'Cloud DB', cost: '~$15-25/mo', desc: 'Firebase Blaze' },
+                  { label: 'Maintenance', cost: 'Rp 5-10M/yr', desc: 'System Updates' },
+                ].map((item) => (
+                  <div key={item.label} className="p-4 bg-gray-50 rounded-2xl">
+                    <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">{item.label}</div>
+                    <div className="text-lg font-bold text-teal-600">{item.cost}</div>
+                    <div className="text-[10px] text-gray-500">{item.desc}</div>
                   </div>
-                  <div className="space-y-4">
-                    <p className="text-xs text-teal-100/70 leading-relaxed">
-                      For a typical hotel with 200 staff, the annual investment is approximately <b>Rp 10M - 20M</b>. 
-                    </p>
-                    <div className="p-4 bg-teal-800/50 rounded-2xl border border-teal-700/50">
-                      <p className="text-[10px] font-bold uppercase tracking-widest text-teal-400 mb-1">ROI Justification</p>
-                      <p className="text-xs leading-relaxed">
-                        Preventing just <b>one</b> burnout-related resignation (recruitment cost ~Rp 15M) covers the entire annual subscription cost.
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                ))}
               </div>
+            </div>
+          </section>
+
+          {/* Scaling & Monetization */}
+          <section id="scaling" className="scroll-mt-32">
+            <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
+              <Rocket className="w-6 h-6 text-teal-600" />
+              5. Scaling & Monetization Strategy
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[
+                { tier: 'Basic', price: 'Rp 50k/yr', desc: 'Min. 50 Users. Rp 5k/mo option.' },
+                { tier: 'Pro', price: 'Rp 150k/yr', desc: 'Min. 50 Users. Rp 15k/mo option.' },
+                { tier: 'Enterprise', price: 'Custom', desc: 'Min. 100 Users. Volume discounts.' },
+              ].map((t) => (
+                <div key={t.tier} className={cn(
+                  "p-6 rounded-3xl border",
+                  t.tier === 'Pro' ? "bg-teal-900 text-white border-teal-800" : "bg-white border-gray-100"
+                )}>
+                  <div className="text-xs font-bold uppercase tracking-widest mb-2 opacity-60">{t.tier}</div>
+                  <div className="text-2xl font-bold mb-2">{t.price}</div>
+                  <p className="text-xs opacity-70">{t.desc}</p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-6 p-6 bg-indigo-50 rounded-3xl border border-indigo-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <p className="text-sm text-indigo-900 leading-relaxed">
+                <b>Strategic Scaling:</b> Volume discounts up to 15% for 100-500 users. Contact us for high-volume rates.
+              </p>
+              <a 
+                href="mailto:safeguard@elpeef.com"
+                className="px-6 py-2 bg-indigo-600 text-white rounded-xl text-xs font-bold hover:bg-indigo-700 transition-all text-center"
+              >
+                Contact Sales
+              </a>
             </div>
           </section>
 
@@ -398,7 +418,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
           <section id="impact" className="scroll-mt-32">
             <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
               <BarChart3 className="w-6 h-6 text-teal-600" />
-              5. The Economic Case for Intervention
+              6. The Economic Case for Intervention
             </h2>
             <div className="bg-gray-900 text-white p-10 rounded-[40px] relative overflow-hidden">
               <div className="relative z-10">
@@ -437,7 +457,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
           <section id="pyramid" className="scroll-mt-32">
             <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
               <TrendingUp className="w-6 h-6 text-teal-600" />
-              6. The Psychosocial Incident Pyramid
+              7. The Psychosocial Incident Pyramid
             </h2>
             <IncidentPyramid />
             <div className="mt-8 p-8 bg-teal-50 rounded-[32px] border border-teal-100">
@@ -454,7 +474,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
           <section id="sectors" className="scroll-mt-32">
             <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
               <Building2 className="w-6 h-6 text-teal-600" />
-              7. Dual-Tier Sector Risk Profiles
+              8. Dual-Tier Sector Risk Profiles
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {[
@@ -495,7 +515,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
           <section id="compliance" className="scroll-mt-32">
             <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
               <ShieldCheck className="w-6 h-6 text-teal-600" />
-              8. Ethical Clearance & Clinical Compliance
+              9. Ethical Clearance & Clinical Compliance
             </h2>
             <div className="p-10 bg-gray-50 rounded-[40px] border border-gray-100">
               <div className="max-w-3xl space-y-6">
@@ -528,7 +548,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
           <section id="team" className="scroll-mt-32">
             <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
               <Users className="w-6 h-6 text-teal-600" />
-              9. The Leadership Team
+              10. The Leadership Team
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[
