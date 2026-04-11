@@ -343,10 +343,15 @@ It does not constitute a formal medical diagnosis.
               </div>
             </div>
 
-            <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm">
+            <div className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-2">
+                <div className="px-2 py-0.5 bg-blue-50 text-blue-600 text-[8px] font-bold rounded uppercase tracking-tighter border border-blue-100">
+                  CDSS v2.4
+                </div>
+              </div>
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-[10px] font-mono uppercase tracking-widest text-gray-400">CDSS Mapping</h3>
-                <FileText className="w-4 h-4 text-gray-300" />
+                <h3 className="text-[10px] font-mono uppercase tracking-widest text-gray-400">Clinical Mapping</h3>
+                <ShieldCheck className="w-4 h-4 text-emerald-500" />
               </div>
               <div className="space-y-4">
                 <div className="flex justify-between items-center group relative">
@@ -383,6 +388,10 @@ It does not constitute a formal medical diagnosis.
                   <span className="text-xs font-medium text-gray-900">{result.suggestedDSM || 'Probable MDD'}</span>
                 </div>
                 <div className="pt-4 border-t border-gray-50 space-y-2">
+                  <div className="flex items-center gap-2 text-[10px] text-emerald-600 font-bold uppercase tracking-widest mb-2">
+                    <CheckCircle2 className="w-3 h-3" />
+                    Evidence-Based CDSS
+                  </div>
                   <button 
                     onClick={handleSyncSATUSEHAT}
                     disabled={syncing}

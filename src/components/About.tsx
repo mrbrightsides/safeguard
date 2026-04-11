@@ -15,7 +15,11 @@ import {
   Linkedin,
   Zap,
   CheckCircle2,
-  Mail
+  Mail,
+  ClipboardCheck,
+  BrainCircuit,
+  UserCheck,
+  AlertTriangle
 } from 'lucide-react';
 
 import { IncidentPyramid } from './IncidentPyramid';
@@ -62,6 +66,85 @@ export const About: React.FC<AboutProps> = ({ onGetStarted }) => {
         </div>
         <div className="absolute top-0 right-0 p-12 opacity-5">
           <Globe className="w-64 h-64" />
+        </div>
+      </section>
+
+      {/* Clinical Pathway Section (For Dr. Andry) */}
+      <section className="p-12 bg-white rounded-[40px] border border-gray-100 shadow-sm">
+        <div className="mb-12">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6">
+            Clinical Pathway
+          </div>
+          <h2 className="text-3xl font-bold tracking-tight">Evidence-Based Clinical Journey</h2>
+          <p className="text-gray-500 mt-2">SafeGuard is not a chatbot; it is a Clinical Decision Support System (CDSS).</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 relative">
+          {[
+            { step: '01', title: 'Digital Anamnesis', desc: 'ICD-10 & DASS-21 based screening.', icon: ClipboardCheck },
+            { step: '02', title: 'AI Triage', desc: 'L0-L3 risk stratification & pattern detection.', icon: BrainCircuit },
+            { step: '03', title: 'Clinical Referral', desc: 'Direct link to psychologists & psychiatrists.', icon: UserCheck },
+            { step: '04', title: 'MERP Activation', desc: 'Emergency response for high-risk (L3) cases.', icon: AlertTriangle }
+          ].map((item, i) => (
+            <div key={i} className="p-6 bg-gray-50 rounded-3xl border border-gray-100 relative z-10">
+              <div className="text-4xl font-black text-gray-200 mb-4">{item.step}</div>
+              <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center mb-4 shadow-sm">
+                <item.icon className="w-5 h-5 text-blue-600" />
+              </div>
+              <h4 className="font-bold text-gray-900 mb-2">{item.title}</h4>
+              <p className="text-xs text-gray-500 leading-relaxed">{item.desc}</p>
+            </div>
+          ))}
+          <div className="hidden md:block absolute top-1/2 left-0 w-full h-[2px] bg-gray-100 -translate-y-1/2 z-0" />
+        </div>
+      </section>
+
+      {/* Human-Centered Design Section (For Ibu Ilma) */}
+      <section className="p-12 bg-teal-50 rounded-[40px] border border-teal-100">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="space-y-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-teal-100 text-teal-700 rounded-full text-[10px] font-bold uppercase tracking-widest">
+              Inclusive Innovation
+            </div>
+            <h2 className="text-3xl font-bold tracking-tight">Designing for Human Behavior</h2>
+            <p className="text-gray-600 leading-relaxed">
+              We believe that <b>"AI yang bagus bukan yang pintar, tapi yang dipakai manusia."</b> SafeGuard is designed with empathy first, ensuring accessibility for all users.
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {[
+                { title: 'Inclusivity', desc: 'High-contrast & Tremor-friendly modes.' },
+                { title: 'Simplicity', desc: '1-minute screening, 1-click action.' },
+                { title: 'Voice Assist', desc: 'Empathetic audio feedback for low vision.' },
+                { title: 'Behavioral UX', desc: 'Gamified wellness adherence loops.' }
+              ].map((item) => (
+                <div key={item.title} className="flex items-start gap-3">
+                  <CheckCircle2 className="w-4 h-4 text-teal-600 mt-1" />
+                  <div>
+                    <p className="font-bold text-sm text-gray-900">{item.title}</p>
+                    <p className="text-xs text-gray-500">{item.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="bg-white p-8 rounded-[40px] shadow-xl border border-teal-50">
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">UX Accessibility Test</span>
+                <span className="px-2 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-bold rounded">PASSED</span>
+              </div>
+              <div className="space-y-4">
+                <div className="h-4 bg-gray-100 rounded-full w-3/4" />
+                <div className="h-4 bg-gray-100 rounded-full w-1/2" />
+                <div className="h-12 bg-teal-600 rounded-2xl w-full flex items-center justify-center text-white font-bold text-sm">
+                  Simplicity in Action
+                </div>
+              </div>
+              <p className="text-[10px] text-gray-400 text-center italic">
+                "Kami tidak hanya membuat AI, kami mendesain perilaku sehat."
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
