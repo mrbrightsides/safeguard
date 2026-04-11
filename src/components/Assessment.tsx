@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { ChevronRight, ChevronLeft, CheckCircle2, AlertCircle, Volume2, VolumeX, BrainCircuit } from 'lucide-react';
+import { ChevronRight, ChevronLeft, CheckCircle2, AlertCircle, Volume2, VolumeX, BrainCircuit, Wifi, WifiOff } from 'lucide-react';
 import { DASS21_QUESTIONS } from '../lib/constants';
 import { cn } from '../lib/utils';
 
@@ -26,6 +26,19 @@ export const Assessment: React.FC<AssessmentProps> = ({ onComplete, isAccessibil
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [isTtsEnabled, setIsTtsEnabled] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
   const [questionQueue, setQuestionQueue] = useState<number[]>(() => {
     // Initial queue: one representative question from each category
     const depression = DASS21_QUESTIONS.find(q => q.category === 'depression')!;
@@ -181,7 +194,15 @@ export const Assessment: React.FC<AssessmentProps> = ({ onComplete, isAccessibil
         <div className="mb-8 flex justify-between items-center">
           <div>
             <h2 className="text-2xl font-bold text-gray-900">Additional Context</h2>
-            <p className="text-sm text-gray-500">Provide more details for a deeper AI analysis.</p>
+            <div className="flex items-center gap-2">
+              <p className="text-sm text-gray-500">Provide more details for a deeper AI analysis.</p>
+              {!isOnline && (
+                <span className="text-[8px] font-bold bg-orange-50 text-orange-600 px-2 py-0.5 rounded uppercase flex items-center gap-1">
+                  <WifiOff className="w-2 h-2" />
+                  Offline
+                </span>
+              )}
+            </div>
           </div>
           <div className="px-3 py-1 bg-teal-50 text-teal-700 rounded-full text-[10px] font-bold uppercase tracking-widest">
             Step 2 of 2
@@ -280,7 +301,16 @@ export const Assessment: React.FC<AssessmentProps> = ({ onComplete, isAccessibil
         <div className="flex justify-between items-center mb-2">
           <div className="flex flex-col">
             <span className="text-xs font-mono text-gray-400 uppercase tracking-widest">Adaptive Anamnesis Scan Engine</span>
-            <span className="text-[10px] text-teal-600 font-bold uppercase tracking-tighter">AI-Driven Scan Active</span>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] text-teal-600 font-bold uppercase tracking-tighter">AI-Driven Scan Active</span>
+              <span className={cn(
+                "text-[8px] px-1.5 py-0.5 rounded font-bold uppercase flex items-center gap-1",
+                isOnline ? "bg-emerald-50 text-emerald-600" : "bg-orange-50 text-orange-600"
+              )}>
+                {isOnline ? <Wifi className="w-2 h-2" /> : <WifiOff className="w-2 h-2" />}
+                {isOnline ? 'Online' : 'Offline Mode'}
+              </span>
+            </div>
           </div>
           <div className="flex items-center gap-4">
             <button 

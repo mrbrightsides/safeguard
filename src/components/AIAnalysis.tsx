@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { analyzeBehavioralRisk } from '../services/geminiService';
 import { generateFHIRPayload } from '../services/fhirService';
 import { motion, AnimatePresence } from 'motion/react';
-import { Brain, Search, Loader2, ShieldCheck, FileText, ExternalLink, Info, Phone, UserPlus, X, Download, Database, CheckCircle2 } from 'lucide-react';
+import { Brain, Search, Loader2, ShieldCheck, FileText, ExternalLink, Info, Phone, UserPlus, X, Download, Database, CheckCircle2, WifiOff, Wifi } from 'lucide-react';
 import { ICD_DESCRIPTIONS, ICD_MAPPING } from '../lib/constants';
 import { cn } from '../lib/utils';
 
@@ -22,13 +22,26 @@ export const AIAnalysis: React.FC<AIAnalysisProps> = ({ initialInput, initialSco
   const [loading, setLoading] = useState(false);
   const [syncing, setSyncing] = useState(false);
   const [result, setResult] = useState<any>(null);
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [showICDTooltip, setShowICDTooltip] = useState(false);
   const [showConsultModal, setShowConsultModal] = useState(false);
   const [showFHIRModal, setShowFHIRModal] = useState(false);
   const [fhirPayload, setFhirPayload] = useState<any>(null);
 
+  // Online status listener
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
   // Auto-analyze if initialInput or initialScores is provided
-  React.useEffect(() => {
+  useEffect(() => {
     if (initialScores) {
       const calculateScoring = () => {
         const { depression, anxiety, stress } = initialScores;
@@ -104,7 +117,7 @@ export const AIAnalysis: React.FC<AIAnalysisProps> = ({ initialInput, initialSco
         }));
       };
       calculateScoring();
-    } else if (initialInput) {
+    } else if (initialInput && isOnline) {
       setInput(initialInput);
       const triggerAnalysis = async () => {
         setLoading(true);
@@ -131,7 +144,7 @@ export const AIAnalysis: React.FC<AIAnalysisProps> = ({ initialInput, initialSco
   }, [initialInput, initialScores, initialContext]);
 
   const handleAnalyze = async () => {
-    if (!input.trim()) return;
+    if (!input.trim() || !isOnline) return;
     setLoading(true);
     try {
       const analysis = await analyzeBehavioralRisk(input);
@@ -226,9 +239,16 @@ It does not constitute a formal medical diagnosis.
           <div className="p-2 bg-black rounded-xl">
             <Brain className="w-6 h-6 text-white" />
           </div>
-          <div>
+          <div className="flex-1">
             <h2 className="text-xl font-bold text-gray-900">Behavioral AI Detector</h2>
             <p className="text-sm text-gray-500">NLP-based Psychosocial Early Warning System</p>
+          </div>
+          <div className={cn(
+            "px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest flex items-center gap-2",
+            isOnline ? "bg-emerald-50 text-emerald-600" : "bg-orange-50 text-orange-600"
+          )}>
+            {isOnline ? <Wifi className="w-3 h-3" /> : <WifiOff className="w-3 h-3" />}
+            {isOnline ? 'Online' : 'Offline Mode'}
           </div>
         </div>
 
@@ -236,16 +256,17 @@ It does not constitute a formal medical diagnosis.
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Describe behavioral patterns, fatigue levels, or incidents for AI-driven risk stratification..."
-            className="w-full h-40 p-6 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-black transition-all resize-none text-gray-700"
+            placeholder={isOnline ? "Describe behavioral patterns..." : "AI Analysis requires internet. Local triage is active below."}
+            disabled={!isOnline}
+            className="w-full h-40 p-6 bg-gray-50 rounded-2xl border-none focus:ring-2 focus:ring-black transition-all resize-none text-gray-700 disabled:opacity-50"
           />
           <button
             onClick={handleAnalyze}
-            disabled={loading || !input.trim()}
+            disabled={loading || !input.trim() || !isOnline}
             className="md:absolute md:bottom-4 md:right-4 mt-4 md:mt-0 px-6 py-3 md:py-2 bg-black text-white rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-gray-800 disabled:opacity-50 transition-all w-full md:w-auto"
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
-            Analyze Risk
+            {isOnline ? 'Analyze Risk' : 'Waiting for Internet'}
           </button>
         </div>
       </div>
@@ -269,7 +290,12 @@ It does not constitute a formal medical diagnosis.
                   Consult Professional
                 </a>
               </div>
-              <h3 className="text-sm font-mono uppercase tracking-widest text-gray-400 mb-4">Clinical Summary</h3>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-sm font-mono uppercase tracking-widest text-gray-400">Clinical Summary</h3>
+                {!isOnline && (
+                  <span className="text-[8px] font-bold bg-orange-100 text-orange-700 px-2 py-0.5 rounded uppercase">Local Triage Only</span>
+                )}
+              </div>
               <p className="text-gray-700 leading-relaxed">{result.summary}</p>
               
               {initialContext && (
