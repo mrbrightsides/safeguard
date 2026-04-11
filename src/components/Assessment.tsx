@@ -5,12 +5,24 @@ import { DASS21_QUESTIONS } from '../lib/constants';
 import { cn } from '../lib/utils';
 
 interface AssessmentProps {
-  onComplete: (scores: Record<string, number>) => void;
+  onComplete: (data: {
+    scores: Record<string, number>;
+    anamnesisType: 'auto' | 'allo';
+    freeFormInput: string;
+    medicalHistory: string;
+    medicationHistory: string;
+  }) => void;
   isAccessibilityMode?: boolean;
 }
 
 export const Assessment: React.FC<AssessmentProps> = ({ onComplete, isAccessibilityMode }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [anamnesisType, setAnamnesisType] = useState<'auto' | 'allo' | null>(null);
+  const [isFreeFormStep, setIsFreeFormStep] = useState(false);
+  const [freeFormInput, setFreeFormInput] = useState('');
+  const [medicalHistory, setMedicalHistory] = useState('');
+  const [medicationHistory, setMedicationHistory] = useState('');
+  const [isListening, setIsListening] = useState(false);
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [isTtsEnabled, setIsTtsEnabled] = useState(false);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -60,39 +72,178 @@ export const Assessment: React.FC<AssessmentProps> = ({ onComplete, isAccessibil
     if (currentIndex < nextQueue.length - 1) {
       setCurrentIndex(currentIndex + 1);
     } else {
-      setIsTransitioning(true);
-      
-      // Calculate final scores
-      const scores = {
-        depression: 0,
-        anxiety: 0,
-        stress: 0,
-      };
-      
-      const categoryCounts: Record<string, number> = { depression: 0, anxiety: 0, stress: 0 };
-      
-      Object.entries(newAnswers).forEach(([id, val]) => {
-        const q = DASS21_QUESTIONS.find(q => q.id === parseInt(id));
-        if (q) {
-          scores[q.category] += val;
-          categoryCounts[q.category]++;
-        }
-      });
-
-      const finalScores = {
-        depression: Math.round((scores.depression / (categoryCounts.depression || 1)) * 7 * 2),
-        anxiety: Math.round((scores.anxiety / (categoryCounts.anxiety || 1)) * 7 * 2),
-        stress: Math.round((scores.stress / (categoryCounts.stress || 1)) * 7 * 2),
-      };
-      
-      // Artificial delay for "therapeutic transition" effect
-      setTimeout(() => {
-        onComplete(finalScores);
-      }, 2500);
+      setIsFreeFormStep(true);
     }
   };
 
-  const progress = ((currentIndex + 1) / questionQueue.length) * 100;
+  const handleFinalSubmit = () => {
+    setIsTransitioning(true);
+    
+    // Calculate final scores
+    const scores = {
+      depression: 0,
+      anxiety: 0,
+      stress: 0,
+    };
+    
+    const categoryCounts: Record<string, number> = { depression: 0, anxiety: 0, stress: 0 };
+    
+    Object.entries(answers).forEach(([id, val]) => {
+      const q = DASS21_QUESTIONS.find(q => q.id === parseInt(id));
+      if (q) {
+        scores[q.category] += val;
+        categoryCounts[q.category]++;
+      }
+    });
+
+    const finalScores = {
+      depression: Math.round((scores.depression / (categoryCounts.depression || 1)) * 7 * 2),
+      anxiety: Math.round((scores.anxiety / (categoryCounts.anxiety || 1)) * 7 * 2),
+      stress: Math.round((scores.stress / (categoryCounts.stress || 1)) * 7 * 2),
+    };
+    
+    // Artificial delay for "therapeutic transition" effect
+    setTimeout(() => {
+      onComplete({
+        scores: finalScores,
+        anamnesisType: anamnesisType || 'auto',
+        freeFormInput,
+        medicalHistory,
+        medicationHistory
+      });
+    }, 2500);
+  };
+
+  const toggleListening = () => {
+    if (!isListening) {
+      // Simulate Speech-to-Text start
+      setIsListening(true);
+      const msg = new SpeechSynthesisUtterance("Listening mode active. Please speak your concerns.");
+      window.speechSynthesis.speak(msg);
+      
+      // Simulated STT result after 3 seconds
+      setTimeout(() => {
+        if (isListening) {
+          const simulatedText = "Saya merasa sangat lelah akhir-akhir ini dan sulit berkonsentrasi di kantor. Tidur juga tidak nyenyak.";
+          setFreeFormInput(prev => prev + (prev ? " " : "") + simulatedText);
+          setIsListening(false);
+        }
+      }, 4000);
+    } else {
+      setIsListening(false);
+    }
+  };
+
+  const progress = anamnesisType 
+    ? ((currentIndex + 1) / (questionQueue.length + 1)) * 100 
+    : 0;
+
+  if (!anamnesisType) {
+    return (
+      <div className={cn(
+        "w-full max-w-2xl p-12 rounded-[40px] border text-center space-y-8",
+        isAccessibilityMode ? "bg-black border-gray-800" : "bg-white border-gray-100 shadow-2xl"
+      )}>
+        <div className="space-y-4">
+          <div className="w-16 h-16 bg-teal-50 rounded-2xl flex items-center justify-center mx-auto">
+            <BrainCircuit className="w-8 h-8 text-teal-600" />
+          </div>
+          <h2 className="text-3xl font-bold text-gray-900">Digital Anamnesis Mode</h2>
+          <p className="text-gray-500">Select how the assessment will be conducted.</p>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <button 
+            onClick={() => setAnamnesisType('auto')}
+            className="p-8 bg-gray-50 rounded-3xl border border-gray-100 hover:border-teal-600 transition-all group text-left"
+          >
+            <div className="font-bold text-gray-900 text-lg mb-1">Autoanamnesis</div>
+            <p className="text-xs text-gray-500">I am performing this assessment for myself.</p>
+          </button>
+          <button 
+            onClick={() => setAnamnesisType('allo')}
+            className="p-8 bg-gray-50 rounded-3xl border border-gray-100 hover:border-blue-600 transition-all group text-left"
+          >
+            <div className="font-bold text-gray-900 text-lg mb-1">Alloanamnesis</div>
+            <p className="text-xs text-gray-500">I am assisting someone else with this assessment.</p>
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (isFreeFormStep) {
+    return (
+      <div className={cn(
+        "w-full max-w-2xl p-8 rounded-3xl border transition-all",
+        isAccessibilityMode ? "bg-black border-gray-800" : "bg-white border-gray-100 shadow-xl"
+      )}>
+        <div className="mb-8 flex justify-between items-center">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">Additional Context</h2>
+            <p className="text-sm text-gray-500">Provide more details for a deeper AI analysis.</p>
+          </div>
+          <div className="px-3 py-1 bg-teal-50 text-teal-700 rounded-full text-[10px] font-bold uppercase tracking-widest">
+            Step 2 of 2
+          </div>
+        </div>
+
+        <div className="space-y-6">
+          <div className="space-y-2">
+            <label className="text-xs font-bold text-gray-400 uppercase tracking-widest flex items-center justify-between">
+              Your Story / Concerns
+              <button 
+                onClick={toggleListening}
+                className={cn(
+                  "flex items-center gap-1 px-2 py-1 rounded-lg transition-all",
+                  isListening ? "bg-red-50 text-red-600 animate-pulse" : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+                )}
+              >
+                <Volume2 className="w-3 h-3" />
+                <span className="text-[10px]">{isListening ? 'Listening...' : 'Speech-to-Text'}</span>
+              </button>
+            </label>
+            <textarea 
+              value={freeFormInput}
+              onChange={(e) => setFreeFormInput(e.target.value)}
+              placeholder="Tell us more about how you feel lately..."
+              className="w-full h-32 p-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-2 focus:ring-teal-500 outline-none transition-all text-sm"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Medical History</label>
+              <input 
+                type="text"
+                value={medicalHistory}
+                onChange={(e) => setMedicalHistory(e.target.value)}
+                placeholder="e.g. Hypertension, Diabetes"
+                className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none text-sm"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-gray-400 uppercase tracking-widest">Medication History</label>
+              <input 
+                type="text"
+                value={medicationHistory}
+                onChange={(e) => setMedicationHistory(e.target.value)}
+                placeholder="e.g. Amlodipine, Metformin"
+                className="w-full p-3 bg-gray-50 border border-gray-100 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none text-sm"
+              />
+            </div>
+          </div>
+
+          <button 
+            onClick={handleFinalSubmit}
+            className="w-full py-4 bg-teal-600 text-white rounded-2xl font-bold hover:bg-teal-700 transition-all shadow-lg shadow-teal-600/20"
+          >
+            Complete Anamnesis & Analyze
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (isTransitioning) {
     return (

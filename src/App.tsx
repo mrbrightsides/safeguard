@@ -54,6 +54,7 @@ export default function App() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [pendingAnalysis, setPendingAnalysis] = useState<string | undefined>(undefined);
   const [pendingScores, setPendingScores] = useState<Record<string, number> | undefined>(undefined);
+  const [pendingAnamnesisData, setPendingAnamnesisData] = useState<any>(null);
   const [showGlobalConsultModal, setShowGlobalConsultModal] = useState(false);
   const [showMERPModal, setShowMERPModal] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -377,15 +378,22 @@ export default function App() {
               <div className="py-6 sm:py-12">
                 <Assessment 
                   isAccessibilityMode={isAccessibilityMode}
-                  onComplete={(scores) => {
+                  onComplete={(data) => {
+                  const { scores, anamnesisType, freeFormInput, medicalHistory, medicationHistory } = data;
                   const summary = `DASS-21 Clinical Assessment Results: 
 - Depression Score: ${scores.depression}
 - Anxiety Score: ${scores.anxiety}
 - Stress Score: ${scores.stress}
-Please provide a clinical risk stratification and recommendations based on these standardized scores.`;
+- Anamnesis Type: ${anamnesisType === 'allo' ? 'Alloanamnesis' : 'Autoanamnesis'}
+- Medical History: ${medicalHistory || 'None'}
+- Medication: ${medicationHistory || 'None'}
+- Patient Statement: ${freeFormInput || 'None'}
+
+Please provide a clinical risk stratification and recommendations based on these standardized scores and clinical context.`;
                   
                   setPendingAnalysis(summary);
                   setPendingScores(scores);
+                  setPendingAnamnesisData(data);
                   
                   // Flag: Notify user that results are ready for analysis
                   addNotification(
@@ -402,6 +410,7 @@ Please provide a clinical risk stratification and recommendations based on these
               <AIAnalysis 
                 initialInput={pendingAnalysis} 
                 initialScores={pendingScores}
+                initialContext={pendingAnamnesisData}
               />
             )}
             {activeView === 'wellness' && <WellnessHub />}

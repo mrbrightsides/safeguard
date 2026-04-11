@@ -9,9 +9,15 @@ import { cn } from '../lib/utils';
 interface AIAnalysisProps {
   initialInput?: string;
   initialScores?: Record<string, number>;
+  initialContext?: {
+    anamnesisType: 'auto' | 'allo';
+    freeFormInput: string;
+    medicalHistory: string;
+    medicationHistory: string;
+  };
 }
 
-export const AIAnalysis: React.FC<AIAnalysisProps> = ({ initialInput, initialScores }) => {
+export const AIAnalysis: React.FC<AIAnalysisProps> = ({ initialInput, initialScores, initialContext }) => {
   const [input, setInput] = useState(initialInput || '');
   const [loading, setLoading] = useState(false);
   const [syncing, setSyncing] = useState(false);
@@ -103,7 +109,7 @@ export const AIAnalysis: React.FC<AIAnalysisProps> = ({ initialInput, initialSco
       const triggerAnalysis = async () => {
         setLoading(true);
         try {
-          const analysis = await analyzeBehavioralRisk(initialInput);
+          const analysis = await analyzeBehavioralRisk(initialInput, initialContext);
           setResult(analysis);
           
           // Flag: Analysis Complete
@@ -122,7 +128,7 @@ export const AIAnalysis: React.FC<AIAnalysisProps> = ({ initialInput, initialSco
       };
       triggerAnalysis();
     }
-  }, [initialInput, initialScores]);
+  }, [initialInput, initialScores, initialContext]);
 
   const handleAnalyze = async () => {
     if (!input.trim()) return;
@@ -265,6 +271,36 @@ It does not constitute a formal medical diagnosis.
               </div>
               <h3 className="text-sm font-mono uppercase tracking-widest text-gray-400 mb-4">Clinical Summary</h3>
               <p className="text-gray-700 leading-relaxed">{result.summary}</p>
+              
+              {initialContext && (
+                <div className="mt-6 p-6 bg-gray-50 rounded-2xl border border-gray-100 space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-[10px] font-mono uppercase text-gray-400 tracking-widest">Extended Anamnesis Context</h4>
+                    <span className={cn(
+                      "px-2 py-0.5 rounded text-[8px] font-bold uppercase",
+                      initialContext.anamnesisType === 'allo' ? "bg-blue-100 text-blue-700" : "bg-teal-100 text-teal-700"
+                    )}>
+                      {initialContext.anamnesisType === 'allo' ? 'Alloanamnesis' : 'Autoanamnesis'}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <p className="text-[10px] text-gray-400 uppercase mb-1">Medical History</p>
+                      <p className="text-xs font-medium text-gray-700">{initialContext.medicalHistory || 'None reported'}</p>
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-gray-400 uppercase mb-1">Medication</p>
+                      <p className="text-xs font-medium text-gray-700">{initialContext.medicationHistory || 'None reported'}</p>
+                    </div>
+                  </div>
+                  {initialContext.freeFormInput && (
+                    <div>
+                      <p className="text-[10px] text-gray-400 uppercase mb-1">Patient Statement / Concerns</p>
+                      <p className="text-xs text-gray-600 italic leading-relaxed">"{initialContext.freeFormInput}"</p>
+                    </div>
+                  )}
+                </div>
+              )}
               
               <div className="mt-8 grid grid-cols-2 gap-4">
                 <div>
