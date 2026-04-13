@@ -5,7 +5,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
 import { GoogleGenAI } from "@google/genai";
 import { createServer as createViteServer } from "vite";
-import { setupMCPServer } from "./mcp_server";
+import { setupMCPServer } from "./mcp_server.ts";
 
 const app = express();
 
