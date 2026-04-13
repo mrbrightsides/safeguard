@@ -4,7 +4,8 @@ import path from "path";
 import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
 import { GoogleGenAI } from "@google/genai";
-import { setupMCPServer } from "./mcp_server.js";
+import { createServer as createViteServer } from "vite";
+import { setupMCPServer } from "./mcp_server";
 
 const app = express();
 
@@ -162,19 +163,29 @@ const swaggerOptions = {
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-// Serve static files in production
-if (process.env.NODE_ENV === "production") {
-  const distPath = path.join(process.cwd(), 'dist');
-  app.use(express.static(distPath));
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(distPath, 'index.html'));
+async function startServer() {
+  // Vite middleware for development
+  if (process.env.NODE_ENV !== "production") {
+    const vite = await createViteServer({
+      server: { middlewareMode: true },
+      appType: "spa",
+    });
+    app.use(vite.middlewares);
+  } else {
+    const distPath = path.join(process.cwd(), 'dist');
+    app.use(express.static(distPath));
+    app.get('*', (req, res) => {
+      res.sendFile(path.join(distPath, 'index.html'));
+    });
+  }
+
+  const PORT = Number(process.env.PORT) || 3000;
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`🚀 SafeGuard Server listening on port ${PORT}`);
+    console.log(`📖 Swagger UI: https://server-safeguard.onrender.com/api-docs`);
   });
 }
 
-const PORT = Number(process.env.PORT) || 3000;
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`🚀 SafeGuard Server listening on port ${PORT}`);
-  console.log(`📖 Swagger UI: https://server-safeguard.onrender.com/api-docs`);
-});
+startServer();
 
 export default app;
