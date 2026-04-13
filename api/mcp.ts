@@ -113,7 +113,7 @@ export function setupMCPServer(app: express.Application) {
       case "analyze_psychosocial_notes": {
         const { notes, context = {} } = args as any;
         try {
-          const apiKey = import.meta.env.GEMINI_API_KEY;
+          const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
           if (!apiKey) {
             throw new Error("GEMINI_API_KEY is not configured on the server.");
           }
@@ -199,8 +199,8 @@ export function setupMCPServer(app: express.Application) {
       status: "ok",
       toolsCount: tools.length,
       env: {
-        hasGeminiKey: !!import.meta.env.GEMINI_API_KEY,
-        nodeEnv: import.meta.env.NODE_ENV
+        hasGeminiKey: !!import.meta.env.VITE_GEMINI_API_KEY,
+        nodeEnv: import.meta.env.VITE_NODE_ENV
       }
     });
   });
