@@ -50,35 +50,42 @@ function calculateRisk(dass21_score: number, srq20_positive: number, suicidal_id
 const tools: Tool[] = [
   {
     name: "get_risk_stratification",
-    description: "Analyze DASS-21 and SRQ-20 scores to determine clinical risk level (L0-L3).",
+    description: "Analyze DASS-21 and SRQ-20 scores to determine clinical risk level (L0-L3). Supports SHARP context.",
     inputSchema: {
       type: "object",
       properties: {
         dass21_score: { type: "integer", description: "Total DASS-21 score" },
         srq20_positive: { type: "integer", description: "Number of positive SRQ-20 items" },
         suicidal_ideation: { type: "boolean", description: "Presence of suicidal ideation" },
+        patientId: { type: "string", description: "SHARP Context: Patient ID from EHR" },
       },
       required: ["dass21_score", "srq20_positive", "suicidal_ideation"],
     },
   },
   {
     name: "analyze_psychosocial_notes",
-    description: "AI-powered analysis of clinical notes or patient statements to detect behavioral risks.",
+    description: "AI-powered analysis of clinical notes to detect behavioral risks. Supports SHARP context.",
     inputSchema: {
       type: "object",
       properties: {
         notes: { type: "string", description: "The clinical notes or patient statement to analyze" },
-        context: { 
-          type: "object", 
-          description: "Additional clinical context (medical history, etc.)",
-          properties: {
-            anamnesisType: { type: "string", enum: ["auto", "allo"] },
-            medicalHistory: { type: "string" },
-            medicationHistory: { type: "string" }
-          }
-        }
+        patientId: { type: "string", description: "SHARP Context: Patient ID from EHR" },
+        fhirServerUrl: { type: "string", description: "SHARP Context: FHIR Server Base URL" },
+        fhirToken: { type: "string", description: "SHARP Context: FHIR Access Token" }
       },
       required: ["notes"],
+    },
+  },
+  {
+    name: "get_icd10_recommendation",
+    description: "Suggest relevant ICD-10 codes based on symptoms. Supports SHARP context.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        symptoms: { type: "string", description: "Description of patient symptoms" },
+        patientId: { type: "string", description: "SHARP Context: Patient ID from EHR" },
+      },
+      required: ["symptoms"],
     },
   },
   {
@@ -89,17 +96,6 @@ const tools: Tool[] = [
       properties: {
         patient_count: { type: "integer", description: "Number of patients in the cohort" },
       },
-    },
-  },
-  {
-    name: "get_icd10_recommendation",
-    description: "Suggest relevant ICD-10 codes based on clinical symptoms and notes.",
-    inputSchema: {
-      type: "object",
-      properties: {
-        symptoms: { type: "string", description: "Description of patient symptoms or clinical notes" },
-      },
-      required: ["symptoms"],
     },
   }
 ];
@@ -197,10 +193,19 @@ app.get("/.well-known/agent-card.json", (req, res) => {
  */
 app.post("/api/v1/analyze", async (req, res) => {
   const { notes, dass21_score, srq20_positive } = req.body;
+  
+  // SHARP Context from Headers (Standard A2A pattern)
+  const patientId = req.headers['x-sharp-patient-id'];
+  const fhirServer = req.headers['x-sharp-fhir-server'];
+  
   if (!genAI) return res.status(500).json({ error: "AI Service not configured" });
   try {
     const model = (genAI as any).getGenerativeModel({ model: "gemini-2.0-flash" });
-    const prompt = `As a Clinical Psychologist, analyze this patient data:\nNotes: ${notes}\nDASS-21 Score: ${dass21_score}\nSRQ-20 Positive: ${srq20_positive}\nProvide a structured analysis including:\n1. Risk Level (L0-L3)\n2. Clinical Summary\n3. Suggested ICD-10 Code\n4. Immediate Recommendations`;
+    let contextStr = "";
+    if (patientId) contextStr += `\n[SHARP Context] Patient ID: ${patientId}`;
+    if (fhirServer) contextStr += `\n[SHARP Context] FHIR Server: ${fhirServer}`;
+
+    const prompt = `As a Clinical Psychologist, analyze this patient data:${contextStr}\nNotes: ${notes}\nDASS-21 Score: ${dass21_score}\nSRQ-20 Positive: ${srq20_positive}\nProvide a structured analysis including:\n1. Risk Level (L0-L3)\n2. Clinical Summary\n3. Suggested ICD-10 Code\n4. Immediate Recommendations`;
     const result = await model.generateContent(prompt);
     res.json({ analysis: result.response.text(), timestamp: new Date().toISOString() });
   } catch (error) {
@@ -333,11 +338,17 @@ app.get("/api/mcp/sse", async (req, res) => {
         return { content: [{ type: "text", text: JSON.stringify(calculateRisk(dass21_score, srq20_positive, suicidal_ideation), null, 2) }] };
       }
       case "analyze_psychosocial_notes": {
-        const { notes, context = {} } = args as any;
+        const { notes, patientId, fhirServerUrl, fhirToken } = args as any;
         try {
           if (!genAI) throw new Error("GEMINI_API_KEY not configured.");
           const model = (genAI as any).getGenerativeModel({ model: "gemini-2.0-flash" });
-          const result = await model.generateContent(`Analyze: ${notes}\nContext: ${JSON.stringify(context)}`);
+          
+          let sharpInfo = "";
+          if (patientId) sharpInfo += `\nSHARP Context - Patient: ${patientId}`;
+          if (fhirServerUrl) sharpInfo += `\nSHARP Context - FHIR Server: ${fhirServerUrl}`;
+          if (fhirToken) sharpInfo += `\nSHARP Context - Token: [PRESENT]`;
+
+          const result = await model.generateContent(`Analyze clinical notes: ${notes}${sharpInfo}\nProvide clinical risk assessment.`);
           return { content: [{ type: "text", text: result.response.text() || "{}" }] };
         } catch (error) {
           return { content: [{ type: "text", text: JSON.stringify({ error: String(error) }) }], isError: true };
