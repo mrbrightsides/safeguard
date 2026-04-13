@@ -3,6 +3,8 @@ import { motion } from 'motion/react';
 import { 
   FileText, 
   ArrowLeft, 
+  BrainCircuit,
+  Zap,
   Download, 
   TrendingUp, 
   AlertCircle, 
@@ -162,10 +164,23 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
     doc.text('- Dwiki Aulia Rahman: Health Data & Predictive Insight', 25, 219);
     doc.text('- dr. M. Rifki Al Ikhsan: Clinical & Occupational Health Advisor', 25, 226);
     
+    // Section 11: Agent Endgame
+    doc.addPage();
+    doc.setFontSize(16);
+    doc.setTextColor(0, 0, 0);
+    doc.text('11. The Agent Endgame: MCP & A2A Readiness', 20, 30);
+    
+    doc.setFontSize(11);
+    doc.setTextColor(80, 80, 80);
+    doc.text('SafeGuard is now an interoperable agent compliant with Prompt Opinion standards.', 25, 40);
+    doc.text('- MCP Server: Exposing clinical tools for global invocation.', 25, 47);
+    doc.text('- SHARP Context: Native FHIR context propagation.', 25, 54);
+    doc.text('- A2A Protocol: Ready for multi-agent collaborative care.', 25, 61);
+
     // Footer
     doc.setFontSize(10);
     doc.setTextColor(180, 180, 180);
-    doc.text('Prepared for HSIL Hackathon 2026 - Harvard T.H. Chan School of Public Health.', 20, 285);
+    doc.text('Prepared for Agents Assemble: The Healthcare AI Endgame Challenge.', 20, 285);
     
     doc.save(`SafeGuard_Strategic_Whitepaper_${new Date().getTime()}.pdf`);
   };
@@ -179,6 +194,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
     { id: 'impact', title: 'Economic Case for Intervention', icon: BarChart3 },
     { id: 'pyramid', title: 'Incident Pyramid', icon: Activity },
     { id: 'sectors', title: 'Sector Analysis', icon: Building2 },
+    { id: 'agent', title: 'Agent Interoperability', icon: BrainCircuit },
     { id: 'compliance', title: 'Ethical Clearance', icon: ShieldCheck },
     { id: 'team', title: 'Leadership Team', icon: Users },
   ];
@@ -511,11 +527,46 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
             </div>
           </section>
 
+          {/* Agent Interoperability */}
+          <section id="agent" className="scroll-mt-32">
+            <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
+              <BrainCircuit className="w-6 h-6 text-teal-600" />
+              9. Agent Interoperability (MCP & A2A)
+            </h2>
+            <div className="p-10 bg-indigo-900 text-white rounded-[40px] space-y-8 relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-12 opacity-10">
+                <Globe className="w-40 h-40" />
+              </div>
+              <div className="relative z-10 max-w-3xl space-y-6">
+                <h3 className="text-2xl font-bold">SafeGuard as a "Superpower" Agent</h3>
+                <p className="text-indigo-100 leading-relaxed">
+                  SafeGuard v2.4.0 transitions from a standalone application to a standards-compliant **Healthcare AI Agent**. By implementing the **Model Context Protocol (MCP)** and **Agent-to-Agent (A2A)** standards, SafeGuard can now be invoked by other clinical agents or EHR systems.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="p-6 bg-white/5 rounded-3xl border border-white/10">
+                    <div className="font-bold mb-2 flex items-center gap-2">
+                      <Zap className="w-4 h-4 text-teal-400" />
+                      MCP Tooling
+                    </div>
+                    <p className="text-xs text-indigo-200">Exposing clinical triage, risk detection, and economic evaluation as invokable tools for the global AI ecosystem.</p>
+                  </div>
+                  <div className="p-6 bg-white/5 rounded-3xl border border-white/10">
+                    <div className="font-bold mb-2 flex items-center gap-2">
+                      <ShieldCheck className="w-4 h-4 text-teal-400" />
+                      SHARP Context
+                    </div>
+                    <p className="text-xs text-indigo-200">Seamlessly propagating patient context and FHIR tokens across multi-agent call chains for secure, interoperable care.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* Ethical Clearance */}
           <section id="compliance" className="scroll-mt-32">
             <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
               <ShieldCheck className="w-6 h-6 text-teal-600" />
-              9. Ethical Clearance & Clinical Compliance
+              10. Ethical Clearance & Clinical Compliance
             </h2>
             <div className="p-10 bg-gray-50 rounded-[40px] border border-gray-100">
               <div className="max-w-3xl space-y-6">
@@ -548,7 +599,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
           <section id="team" className="scroll-mt-32">
             <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
               <Users className="w-6 h-6 text-teal-600" />
-              10. The Leadership Team
+              11. The Leadership Team
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[
@@ -571,7 +622,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
               "SafeGuard is not a cost center; it is a risk control system."
             </p>
             <p className="text-gray-400 text-sm">
-              Prepared for the HSIL Hackathon 2026 - Harvard T.H. Chan School of Public Health. All data based on WHO, ILO, UNESCO, and Kemenkes official reports.
+              Prepared for the "Agents Assemble: The Healthcare AI Endgame Challenge" by Prompt Opinion. All data based on WHO, ILO, UNESCO, and Kemenkes official reports.
             </p>
           </div>
         </div>

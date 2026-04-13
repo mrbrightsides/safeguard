@@ -28,6 +28,7 @@ import { Assessment } from './components/Assessment';
 import { AIAnalysis } from './components/AIAnalysis';
 import { OrganizationAnalytics } from './components/OrganizationAnalytics';
 import { WellnessHub } from './components/WellnessHub';
+import { AgentWorkspace } from './components/AgentWorkspace';
 import { Whitepaper } from './components/Whitepaper';
 import { ScalingStrategy } from './components/ScalingStrategy';
 import { About } from './components/About';
@@ -37,7 +38,7 @@ import { MERPModal } from './components/MERPModal';
 import { RoleSelection, UserRole } from './components/RoleSelection';
 import { cn } from './lib/utils';
 
-type View = 'dashboard' | 'assessment' | 'ai-analysis' | 'analytics' | 'wellness' | 'settings' | 'whitepaper' | 'about' | 'scaling' | 'compliance';
+type View = 'dashboard' | 'assessment' | 'ai-analysis' | 'analytics' | 'wellness' | 'settings' | 'whitepaper' | 'about' | 'scaling' | 'compliance' | 'agent-workspace';
 
 interface Notification {
   id: string;
@@ -136,6 +137,7 @@ export default function App() {
     { id: 'assessment', label: 'Digital Anamnesis', icon: ClipboardCheck, roles: ['personal', 'corporate'] },
     { id: 'ai-analysis', label: 'AI Risk Detector', icon: BrainCircuit, roles: ['personal', 'corporate'] },
     { id: 'wellness', label: 'Wellness Hub', icon: Heart, roles: ['personal', 'corporate'] },
+    { id: 'agent-workspace', label: 'Agent Workspace', icon: BrainCircuit, roles: ['corporate'] },
     { id: 'scaling', label: 'Scaling & Monetization', icon: TrendingUp, roles: ['corporate'] },
     { id: 'about', label: 'About SafeGuard', icon: Info, roles: ['personal', 'corporate'] },
     { id: 'compliance', label: 'Trust & Compliance', icon: ShieldCheck, roles: ['personal', 'corporate'] },
@@ -414,6 +416,7 @@ Please provide a clinical risk stratification and recommendations based on these
               />
             )}
             {activeView === 'wellness' && <WellnessHub />}
+            {activeView === 'agent-workspace' && <AgentWorkspace />}
             {activeView === 'scaling' && <ScalingStrategy />}
             {activeView === 'about' && <About onGetStarted={() => setActiveView('assessment')} />}
             {activeView === 'compliance' && <Compliance onBack={() => setActiveView(role === 'corporate' ? 'dashboard' : 'assessment')} />}

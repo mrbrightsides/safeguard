@@ -2,11 +2,33 @@ import express from "express";
 import path from "path";
 import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
+import { setupMCPServer } from "./mcp.js";
 
 async function startServer() {
   const app = express();
 
   app.use(express.json());
+
+  // SHARP Context Middleware
+  app.use((req, res, next) => {
+    const sharpContext = {
+      patientId: req.headers["x-sharp-patient-id"],
+      fhirBase: req.headers["x-sharp-fhir-base"],
+      fhirToken: req.headers["x-sharp-fhir-token"],
+      tenantId: req.headers["x-sharp-tenant-id"],
+    };
+    
+    // Attach to request for MCP server to use
+    (req as any).sharpContext = sharpContext;
+    
+    if (sharpContext.patientId) {
+      console.log(`[SHARP] Context detected for Patient: ${sharpContext.patientId}`);
+    }
+    next();
+  });
+
+  // Initialize MCP Server
+  setupMCPServer(app);
 
   // Swagger Configuration
   const swaggerOptions = {
@@ -263,6 +285,21 @@ async function startServer() {
       { name: 'Others (F00-F99)', value: 10, color: '#ccfbf1' },
     ]);
   });
+
+  // Vite middleware for development (AI Studio / Local)
+  if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
+    try {
+      const { createServer: createViteServer } = await import("vite");
+      const vite = await createViteServer({
+        server: { middlewareMode: true },
+        appType: "spa",
+      });
+      app.use(vite.middlewares);
+      console.log("Vite middleware loaded for development.");
+    } catch (e) {
+      console.error("Failed to load Vite middleware:", e);
+    }
+  }
 
   return app;
 }

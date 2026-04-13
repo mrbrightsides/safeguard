@@ -1,0 +1,28 @@
+{
+  "id": "safeguard-clinical-agent",
+  "name": "SafeGuard Clinical Agent",
+  "description": "AI-powered psychosocial health surveillance agent with MCP clinical tools and FHIR interoperability.",
+  "version": "2.4.0",
+  "protocol": "A2A",
+  "mcp_endpoint": "/api/mcp/sse",
+  "capabilities": [
+    "psychosocial_risk_detection",
+    "clinical_triage",
+    "economic_evaluation",
+    "fhir_interoperability"
+  ],
+  "sharp_compatible": true,
+  "author": "SafeGuard Team",
+  "marketplace_category": "Clinical Decision Support",
+  "icon_url": "/brain-icon.png",
+  "tools": [
+    {
+      "name": "get_risk_stratification",
+      "description": "Calculate behavioral risk level based on clinical scores."
+    },
+    {
+      "name": "analyze_psychosocial_notes",
+      "description": "NLP analysis of patient statements for mental health markers."
+    }
+  ]
+}
