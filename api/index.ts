@@ -120,7 +120,10 @@ app.get("/.well-known/agent-card.json", (req, res) => {
     name: "SafeGuard Clinical Agent",
     description: "AI-powered psychosocial health surveillance and economic evaluation.",
     url: baseUrl,
-    capabilities: ["chat", "tools"],
+    capabilities: {
+      chat: true,
+      tools: true
+    },
     defaultInputModes: ["text"],
     auth: {
       type: "none"
