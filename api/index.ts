@@ -6,11 +6,21 @@ import { setupMCPServer } from "./mcp.js";
 
 const app = express();
 
+console.log("[STARTUP] Server instance created.");
+
 async function startServer() {
+  console.log("[STARTUP] Configuring middleware...");
   app.use(express.json());
 
   // Health Check for Vercel
-  app.get("/api/ping", (req, res) => res.json({ status: "pong", timestamp: new Date().toISOString() }));
+  app.get("/api/ping", (req, res) => {
+    console.log("[API] Ping received");
+    res.json({ 
+      status: "pong", 
+      timestamp: new Date().toISOString(),
+      env: process.env.NODE_ENV
+    });
+  });
 
   // SHARP Context Middleware
   app.use((req, res, next) => {
@@ -296,7 +306,7 @@ async function startServer() {
   });
 
   // Vite middleware for development (AI Studio / Local)
-  if (import.meta.env.VITE_NODE_ENV !== "production" && !process.env.VERCEL) {
+  if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
     try {
       const { createServer: createViteServer } = await import("vite");
       const vite = await createViteServer({

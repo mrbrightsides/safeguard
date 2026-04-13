@@ -113,9 +113,9 @@ export function setupMCPServer(app: express.Application) {
       case "analyze_psychosocial_notes": {
         const { notes, context = {} } = args as any;
         try {
-          const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+          const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
           if (!apiKey) {
-            throw new Error("GEMINI_API_KEY is not configured on the server.");
+            throw new Error("GEMINI_API_KEY is not configured. Please set it in Vercel Environment Variables.");
           }
           const genAI = new GoogleGenAI({ apiKey });
           
@@ -199,8 +199,10 @@ export function setupMCPServer(app: express.Application) {
       status: "ok",
       toolsCount: tools.length,
       env: {
-        hasGeminiKey: !!import.meta.env.VITE_GEMINI_API_KEY,
-        nodeEnv: import.meta.env.VITE_NODE_ENV
+        hasGeminiKey: !!(process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY),
+        hasVitePrefix: !!process.env.VITE_GEMINI_API_KEY,
+        nodeEnv: process.env.NODE_ENV,
+        isVercel: !!process.env.VERCEL
       }
     });
   });
