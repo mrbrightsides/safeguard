@@ -128,12 +128,16 @@ app.get("/.well-known/agent-card.json", (req, res) => {
     defaultOutputModes: ["text"],
     skills: [
       {
+        id: "risk-stratification",
         name: "Clinical Risk Stratification",
-        description: "Determines clinical risk levels (L0-L3) based on DASS-21 and SRQ-20 scores."
+        description: "Determines clinical risk levels (L0-L3) based on DASS-21 and SRQ-20 scores.",
+        tags: ["clinical", "risk", "assessment"]
       },
       {
+        id: "psychosocial-analysis",
         name: "Psychosocial Analysis",
-        description: "AI-powered analysis of clinical notes to detect behavioral risks."
+        description: "AI-powered analysis of clinical notes to detect behavioral risks.",
+        tags: ["ai", "psychosocial", "clinical-notes"]
       }
     ],
     preferredTransport: "sse",
