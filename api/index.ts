@@ -296,7 +296,7 @@ async function startServer() {
   });
 
   // Vite middleware for development (AI Studio / Local)
-  if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
+  if (import.meta.env.VITE_NODE_ENV !== "production" && !process.env.VERCEL) {
     try {
       const { createServer: createViteServer } = await import("vite");
       const vite = await createViteServer({
