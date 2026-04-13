@@ -1,14 +1,16 @@
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
-import { 
-  CallToolRequestSchema, 
-  ListToolsRequestSchema,
-  Tool
-} from "@modelcontextprotocol/sdk/types.js";
-import express from "express";
 import { GoogleGenAI } from "@google/genai";
+import express from "express";
+import { z } from "zod";
 
-// --- MCP Clinical Logic ---
+// --- MCP Server Instance (Stateful for Render) ---
+const server = new McpServer({
+  name: "SafeGuard-Clinical-Agent",
+  version: "2.5.0",
+});
+
+// --- Clinical Logic ---
 function calculateRisk(dass21_score: number, srq20_positive: number, suicidal_ideation: boolean) {
   let risk = "L3: Prognostic Layer";
   let icd = "N/A";
@@ -31,159 +33,115 @@ function calculateRisk(dass21_score: number, srq20_positive: number, suicidal_id
   return { risk_level: risk, icd_code: icd, recommendation: rec };
 }
 
-// --- Session Management for Serverless ---
-// Maps sessionId to its specific transport instance
-const activeTransports = new Map<string, SSEServerTransport>();
+// --- Register Tools ---
+
+server.tool(
+  "get_risk_stratification",
+  "Analyze DASS-21 and SRQ-20 scores to determine clinical risk level (L0-L3).",
+  {
+    dass21_score: z.number().int().describe("Total DASS-21 score"),
+    srq20_positive: z.number().int().describe("Number of positive SRQ-20 items"),
+    suicidal_ideation: z.boolean().describe("Presence of suicidal ideation"),
+  },
+  async ({ dass21_score, srq20_positive, suicidal_ideation }) => {
+    const result = calculateRisk(dass21_score, srq20_positive, suicidal_ideation);
+    return {
+      content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+    };
+  }
+);
+
+server.tool(
+  "analyze_psychosocial_notes",
+  "AI-powered analysis of clinical notes or patient statements to detect behavioral risks.",
+  {
+    notes: z.string().describe("The clinical notes or patient statement to analyze"),
+    context: z.object({
+      anamnesisType: z.enum(["auto", "allo"]).optional(),
+      medicalHistory: z.string().optional(),
+      medicationHistory: z.string().optional()
+    }).optional()
+  },
+  async ({ notes, context = {} }) => {
+    try {
+      const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
+      if (!apiKey) throw new Error("GEMINI_API_KEY not configured.");
+      const genAI = new GoogleGenAI({ apiKey });
+      const response = await genAI.models.generateContent({
+        model: "gemini-2.0-flash",
+        contents: `Analyze the following behavioral input for psychosocial risks.
+        Context: ${JSON.stringify(context)}
+        Input: ${notes}
+        
+        Format as JSON: { riskLevel, summary, detectedPatterns[], recommendations[], suggestedICD, suggestedDSM }`,
+        config: { responseMimeType: "application/json" }
+      });
+      return { content: [{ type: "text", text: response.text || "{}" }] };
+    } catch (error) {
+      return { content: [{ type: "text", text: JSON.stringify({ error: String(error) }) }], isError: true };
+    }
+  }
+);
+
+server.tool(
+  "get_economic_impact",
+  "Calculate ROI and potential savings for mental health interventions.",
+  {
+    patient_count: z.number().int().default(100).describe("Number of patients in the cohort"),
+  },
+  async ({ patient_count }) => {
+    const savingsPerPatient = 12500000; // Rp 12.5M
+    const totalSavings = patient_count * savingsPerPatient;
+    return {
+      content: [{ 
+        type: "text", 
+        text: JSON.stringify({
+          roi_ratio: "1:4",
+          potential_savings: `Rp ${totalSavings.toLocaleString('id-ID')}`,
+          currency: "IDR",
+          clinical_basis: "INA-CBG Chapter V Mapping"
+        }, null, 2) 
+      }],
+    };
+  }
+);
+
+// --- Session Management ---
+const transports = new Map<string, SSEServerTransport>();
 
 export function setupMCPServer(app: express.Application) {
   
-  const sseHandler = async (req: express.Request, res: express.Response) => {
-    console.log(`[MCP] Incoming SSE connection from ${req.ip}`);
+  app.get("/api/mcp/sse", async (req, res) => {
+    console.log(`[MCP] New SSE connection from ${req.ip}`);
+
+    // Set headers for long-lived connection
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
     
+    // Render/Standard Express doesn't need the Vercel anti-buffering hacks as much,
+    // but keeping them doesn't hurt.
+    res.setHeader('X-Accel-Buffering', 'no');
+
+    const transport = new SSEServerTransport("/api/mcp/messages", res);
+    transports.set(transport.sessionId, transport);
+
     try {
-      // 1. Create a dedicated server instance for this connection
-      const server = new Server(
-        {
-          name: "SafeGuard-Clinical-Agent",
-          version: "2.4.0",
-        },
-        {
-          capabilities: {
-            tools: {},
-          },
-        }
-      );
-
-      // 2. Define tools for this instance
-      const tools: Tool[] = [
-        {
-          name: "get_risk_stratification",
-          description: "Analyze DASS-21 and SRQ-20 scores to determine clinical risk level (L0-L3).",
-          inputSchema: {
-            type: "object",
-            properties: {
-              dass21_score: { type: "integer", description: "Total DASS-21 score" },
-              srq20_positive: { type: "integer", description: "Number of positive SRQ-20 items" },
-              suicidal_ideation: { type: "boolean", description: "Presence of suicidal ideation" },
-            },
-            required: ["dass21_score", "srq20_positive", "suicidal_ideation"],
-          },
-        },
-        {
-          name: "analyze_psychosocial_notes",
-          description: "AI-powered analysis of clinical notes or patient statements to detect behavioral risks.",
-          inputSchema: {
-            type: "object",
-            properties: {
-              notes: { type: "string", description: "The clinical notes or patient statement to analyze" },
-              context: { 
-                type: "object", 
-                description: "Additional clinical context (medical history, etc.)",
-                properties: {
-                  anamnesisType: { type: "string", enum: ["auto", "allo"] },
-                  medicalHistory: { type: "string" },
-                  medicationHistory: { type: "string" }
-                }
-              }
-            },
-            required: ["notes"],
-          },
-        },
-        {
-          name: "get_economic_impact",
-          description: "Calculate ROI and potential savings for mental health interventions.",
-          inputSchema: {
-            type: "object",
-            properties: {
-              patient_count: { type: "integer", description: "Number of patients in the cohort" },
-            },
-          },
-        }
-      ];
-
-      // 3. Register handlers for this instance
-      server.setRequestHandler(ListToolsRequestSchema, async () => ({
-        tools,
-      }));
-
-      server.setRequestHandler(CallToolRequestSchema, async (request) => {
-        const { name, arguments: args } = request.params;
-        
-        switch (name) {
-          case "get_risk_stratification": {
-            const { dass21_score, srq20_positive, suicidal_ideation } = args as any;
-            const result = calculateRisk(dass21_score, srq20_positive, suicidal_ideation);
-            return {
-              content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
-            };
-          }
-          case "analyze_psychosocial_notes": {
-            const { notes, context = {} } = args as any;
-            try {
-              const apiKey = process.env.GEMINI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY;
-              if (!apiKey) throw new Error("GEMINI_API_KEY not configured.");
-              const genAI = new GoogleGenAI({ apiKey });
-              const response = await genAI.models.generateContent({
-                model: "gemini-2.0-flash",
-                contents: `Analyze: ${notes}\nContext: ${JSON.stringify(context)}`,
-                config: { responseMimeType: "application/json" }
-              });
-              return { content: [{ type: "text", text: response.text || "{}" }] };
-            } catch (error) {
-              return { content: [{ type: "text", text: JSON.stringify({ error: String(error) }) }], isError: true };
-            }
-          }
-          case "get_economic_impact": {
-            const { patient_count = 100 } = args as any;
-            return {
-              content: [{ 
-                type: "text", 
-                text: JSON.stringify({
-                  roi_ratio: "1:4",
-                  potential_savings: `Rp ${(patient_count * 12500000).toLocaleString('id-ID')}`
-                }, null, 2) 
-              }],
-            };
-          }
-          default:
-            throw new Error(`Unknown tool: ${name}`);
-        }
-      });
-
-      // 4. Connect Transport with Anti-Buffering Headers
-      res.setHeader('Content-Type', 'text/event-stream');
-      res.setHeader('Cache-Control', 'no-cache, no-transform');
-      res.setHeader('Connection', 'keep-alive');
-      res.setHeader('X-Accel-Buffering', 'no'); // CRITICAL for Vercel
-      
-      const transport = new SSEServerTransport("/api/mcp/messages", res);
       await server.connect(transport);
-      
-      const sessionId = transport.sessionId;
-      activeTransports.set(sessionId, transport);
-      
-      console.log(`[MCP] Session ${sessionId} connected.`);
-
-      // Heartbeat to keep Vercel function alive
-      const heartbeat = setInterval(() => {
-        res.write(': heartbeat\n\n');
-      }, 5000);
-
-      req.on('close', () => {
-        console.log(`[MCP] Session ${sessionId} closed.`);
-        clearInterval(heartbeat);
-        activeTransports.delete(sessionId);
-      });
-
-    } catch (err) {
-      console.error("[MCP] SSE Connection Error:", err);
-      res.status(500).send(`MCP SSE Connection Failed: ${err instanceof Error ? err.message : String(err)}`);
+      console.log(`[MCP] Session ${transport.sessionId} connected.`);
+    } catch (error) {
+      console.error("❌ Failed to connect MCP server:", error);
     }
-  };
 
-  const messageHandler = async (req: express.Request, res: express.Response) => {
+    req.on('close', () => {
+      console.log(`[MCP] Session ${transport.sessionId} closed.`);
+      transports.delete(transport.sessionId);
+    });
+  });
+
+  app.post("/api/mcp/messages", async (req, res) => {
     const sessionId = req.query.sessionId as string;
-    const transport = activeTransports.get(sessionId);
+    const transport = transports.get(sessionId);
 
     if (transport) {
       try {
@@ -193,31 +151,21 @@ export function setupMCPServer(app: express.Application) {
         res.status(500).send("Error handling message");
       }
     } else {
-      console.warn(`[MCP] Message received for unknown session: ${sessionId}`);
-      res.status(400).json({ 
-        error: "Session not found", 
-        message: "The SSE connection for this session may have timed out or been closed. Please re-establish the SSE connection."
-      });
+      res.status(400).send("No active session.");
     }
-  };
-
-  // Routes
-  app.get("/mcp/sse", sseHandler);
-  app.get("/api/mcp/sse", sseHandler);
-  app.post("/mcp/messages", messageHandler);
-  app.post("/api/mcp/messages", messageHandler);
+  });
 
   app.get("/api/mcp/debug", (req, res) => {
     res.json({
       status: "ok",
-      activeSessions: activeTransports.size,
-      sessionIds: Array.from(activeTransports.keys()),
+      activeSessions: transports.size,
+      sessionIds: Array.from(transports.keys()),
       env: {
-        hasGeminiKey: !!(process.env.GEMINI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY),
+        hasGeminiKey: !!(process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY),
         isVercel: !!process.env.VERCEL
       }
     });
   });
 
-  console.log("MCP Server routes registered.");
+  console.log("MCP Server (Stateful) routes registered.");
 }
