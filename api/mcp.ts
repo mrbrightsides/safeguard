@@ -8,7 +8,7 @@ import {
 import express from "express";
 import { GoogleGenAI } from "@google/genai";
 
-// SafeGuard Clinical Logic (Extracted from api/index.ts)
+// SafeGuard Clinical Logic
 function calculateRisk(dass21_score: number, srq20_positive: number, suicidal_ideation: boolean) {
   let risk = "L3: Prognostic Layer";
   let icd = "N/A";
@@ -31,148 +31,158 @@ function calculateRisk(dass21_score: number, srq20_positive: number, suicidal_id
   return { risk_level: risk, icd_code: icd, recommendation: rec };
 }
 
-export function setupMCPServer(app: express.Application) {
-  const server = new Server(
-    {
-      name: "SafeGuard-Clinical-Agent",
-      version: "2.4.0",
+// --- MCP Server State (Persistent in warm instances) ---
+const server = new Server(
+  {
+    name: "SafeGuard-Clinical-Agent",
+    version: "2.4.0",
+  },
+  {
+    capabilities: {
+      tools: {},
     },
-    {
-      capabilities: {
-        tools: {},
-      },
-    }
-  );
+  }
+);
 
-  const tools: Tool[] = [
-    {
-      name: "get_risk_stratification",
-      description: "Analyze DASS-21 and SRQ-20 scores to determine clinical risk level (L0-L3).",
-      inputSchema: {
-        type: "object",
-        properties: {
-          dass21_score: { type: "integer", description: "Total DASS-21 score" },
-          srq20_positive: { type: "integer", description: "Number of positive SRQ-20 items" },
-          suicidal_ideation: { type: "boolean", description: "Presence of suicidal ideation" },
-        },
-        required: ["dass21_score", "srq20_positive", "suicidal_ideation"],
+const tools: Tool[] = [
+  {
+    name: "get_risk_stratification",
+    description: "Analyze DASS-21 and SRQ-20 scores to determine clinical risk level (L0-L3).",
+    inputSchema: {
+      type: "object",
+      properties: {
+        dass21_score: { type: "integer", description: "Total DASS-21 score" },
+        srq20_positive: { type: "integer", description: "Number of positive SRQ-20 items" },
+        suicidal_ideation: { type: "boolean", description: "Presence of suicidal ideation" },
       },
+      required: ["dass21_score", "srq20_positive", "suicidal_ideation"],
     },
-    {
-      name: "analyze_psychosocial_notes",
-      description: "AI-powered analysis of clinical notes or patient statements to detect behavioral risks.",
-      inputSchema: {
-        type: "object",
-        properties: {
-          notes: { type: "string", description: "The clinical notes or patient statement to analyze" },
-          context: { 
-            type: "object", 
-            description: "Additional clinical context (medical history, etc.)",
-            properties: {
-              anamnesisType: { type: "string", enum: ["auto", "allo"] },
-              medicalHistory: { type: "string" },
-              medicationHistory: { type: "string" }
-            }
+  },
+  {
+    name: "analyze_psychosocial_notes",
+    description: "AI-powered analysis of clinical notes or patient statements to detect behavioral risks.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        notes: { type: "string", description: "The clinical notes or patient statement to analyze" },
+        context: { 
+          type: "object", 
+          description: "Additional clinical context (medical history, etc.)",
+          properties: {
+            anamnesisType: { type: "string", enum: ["auto", "allo"] },
+            medicalHistory: { type: "string" },
+            medicationHistory: { type: "string" }
           }
-        },
-        required: ["notes"],
-      },
-    },
-    {
-      name: "get_economic_impact",
-      description: "Calculate ROI and potential savings for mental health interventions.",
-      inputSchema: {
-        type: "object",
-        properties: {
-          patient_count: { type: "integer", description: "Number of patients in the cohort" },
-        },
-      },
-    }
-  ];
-
-  server.setRequestHandler(ListToolsRequestSchema, async () => ({
-    tools,
-  }));
-
-  server.setRequestHandler(CallToolRequestSchema, async (request) => {
-    const { name, arguments: args } = request.params;
-
-    // SHARP Context Handling (Simulated)
-    // In a real SHARP environment, context like patientId would be in request.meta
-    const patientContext = (request as any).meta?.sharpContext || {};
-    console.log(`[SHARP] Processing request for Patient: ${patientContext.patientId || 'Unknown'}`);
-
-    switch (name) {
-      case "get_risk_stratification": {
-        const { dass21_score, srq20_positive, suicidal_ideation } = args as any;
-        const result = calculateRisk(dass21_score, srq20_positive, suicidal_ideation);
-        return {
-          content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
-        };
-      }
-      case "analyze_psychosocial_notes": {
-        const { notes, context = {} } = args as any;
-        try {
-          const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
-          if (!apiKey) {
-            throw new Error("GEMINI_API_KEY is not configured. Please set it in Vercel Environment Variables.");
-          }
-          const genAI = new GoogleGenAI({ apiKey });
-          
-          const response = await genAI.models.generateContent({
-            model: "gemini-2.0-flash",
-            contents: `Analyze the following behavioral input for psychosocial risks.
-            Context: ${JSON.stringify(context)}
-            Input: ${notes}
-            
-            Format as JSON: { riskLevel, summary, detectedPatterns[], recommendations[], suggestedICD, suggestedDSM }`,
-            config: {
-              responseMimeType: "application/json"
-            }
-          });
-
-          const cleanedText = response.text || "{}";
-          
-          return {
-            content: [{ type: "text", text: cleanedText }],
-          };
-        } catch (error) {
-          return {
-            content: [{ type: "text", text: JSON.stringify({ error: "AI Analysis failed", details: String(error) }) }],
-            isError: true
-          };
         }
-      }
-      case "get_economic_impact": {
-        const { patient_count = 100 } = args as any;
-        const savingsPerPatient = 12500000; // Rp 12.5M
-        const totalSavings = patient_count * savingsPerPatient;
+      },
+      required: ["notes"],
+    },
+  },
+  {
+    name: "get_economic_impact",
+    description: "Calculate ROI and potential savings for mental health interventions.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        patient_count: { type: "integer", description: "Number of patients in the cohort" },
+      },
+    },
+  }
+];
+
+// Initialize Handlers Once
+server.setRequestHandler(ListToolsRequestSchema, async () => ({
+  tools,
+}));
+
+server.setRequestHandler(CallToolRequestSchema, async (request) => {
+  const { name, arguments: args } = request.params;
+  const patientContext = (request as any).meta?.sharpContext || {};
+  console.log(`[SHARP] Processing request for Patient: ${patientContext.patientId || 'Unknown'}`);
+
+  switch (name) {
+    case "get_risk_stratification": {
+      const { dass21_score, srq20_positive, suicidal_ideation } = args as any;
+      const result = calculateRisk(dass21_score, srq20_positive, suicidal_ideation);
+      return {
+        content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
+      };
+    }
+    case "analyze_psychosocial_notes": {
+      const { notes, context = {} } = args as any;
+      try {
+        const apiKey = process.env.GEMINI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY;
+        if (!apiKey) {
+          throw new Error("GEMINI_API_KEY is not configured. Please set it in Vercel Environment Variables.");
+        }
+        const genAI = new GoogleGenAI({ apiKey });
+        
+        const response = await genAI.models.generateContent({
+          model: "gemini-2.0-flash",
+          contents: `Analyze the following behavioral input for psychosocial risks.
+          Context: ${JSON.stringify(context)}
+          Input: ${notes}
+          
+          Format as JSON: { riskLevel, summary, detectedPatterns[], recommendations[], suggestedICD, suggestedDSM }`,
+          config: {
+            responseMimeType: "application/json"
+          }
+        });
+
+        const cleanedText = response.text || "{}";
+        
         return {
-          content: [{ 
-            type: "text", 
-            text: JSON.stringify({
-              roi_ratio: "1:4",
-              potential_savings: `Rp ${totalSavings.toLocaleString('id-ID')}`,
-              currency: "IDR",
-              clinical_basis: "INA-CBG Chapter V Mapping"
-            }, null, 2) 
-          }],
+          content: [{ type: "text", text: cleanedText }],
+        };
+      } catch (error) {
+        return {
+          content: [{ type: "text", text: JSON.stringify({ error: "AI Analysis failed", details: String(error) }) }],
+          isError: true
         };
       }
-      default:
-        throw new Error(`Unknown tool: ${name}`);
     }
-  });
+    case "get_economic_impact": {
+      const { patient_count = 100 } = args as any;
+      const savingsPerPatient = 12500000; // Rp 12.5M
+      const totalSavings = patient_count * savingsPerPatient;
+      return {
+        content: [{ 
+          type: "text", 
+          text: JSON.stringify({
+            roi_ratio: "1:4",
+            potential_savings: `Rp ${totalSavings.toLocaleString('id-ID')}`,
+            currency: "IDR",
+            clinical_basis: "INA-CBG Chapter V Mapping"
+          }, null, 2) 
+        }],
+      };
+    }
+    default:
+      throw new Error(`Unknown tool: ${name}`);
+  }
+});
 
-  // MCP over SSE (Server-Sent Events) - Standard for web-based MCP
-  let transport: SSEServerTransport | null = null;
+let transport: SSEServerTransport | null = null;
 
+// --- Exported Setup Function ---
+export function setupMCPServer(app: express.Application) {
   const sseHandler = async (req: express.Request, res: express.Response) => {
     console.log(`[MCP] Incoming SSE connection from ${req.ip}`);
     try {
+      // Set headers for long-lived connection
+      res.setHeader('Content-Type', 'text/event-stream');
+      res.setHeader('Cache-Control', 'no-cache');
+      res.setHeader('Connection', 'keep-alive');
+      
       transport = new SSEServerTransport("/api/mcp/messages", res);
       await server.connect(transport);
       console.log("[MCP] SSE Transport connected.");
+
+      // Handle connection close
+      req.on('close', () => {
+        console.log("[MCP] SSE Connection closed by client.");
+        transport = null;
+      });
     } catch (err) {
       console.error("[MCP] SSE Connection Error:", err);
       res.status(500).send("MCP SSE Connection Failed");
@@ -180,10 +190,19 @@ export function setupMCPServer(app: express.Application) {
   };
 
   const messageHandler = async (req: express.Request, res: express.Response) => {
+    console.log(`[MCP] Incoming message. Transport active: ${!!transport}`);
     if (transport) {
-      await transport.handlePostMessage(req, res);
+      try {
+        await transport.handlePostMessage(req, res);
+      } catch (err) {
+        console.error("[MCP] Message Handling Error:", err);
+        res.status(500).send("Error handling MCP message");
+      }
     } else {
-      res.status(400).send("No active SSE transport");
+      res.status(400).json({ 
+        error: "No active SSE transport", 
+        message: "The SSE connection must be established before sending messages. In serverless environments, ensure the GET /sse request is still open."
+      });
     }
   };
 
@@ -198,14 +217,14 @@ export function setupMCPServer(app: express.Application) {
     res.json({
       status: "ok",
       toolsCount: tools.length,
+      transportActive: !!transport,
       env: {
-        hasGeminiKey: !!(process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY),
-        hasVitePrefix: !!process.env.VITE_GEMINI_API_KEY,
+        hasGeminiKey: !!(process.env.GEMINI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY),
         nodeEnv: process.env.NODE_ENV,
         isVercel: !!process.env.VERCEL
       }
     });
   });
 
-  console.log("MCP Server initialized at /api/mcp/sse");
+  console.log("MCP Server routes registered.");
 }
