@@ -3,7 +3,8 @@ import cors from "cors";
 import path from "path";
 import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
-import { setupMCPServer } from "./mcp";
+import { GoogleGenAI } from "@google/genai";
+import { setupMCPServer } from "./mcp_server.js";
 
 const app = express();
 
@@ -11,36 +12,110 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// SHARP Context Middleware
-app.use((req, res, next) => {
-  const sharpContext = {
-    patientId: req.headers["x-sharp-patient-id"],
-    fhirBase: req.headers["x-sharp-fhir-base"],
-    fhirToken: req.headers["x-sharp-fhir-token"],
-    tenantId: req.headers["x-sharp-tenant-id"],
-  };
-  (req as any).sharpContext = sharpContext;
-  next();
-});
+// Initialize Gemini
+const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
+const genAI = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
 // Health Check
 app.get("/api/ping", (req, res) => {
   res.json({ 
     status: "pong", 
     timestamp: new Date().toISOString(),
-    env: process.env.NODE_ENV
+    hasAI: !!genAI
   });
 });
 
-// Initialize MCP Server
-setupMCPServer(app);
+// --- A2A / External Agent Endpoints ---
 
-// Clinical Endpoints
+/**
+ * @openapi
+ * /api/v1/analyze:
+ *   post:
+ *     summary: AI Clinical Analysis
+ *     description: Comprehensive psychosocial risk assessment using Gemini AI.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               notes:
+ *                 type: string
+ *                 description: Clinical notes or patient statement
+ *                 example: "Patient reports feeling overwhelmed and having trouble sleeping for 2 weeks."
+ *               dass21_score:
+ *                 type: integer
+ *                 description: Total DASS-21 score
+ *                 example: 18
+ *               srq20_positive:
+ *                 type: integer
+ *                 description: Number of positive SRQ-20 items
+ *                 example: 5
+ *     responses:
+ *       200:
+ *         description: Analysis result
+ */
+app.post("/api/v1/analyze", async (req, res) => {
+  const { notes, dass21_score, srq20_positive } = req.body;
+
+  if (!genAI) {
+    return res.status(500).json({ error: "AI Service not configured" });
+  }
+
+  try {
+    const model = (genAI as any).getGenerativeModel({ model: "gemini-2.0-flash" });
+    const prompt = `
+      As a Clinical Psychologist, analyze this patient data:
+      Notes: ${notes}
+      DASS-21 Score: ${dass21_score}
+      SRQ-20 Positive: ${srq20_positive}
+
+      Provide a structured analysis including:
+      1. Risk Level (L0-L3)
+      2. Clinical Summary
+      3. Suggested ICD-10 Code
+      4. Immediate Recommendations
+    `;
+
+    const result = await model.generateContent(prompt);
+    const response = result.response;
+    res.json({ 
+      analysis: response.text(),
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({ error: String(error) });
+  }
+});
+
+/**
+ * @openapi
+ * /api/v1/risk-detect:
+ *   post:
+ *     summary: Rule-based Risk Detection
+ *     description: Fast clinical risk stratification based on scoring thresholds.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               dass21_score: { type: integer, example: 24 }
+ *               srq20_positive: { type: integer, example: 8 }
+ *               suicidal_ideation: { type: boolean, example: false }
+ *     responses:
+ *       200:
+ *         description: Risk level and recommendation
+ */
 app.post("/api/v1/risk-detect", (req, res) => {
   const { dass21_score, srq20_positive, suicidal_ideation } = req.body;
+  
   let risk = "L3: Prognostic Layer";
   let icd = "N/A";
   let rec = "Continue routine wellness monitoring.";
+
   if (suicidal_ideation) {
     risk = "L0: Emergency";
     icd = "F32.3";
@@ -54,41 +129,36 @@ app.post("/api/v1/risk-detect", (req, res) => {
     icd = "F41.1";
     rec = "Clinical consultation required within 48 hours.";
   }
+
   res.json({ risk_level: risk, icd_code: icd, recommendation: rec });
 });
 
-app.get("/api/v1/economic-forecast", (req, res) => {
-  res.json({
-    roi_ratio: "1:4",
-    mean_claim_ina_cbg: "Rp12,400,000",
-    potential_savings_annual: "Rp1,250,000,000",
-    currency: "IDR"
-  });
-});
+// Initialize MCP Server (Keep as fallback)
+setupMCPServer(app);
 
-app.get("/api/v1/icd-clusters", (req, res) => {
-  res.json([
-    { name: 'F40-F48 (Anxiety/Stress)', value: 42, color: '#0d9488' },
-    { name: 'F30-F39 (Mood/Depression)', value: 28, color: '#14b8a6' },
-    { name: 'F20-F29 (Psychotic)', value: 8, color: '#0f766e' },
-    { name: 'F10-F19 (Substance)', value: 12, color: '#5eead4' },
-    { name: 'Others (F00-F99)', value: 10, color: '#ccfbf1' },
-  ]);
-});
-
-// Swagger
+// Swagger Configuration
 const swaggerOptions = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "SafeGuard API",
+      title: "SafeGuard Clinical Agent API",
       version: "1.0.0",
-      description: "API for AI-powered psychosocial health surveillance.",
+      description: "AI-powered psychosocial health surveillance and economic evaluation.",
+      contact: {
+        name: "SafeGuard Team",
+        url: "https://server-safeguard.onrender.com",
+      },
     },
-    servers: [{ url: "/", description: "Current Server" }],
+    servers: [
+      {
+        url: "https://server-safeguard.onrender.com",
+        description: "Production Server (Render)",
+      },
+    ],
   },
-  apis: [],
+  apis: ["./api/index.ts"], // Scan this file for OpenAPI annotations
 };
+
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
@@ -99,19 +169,12 @@ if (process.env.NODE_ENV === "production") {
   app.get('*', (req, res) => {
     res.sendFile(path.join(distPath, 'index.html'));
   });
-} else {
-  // Vite middleware for development
-  const { createServer: createViteServer } = await import("vite");
-  const vite = await createViteServer({
-    server: { middlewareMode: true },
-    appType: "spa",
-  });
-  app.use(vite.middlewares);
 }
 
 const PORT = Number(process.env.PORT) || 3000;
 app.listen(PORT, "0.0.0.0", () => {
-  console.log(`🚀 Server listening on port ${PORT}`);
+  console.log(`🚀 SafeGuard Server listening on port ${PORT}`);
+  console.log(`📖 Swagger UI: https://server-safeguard.onrender.com/api-docs`);
 });
 
 export default app;
