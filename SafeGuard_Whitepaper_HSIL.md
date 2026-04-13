@@ -114,24 +114,34 @@ SafeGuard's predictive model is based on the classical safety pyramid (Heinrich)
 
 ---
 
-### 9. Technical Architecture & Interoperability
-SafeGuard is built on the principles of **High-Value Health Systems**:
-*   **FHIR-Native**: Fully compatible with HL7 FHIR standards.
-*   **SATUSEHAT Integration**: Ready for Indonesia's national health data platform.
-*   **Web Bluetooth API**: Real-time biometric sync with wearable devices.
-*   **AI-Driven Prognostics**: Uses Gemini AI for L0–L3 risk stratification.
+### 9. Technical Architecture & Interoperability (Prompt Opinion Ecosystem)
+SafeGuard is built on the principles of **High-Value Health Systems** and is fully integrated into the **Prompt Opinion** multi-agent platform:
+*   **MCP Server (Path A)**: Exposes specialized healthcare tools (Risk Stratification, Psychosocial Analysis, Economic Impact) via the Model Context Protocol.
+*   **A2A Agent (Path B)**: Supports the Agent-to-Agent standard with a discovery-ready `.well-known/agent-card.json` and OpenAPI (Swagger) documentation.
+*   **SHARP Extension Specs**: Fully compliant with SHARP context propagation, allowing seamless handling of **Patient IDs** and **FHIR tokens** directly from EHR sessions.
+*   **FHIR-Ready**: Designed to consume and analyze data from FHIR servers for real-time clinical decision support.
+*   **AI-Driven Prognostics**: Leverages **Gemini 2.0 Flash** for high-velocity, clinical-grade risk stratification and ICD-10 recommendation.
 
 ---
 
-### 10. Ethical Clearance & Clinical Compliance
+### 10. Clinical Tools & AI Capabilities
+SafeGuard provides a suite of specialized tools accessible via MCP and REST API:
+*   **`get_risk_stratification`**: Automated L0-L3 risk leveling based on DASS-21 and SRQ-20.
+*   **`analyze_psychosocial_notes`**: AI-powered behavioral risk detection from unstructured clinical notes.
+*   **`get_icd10_recommendation`**: Intelligent suggestion of ICD-10 Chapter V codes based on patient symptoms.
+*   **`get_economic_forecast`**: Real-time ROI calculations and INA-CBG claim estimates for healthcare administrators.
+
+---
+
+### 11. Ethical Clearance & Clinical Compliance
 SafeGuard is committed to obtaining formal ethical clearance from recognized Institutional Review Boards (IRB) to ensure:
-*   **Clinical Validity**: Ensuring AI models are medically sound.
-*   **Informed Consent**: Transparent protocols for worker data usage.
-*   **Data Anonymization**: Protecting individual identities in aggregate reports.
+*   **Clinical Validity**: Ensuring AI models are medically sound and aligned with ICD-10 standards.
+*   **Informed Consent**: Transparent protocols for worker data usage within the Prompt Opinion platform.
+*   **Data Anonymization**: Strict use of synthetic or de-identified data, ensuring zero PHI exposure.
 
 ---
 
-### 11. The Leadership Team
+### 12. The Leadership Team
 *   **Akhmad Khudri**: Team Lead & Product Owner (Strategy & SWOT)
 *   **Stanley Nathanael Wijaya**: Lead AI & Product Engineer (Front-end & Integration)
 *   **Dwiki Aulia Rahman**: Health Data & Predictive Insight (AI Architecture & Epidemiology)
@@ -139,8 +149,8 @@ SafeGuard is committed to obtaining formal ethical clearance from recognized Ins
 
 ---
 
-### 9. Conclusion
-SafeGuard is not just a mental health app; it is a strategic economic tool. By making invisible risks measurable, we empower healthcare leaders and corporate executives to make data-driven decisions that save both lives and capital.
+### 13. Conclusion
+SafeGuard is not just a mental health app; it is a strategic economic tool integrated into the world's leading multi-agent healthcare platform. By making invisible risks measurable and interoperable via MCP, A2A, and SHARP, we empower healthcare leaders to make data-driven decisions that save both lives and capital.
 
 ---
-*Prepared for the HSIL Hackathon 2026 – Building High-Value Health Systems Leveraging AI.*
+*Prepared for the Prompt Opinion Hackathon & HSIL 2026 – Building High-Value Health Systems Leveraging AI.*

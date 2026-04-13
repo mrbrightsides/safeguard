@@ -20,7 +20,7 @@ app.use(cors());
 app.use(express.json());
 
 // Initialize Gemini
-const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
+const apiKey = process.env.GEMINI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY;
 const genAI = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
 // --- MCP Clinical Logic ---
@@ -125,7 +125,7 @@ app.get("/.well-known/agent-card.json", (req, res) => {
     version: "1.0.0",
     protocolVersion: "1.0",
     name: "SafeGuard Clinical Agent",
-    description: "AI-powered psychosocial health surveillance and economic evaluation.",
+    description: "SafeGuard: AI-Powered Psychosocial Risk Stratification & Economic ROI Forecasting. Fully SHARP-compliant clinical decision support.",
     url: baseUrl,
     capabilities: {
       chat: true,
