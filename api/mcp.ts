@@ -42,7 +42,6 @@ export function setupMCPServer(app: express.Application) {
     
     try {
       // 1. Create a dedicated server instance for this connection
-      // This ensures no state conflict between concurrent users in a warm instance
       const server = new Server(
         {
           name: "SafeGuard-Clinical-Agent",
@@ -109,7 +108,6 @@ export function setupMCPServer(app: express.Application) {
 
       server.setRequestHandler(CallToolRequestSchema, async (request) => {
         const { name, arguments: args } = request.params;
-        const patientContext = (request as any).meta?.sharpContext || {};
         
         switch (name) {
           case "get_risk_stratification": {
@@ -122,7 +120,7 @@ export function setupMCPServer(app: express.Application) {
           case "analyze_psychosocial_notes": {
             const { notes, context = {} } = args as any;
             try {
-              const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
+              const apiKey = process.env.GEMINI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY;
               if (!apiKey) throw new Error("GEMINI_API_KEY not configured.");
               const genAI = new GoogleGenAI({ apiKey });
               const response = await genAI.models.generateContent({
@@ -152,22 +150,28 @@ export function setupMCPServer(app: express.Application) {
         }
       });
 
-      // 4. Connect Transport
+      // 4. Connect Transport with Anti-Buffering Headers
       res.setHeader('Content-Type', 'text/event-stream');
-      res.setHeader('Cache-Control', 'no-cache');
+      res.setHeader('Cache-Control', 'no-cache, no-transform');
       res.setHeader('Connection', 'keep-alive');
+      res.setHeader('X-Accel-Buffering', 'no'); // CRITICAL for Vercel
       
       const transport = new SSEServerTransport("/api/mcp/messages", res);
       await server.connect(transport);
       
-      // Store transport by its internal session ID so POST requests can find it
       const sessionId = transport.sessionId;
       activeTransports.set(sessionId, transport);
       
       console.log(`[MCP] Session ${sessionId} connected.`);
 
+      // Heartbeat to keep Vercel function alive
+      const heartbeat = setInterval(() => {
+        res.write(': heartbeat\n\n');
+      }, 5000);
+
       req.on('close', () => {
         console.log(`[MCP] Session ${sessionId} closed.`);
+        clearInterval(heartbeat);
         activeTransports.delete(sessionId);
       });
 
@@ -209,7 +213,7 @@ export function setupMCPServer(app: express.Application) {
       activeSessions: activeTransports.size,
       sessionIds: Array.from(activeTransports.keys()),
       env: {
-        hasGeminiKey: !!(process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY),
+        hasGeminiKey: !!(process.env.GEMINI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY),
         isVercel: !!process.env.VERCEL
       }
     });
