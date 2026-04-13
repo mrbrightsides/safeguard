@@ -54,12 +54,14 @@ export function setupMCPServer(app: express.Application) {
     );
 
     // 2. Register tools for this specific instance
-    server.setRequestHandler(ListToolsRequestSchema, async () => ({
-      tools,
-    }));
+    server.setRequestHandler(ListToolsRequestSchema, async () => {
+      console.log(`[MCP] Session ${transport.sessionId} requested tools.`);
+      return { tools };
+    });
 
     server.setRequestHandler(CallToolRequestSchema, async (request) => {
       const { name, arguments: args } = request.params;
+      console.log(`[MCP] Session ${transport.sessionId} calling tool: ${name}`);
       switch (name) {
         case "get_risk_stratification": {
           const { dass21_score, srq20_positive, suicidal_ideation } = args as any;
@@ -100,10 +102,13 @@ export function setupMCPServer(app: express.Application) {
     });
 
     // 3. Setup Transport
-    res.setHeader('Content-Type', 'text/event-stream');
-    res.setHeader('Cache-Control', 'no-cache');
-    res.setHeader('Connection', 'keep-alive');
-    res.setHeader('X-Accel-Buffering', 'no');
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache, no-transform',
+      'Connection': 'keep-alive',
+      'X-Accel-Buffering': 'no'
+    });
+    res.flushHeaders();
 
     const protocol = req.headers['x-forwarded-proto'] || req.protocol;
     const host = req.get('host');
@@ -112,6 +117,11 @@ export function setupMCPServer(app: express.Application) {
     const transport = new SSEServerTransport(messageUrl, res);
     transports.set(transport.sessionId, transport);
 
+    // Heartbeat to keep connection alive on Render
+    const heartbeat = setInterval(() => {
+      res.write(': heartbeat\n\n');
+    }, 30000);
+
     try {
       await server.connect(transport);
       console.log(`[MCP] Session ${transport.sessionId} connected.`);
@@ -119,9 +129,14 @@ export function setupMCPServer(app: express.Application) {
       console.error("❌ Failed to connect MCP server:", error);
     }
 
-    req.on('close', () => {
-      console.log(`[MCP] Session ${transport.sessionId} closed.`);
-      transports.delete(transport.sessionId);
+    // Keep the handler alive until the connection is closed
+    await new Promise((resolve) => {
+      req.on('close', () => {
+        console.log(`[MCP] Session ${transport.sessionId} closed.`);
+        clearInterval(heartbeat);
+        transports.delete(transport.sessionId);
+        resolve(null);
+      });
     });
   });
 
