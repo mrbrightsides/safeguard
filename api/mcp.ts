@@ -1,16 +1,12 @@
-import { Server } from "@modelcontextprotocol/sdk/server/index.js";
-import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
+import { Server } from "@modelcontextprotocol/sdk/server/index";
+import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse";
 import { 
   CallToolRequestSchema, 
   ListToolsRequestSchema,
   Tool
-} from "@modelcontextprotocol/sdk/types.js";
+} from "@modelcontextprotocol/sdk/types";
 import express from "express";
 import { GoogleGenAI } from "@google/genai";
-
-// Initialize Gemini for Server-side MCP Tools
-const apiKey = process.env.GEMINI_API_KEY || "";
-const genAI = new GoogleGenAI({ apiKey });
 
 // SafeGuard Clinical Logic (Extracted from api/index.ts)
 function calculateRisk(dass21_score: number, srq20_positive: number, suicidal_ideation: boolean) {
@@ -117,6 +113,12 @@ export function setupMCPServer(app: express.Application) {
       case "analyze_psychosocial_notes": {
         const { notes, context = {} } = args as any;
         try {
+          const apiKey = import.meta.env.GEMINI_API_KEY;
+          if (!apiKey) {
+            throw new Error("GEMINI_API_KEY is not configured on the server.");
+          }
+          const genAI = new GoogleGenAI({ apiKey });
+          
           const response = await genAI.models.generateContent({
             model: "gemini-2.0-flash",
             contents: `Analyze the following behavioral input for psychosocial risks.
@@ -166,8 +168,15 @@ export function setupMCPServer(app: express.Application) {
   let transport: SSEServerTransport | null = null;
 
   const sseHandler = async (req: express.Request, res: express.Response) => {
-    transport = new SSEServerTransport("/api/mcp/messages", res);
-    await server.connect(transport);
+    console.log(`[MCP] Incoming SSE connection from ${req.ip}`);
+    try {
+      transport = new SSEServerTransport("/api/mcp/messages", res);
+      await server.connect(transport);
+      console.log("[MCP] SSE Transport connected.");
+    } catch (err) {
+      console.error("[MCP] SSE Connection Error:", err);
+      res.status(500).send("MCP SSE Connection Failed");
+    }
   };
 
   const messageHandler = async (req: express.Request, res: express.Response) => {
@@ -184,6 +193,17 @@ export function setupMCPServer(app: express.Application) {
   
   app.post("/mcp/messages", messageHandler);
   app.post("/api/mcp/messages", messageHandler);
+
+  app.get("/api/mcp/debug", (req, res) => {
+    res.json({
+      status: "ok",
+      toolsCount: tools.length,
+      env: {
+        hasGeminiKey: !!import.meta.env.GEMINI_API_KEY,
+        nodeEnv: import.meta.env.NODE_ENV
+      }
+    });
+  });
 
   console.log("MCP Server initialized at /api/mcp/sse");
 }

@@ -2,7 +2,15 @@ import express from "express";
 import path from "path";
 import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
-import { setupMCPServer } from "./mcp.js";
+import { setupMCPServer } from "./mcp";
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('[FATAL] Unhandled Rejection at:', promise, 'reason:', reason);
+});
+
+process.on('uncaughtException', (err) => {
+  console.error('[FATAL] Uncaught Exception thrown:', err);
+});
 
 async function startServer() {
   const app = express();
@@ -28,7 +36,13 @@ async function startServer() {
   });
 
   // Initialize MCP Server
-  setupMCPServer(app);
+  try {
+    console.log("[SYSTEM] Initializing MCP Server...");
+    setupMCPServer(app);
+    console.log("[SYSTEM] MCP Server initialized successfully.");
+  } catch (error) {
+    console.error("[ERROR] Failed to initialize MCP Server:", error);
+  }
 
   // Swagger Configuration
   const swaggerOptions = {
