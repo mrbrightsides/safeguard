@@ -31,6 +31,53 @@ function calculateRisk(dass21_score: number, srq20_positive: number, suicidal_id
   return { risk_level: risk, icd_code: icd, recommendation: rec };
 }
 
+// --- MCP Server Instance ---
+const tools: Tool[] = [
+  {
+    name: "get_risk_stratification",
+    description: "Analyze DASS-21 and SRQ-20 scores to determine clinical risk level (L0-L3).",
+    inputSchema: {
+      type: "object",
+      properties: {
+        dass21_score: { type: "integer", description: "Total DASS-21 score" },
+        srq20_positive: { type: "integer", description: "Number of positive SRQ-20 items" },
+        suicidal_ideation: { type: "boolean", description: "Presence of suicidal ideation" },
+      },
+      required: ["dass21_score", "srq20_positive", "suicidal_ideation"],
+    },
+  },
+  {
+    name: "analyze_psychosocial_notes",
+    description: "AI-powered analysis of clinical notes or patient statements to detect behavioral risks.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        notes: { type: "string", description: "The clinical notes or patient statement to analyze" },
+        context: { 
+          type: "object", 
+          description: "Additional clinical context (medical history, etc.)",
+          properties: {
+            anamnesisType: { type: "string", enum: ["auto", "allo"] },
+            medicalHistory: { type: "string" },
+            medicationHistory: { type: "string" }
+          }
+        }
+      },
+      required: ["notes"],
+    },
+  },
+  {
+    name: "get_economic_impact",
+    description: "Calculate ROI and potential savings for mental health interventions.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        patient_count: { type: "integer", description: "Number of patients in the cohort" },
+      },
+    },
+  }
+];
+
 // --- Session Management ---
 const transports = new Map<string, SSEServerTransport>();
 
@@ -102,14 +149,6 @@ export function setupMCPServer(app: express.Application) {
     });
 
     // 3. Setup Transport
-    res.writeHead(200, {
-      'Content-Type': 'text/event-stream',
-      'Cache-Control': 'no-cache, no-transform',
-      'Connection': 'keep-alive',
-      'X-Accel-Buffering': 'no'
-    });
-    res.flushHeaders();
-
     const protocol = req.headers['x-forwarded-proto'] || req.protocol;
     const host = req.get('host');
     const messageUrl = `${protocol}://${host}/api/mcp/messages`;
@@ -119,7 +158,11 @@ export function setupMCPServer(app: express.Application) {
 
     // Heartbeat to keep connection alive on Render
     const heartbeat = setInterval(() => {
-      res.write(': heartbeat\n\n');
+      try {
+        res.write(': heartbeat\n\n');
+      } catch (e) {
+        clearInterval(heartbeat);
+      }
     }, 30000);
 
     try {
