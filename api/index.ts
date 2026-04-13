@@ -2,20 +2,15 @@ import express from "express";
 import path from "path";
 import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
-import { setupMCPServer } from "./mcp";
+import { setupMCPServer } from "./mcp.js";
 
-process.on('unhandledRejection', (reason, promise) => {
-  console.error('[FATAL] Unhandled Rejection at:', promise, 'reason:', reason);
-});
-
-process.on('uncaughtException', (err) => {
-  console.error('[FATAL] Uncaught Exception thrown:', err);
-});
+const app = express();
 
 async function startServer() {
-  const app = express();
-
   app.use(express.json());
+
+  // Health Check for Vercel
+  app.get("/api/ping", (req, res) => res.json({ status: "pong", timestamp: new Date().toISOString() }));
 
   // SHARP Context Middleware
   app.use((req, res, next) => {
@@ -318,19 +313,8 @@ async function startServer() {
   return app;
 }
 
-// For local development
-if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
-  startServer().then(app => {
-    const PORT = 3000;
-    app.listen(PORT, "0.0.0.0", () => {
-      console.log(`Server running on http://localhost:${PORT}`);
-      console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`);
-    });
-  });
-}
+// Initialize the server logic
+startServer();
 
-// Export for Vercel
-export default async (req: any, res: any) => {
-  const app = await startServer();
-  return app(req, res);
-};
+// Export the app instance for Vercel
+export default app;
