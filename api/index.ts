@@ -107,6 +107,27 @@ app.get("/api/ping", (req, res) => {
   });
 });
 
+// Agent Card for Prompt Opinion (A2A)
+app.get("/.well-known/agent-card.json", (req, res) => {
+  const protocol = req.headers['x-forwarded-proto'] || req.protocol;
+  const host = req.get('host');
+  const baseUrl = `${protocol}://${host}`;
+
+  res.json({
+    schema_version: "v1",
+    name: "SafeGuard Clinical Agent",
+    description: "AI-powered psychosocial health surveillance and economic evaluation.",
+    auth: {
+      type: "none"
+    },
+    api: {
+      type: "openapi",
+      url: `${baseUrl}/api-docs/swagger.json`
+    },
+    contact_email: "khudri@binadarma.ac.id"
+  });
+});
+
 // A2A Endpoints
 /**
  * @openapi
@@ -228,6 +249,9 @@ const swaggerOptions = {
   apis: ["./api/index.ts"],
 };
 const swaggerDocs = swaggerJsdoc(swaggerOptions);
+app.get("/api-docs/swagger.json", (req, res) => {
+  res.json(swaggerDocs);
+});
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 async function startServer() {
