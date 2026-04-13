@@ -90,6 +90,17 @@ const tools: Tool[] = [
         patient_count: { type: "integer", description: "Number of patients in the cohort" },
       },
     },
+  },
+  {
+    name: "get_icd10_recommendation",
+    description: "Suggest relevant ICD-10 codes based on clinical symptoms and notes.",
+    inputSchema: {
+      type: "object",
+      properties: {
+        symptoms: { type: "string", description: "Description of patient symptoms or clinical notes" },
+      },
+      required: ["symptoms"],
+    },
   }
 ];
 
@@ -138,6 +149,18 @@ app.get("/.well-known/agent-card.json", (req, res) => {
         name: "Psychosocial Analysis",
         description: "AI-powered analysis of clinical notes to detect behavioral risks.",
         tags: ["ai", "psychosocial", "clinical-notes"]
+      },
+      {
+        id: "icd10-recommendation",
+        name: "ICD-10 Recommendation",
+        description: "Suggests relevant ICD-10 codes based on clinical symptoms and notes.",
+        tags: ["clinical", "icd10", "diagnosis-support"]
+      },
+      {
+        id: "economic-forecasting",
+        name: "Economic Forecasting",
+        description: "Provides ROI and INA-CBG claim estimates for mental health interventions.",
+        tags: ["economic", "roi", "ina-cbg"]
       }
     ],
     preferredTransport: "sse",
@@ -210,6 +233,88 @@ app.post("/api/v1/risk-detect", (req, res) => {
   res.json(result);
 });
 
+/**
+ * @openapi
+ * /api/v1/icd10-recommend:
+ *   post:
+ *     summary: ICD-10 Code Recommendation
+ *     description: AI-powered suggestion of ICD-10 codes based on symptoms.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               symptoms: { type: string, example: "Persistent sadness, loss of interest, and fatigue for 3 weeks." }
+ *     responses:
+ *       200: { description: ICD-10 recommendations }
+ */
+app.post("/api/v1/icd10-recommend", async (req, res) => {
+  const { symptoms } = req.body;
+  if (!genAI) return res.status(500).json({ error: "AI Service not configured" });
+  try {
+    const model = (genAI as any).getGenerativeModel({ model: "gemini-2.0-flash" });
+    const prompt = `As a Medical Coding Expert, suggest relevant ICD-10 codes for these symptoms: ${symptoms}. Provide the code, title, and a brief clinical justification for each.`;
+    const result = await model.generateContent(prompt);
+    res.json({ recommendations: result.response.text(), timestamp: new Date().toISOString() });
+  } catch (error) {
+    res.status(500).json({ error: String(error) });
+  }
+});
+
+/**
+ * @openapi
+ * /api/v1/economic-forecast:
+ *   get:
+ *     summary: Economic ROI Forecasting
+ *     description: ROI calculations and INA-CBG claim estimates for mental health cohorts.
+ *     parameters:
+ *       - in: query
+ *         name: patient_count
+ *         schema:
+ *           type: integer
+ *           default: 100
+ *         description: Number of patients in the cohort.
+ *     responses:
+ *       200: { description: Economic forecast data }
+ */
+app.get("/api/v1/economic-forecast", (req, res) => {
+  const patient_count = Number(req.query.patient_count) || 100;
+  res.json({
+    roi_ratio: "1:4.2",
+    total_savings_estimate: `Rp ${(patient_count * 12500000).toLocaleString('id-ID')}`,
+    ina_cbg_estimates: {
+      mild_cases: `Rp ${(patient_count * 0.6 * 4500000).toLocaleString('id-ID')}`,
+      severe_cases: `Rp ${(patient_count * 0.1 * 18000000).toLocaleString('id-ID')}`
+    },
+    timestamp: new Date().toISOString()
+  });
+});
+
+/**
+ * @openapi
+ * /api/v1/icd-clusters:
+ *   get:
+ *     summary: ICD-10 Chapter V Clusters
+ *     description: Distribution data for mental and behavioural disorders (F00-F99).
+ *     responses:
+ *       200: { description: ICD cluster distribution }
+ */
+app.get("/api/v1/icd-clusters", (req, res) => {
+  res.json({
+    clusters: [
+      { code: "F32", name: "Depressive episode", prevalence: "34%" },
+      { code: "F41", name: "Other anxiety disorders", prevalence: "28%" },
+      { code: "F43", name: "Reaction to severe stress", prevalence: "15%" },
+      { code: "F10", name: "Mental disorders due to alcohol", prevalence: "8%" },
+      { code: "Others", name: "Other Chapter V disorders", prevalence: "15%" }
+    ],
+    source: "Synthetic Surveillance Data 2024",
+    timestamp: new Date().toISOString()
+  });
+});
+
 // MCP Endpoints
 app.get("/api/mcp/sse", async (req, res) => {
   const server = new Server({ name: "SafeGuard-Clinical-Agent", version: "2.7.0" }, { capabilities: { tools: {} } });
@@ -241,6 +346,17 @@ app.get("/api/mcp/sse", async (req, res) => {
       case "get_economic_impact": {
         const { patient_count = 100 } = args as any;
         return { content: [{ type: "text", text: JSON.stringify({ roi_ratio: "1:4", potential_savings: `Rp ${(patient_count * 12500000).toLocaleString('id-ID')}` }, null, 2) }] };
+      }
+      case "get_icd10_recommendation": {
+        const { symptoms } = args as any;
+        try {
+          if (!genAI) throw new Error("GEMINI_API_KEY not configured.");
+          const model = (genAI as any).getGenerativeModel({ model: "gemini-2.0-flash" });
+          const result = await model.generateContent(`Suggest ICD-10 codes for: ${symptoms}. Provide code, title, and justification.`);
+          return { content: [{ type: "text", text: result.response.text() || "{}" }] };
+        } catch (error) {
+          return { content: [{ type: "text", text: JSON.stringify({ error: String(error) }) }], isError: true };
+        }
       }
       default: throw new Error(`Unknown tool: ${name}`);
     }
