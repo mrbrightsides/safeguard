@@ -20,7 +20,7 @@ app.use(cors());
 app.use(express.json());
 
 // Initialize Gemini
-const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
+const apiKey = process.env.GEMINI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY;
 const genAI = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
 // --- MCP Clinical Logic ---
@@ -353,6 +353,13 @@ app.post("/api/v1/chat", async (req, res) => {
 
 // MCP Endpoints
 app.get("/api/mcp/sse", async (req, res) => {
+  // Force SSE headers to prevent buffering
+  res.setHeader('Content-Type', 'text/event-stream');
+  res.setHeader('Cache-Control', 'no-cache');
+  res.setHeader('Connection', 'keep-alive');
+  res.setHeader('X-Accel-Buffering', 'no'); // Critical for Render/Nginx proxies
+  res.flushHeaders();
+
   const server = new Server({ name: "SafeGuard-Clinical-Agent", version: "2.7.0" }, { capabilities: { tools: {} } });
   const protocol = req.headers['x-forwarded-proto'] || req.protocol;
   const host = req.get('host');
@@ -405,8 +412,14 @@ app.get("/api/mcp/sse", async (req, res) => {
   });
 
   const heartbeat = setInterval(() => { try { res.write(': heartbeat\n\n'); } catch (e) { clearInterval(heartbeat); } }, 30000);
-  try { await server.connect(transport); } catch (error) { console.error("MCP connect error:", error); }
-  req.on('close', () => { clearInterval(heartbeat); transports.delete(transport.sessionId); });
+  
+  // Connect without blocking the main event loop
+  server.connect(transport).catch(error => console.error("MCP connect error:", error));
+  
+  req.on('close', () => { 
+    clearInterval(heartbeat); 
+    transports.delete(transport.sessionId); 
+  });
 });
 
 app.post("/api/mcp/messages", async (req, res) => {
