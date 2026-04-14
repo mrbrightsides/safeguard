@@ -127,12 +127,14 @@ app.get("/.well-known/agent-card.json", (req, res) => {
     name: "SafeGuard Clinical Agent",
     description: "SafeGuard: AI-Powered Psychosocial Risk Stratification & Economic ROI Forecasting. Fully SHARP-compliant clinical decision support.",
     url: baseUrl,
+    endpoints: {
+      chat: `${baseUrl}/api/v1/chat`,
+      analyze: `${baseUrl}/api/v1/analyze`
+    },
     capabilities: {
       chat: true,
       tools: true
     },
-    defaultInputModes: ["text"],
-    defaultOutputModes: ["text"],
     skills: [
       {
         id: "risk-stratification",
@@ -158,6 +160,9 @@ app.get("/.well-known/agent-card.json", (req, res) => {
         description: "Provides ROI and INA-CBG claim estimates for mental health interventions.",
         tags: ["economic", "roi", "ina-cbg"]
       }
+    ],
+    extensions: [
+      "https://app.promptopinion.ai/schemas/a2a/v1/fhir-context"
     ],
     preferredTransport: "sse",
     auth: {
@@ -343,9 +348,29 @@ app.post("/api/v1/chat", async (req, res) => {
   if (!genAI) return res.status(500).json({ error: "AI Service not configured" });
   try {
     const model = (genAI as any).getGenerativeModel({ model: "gemini-2.0-flash" });
-    const prompt = `Context: ${JSON.stringify(context)}\nUser Message: ${message}\nAs SafeGuard Clinical Agent, provide a professional clinical response.`;
-    const result = await model.generateContent(prompt);
-    res.json({ response: result.response.text(), timestamp: new Date().toISOString() });
+    
+    // Extract FHIR context if present (SHARP)
+    const fhirContext = context.fhir || {};
+    const patientId = fhirContext.patientId || req.headers['x-sharp-patient-id'];
+    const fhirServer = fhirContext.serverUrl || req.headers['x-sharp-fhir-server'];
+
+    const systemPrompt = `You are SafeGuard, a Clinical AI Agent. 
+    Context: ${JSON.stringify(context)}
+    Patient ID: ${patientId || 'Unknown'}
+    FHIR Server: ${fhirServer || 'Unknown'}
+    
+    User Message: ${message}
+    
+    If the user provides clinical scores (DASS-21, SRQ-20), perform risk stratification (L0-L3).
+    Always suggest ICD-10 codes and provide ROI estimates if relevant.
+    Provide a professional, structured clinical response.`;
+
+    const result = await model.generateContent(systemPrompt);
+    res.json({ 
+      response: result.response.text(), 
+      timestamp: new Date().toISOString(),
+      agent: "SafeGuard"
+    });
   } catch (error) {
     res.status(500).json({ error: String(error) });
   }
