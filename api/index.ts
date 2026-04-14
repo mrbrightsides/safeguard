@@ -20,7 +20,7 @@ app.use(cors());
 app.use(express.json());
 
 // Initialize Gemini
-const apiKey = process.env.GEMINI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY;
+const apiKey = process.env.GEMINI_API_KEY || import.meta.VITE_GEMINI_API_KEY;
 const genAI = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
 // --- MCP Clinical Logic ---
@@ -123,7 +123,7 @@ app.get("/.well-known/agent-card.json", (req, res) => {
   res.json({
     schema_version: "v1",
     version: "1.0.0",
-    protocolVersion: "1.0",
+    protocolVersion: "2.0",
     name: "SafeGuard Clinical Agent",
     description: "SafeGuard: AI-Powered Psychosocial Risk Stratification & Economic ROI Forecasting. Fully SHARP-compliant clinical decision support.",
     url: baseUrl,
@@ -134,10 +134,17 @@ app.get("/.well-known/agent-card.json", (req, res) => {
     capabilities: {
       chat: true,
       tools: true,
-      sharp: true
+      sharp: {
+        supported: true,
+        version: "1.0"
+      }
     },
     extensions: [
-      "https://app.promptopinion.ai/schemas/a2a/v1/fhir-context"
+      {
+        id: "fhir-context",
+        url: "https://app.promptopinion.ai/schemas/a2a/v1/fhir-context",
+        required: false
+      }
     ],
     defaultInputModes: ["text"],
     defaultOutputModes: ["text"],
