@@ -20,7 +20,7 @@ app.use(cors());
 app.use(express.json());
 
 // Initialize Gemini
-const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
+const apiKey = process.env.GEMINI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY;
 const genAI = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
 // --- MCP Clinical Logic ---
@@ -133,8 +133,12 @@ app.get("/.well-known/agent-card.json", (req, res) => {
     },
     capabilities: {
       chat: true,
-      tools: true
+      tools: true,
+      sharp: true
     },
+    extensions: [
+      "https://app.promptopinion.ai/schemas/a2a/v1/fhir-context"
+    ],
     defaultInputModes: ["text"],
     defaultOutputModes: ["text"],
     skills: [
@@ -161,12 +165,6 @@ app.get("/.well-known/agent-card.json", (req, res) => {
         name: "Economic Forecasting",
         description: "Provides ROI and INA-CBG claim estimates for mental health interventions.",
         tags: ["economic", "roi", "ina-cbg"]
-      }
-    ],
-    extensions: [
-      {
-        id: "fhir-context",
-        url: "https://app.promptopinion.ai/schemas/a2a/v1/fhir-context"
       }
     ],
     preferredTransport: "rest",
