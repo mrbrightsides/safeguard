@@ -142,13 +142,13 @@ app.get("/.well-known/agent-card.json", (req, res) => {
         id: "risk-stratification",
         name: "Clinical Risk Stratification",
         description: "Determines clinical risk levels (L0-L3) based on DASS-21 and SRQ-20 scores.",
-        tags: ["clinical", "risk", "assessment"]
+        tags: ["clinical", "risk", "assessment", "sharp"]
       },
       {
         id: "psychosocial-analysis",
         name: "Psychosocial Analysis",
         description: "AI-powered analysis of clinical notes to detect behavioral risks.",
-        tags: ["ai", "psychosocial", "clinical-notes"]
+        tags: ["ai", "psychosocial", "clinical-notes", "sharp"]
       },
       {
         id: "icd10-recommendation",
@@ -164,9 +164,12 @@ app.get("/.well-known/agent-card.json", (req, res) => {
       }
     ],
     extensions: [
-      "https://app.promptopinion.ai/schemas/a2a/v1/fhir-context"
+      {
+        id: "fhir-context",
+        url: "https://app.promptopinion.ai/schemas/a2a/v1/fhir-context"
+      }
     ],
-    preferredTransport: "sse",
+    preferredTransport: "rest",
     auth: {
       type: "none"
     },
