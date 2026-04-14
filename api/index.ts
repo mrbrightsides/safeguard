@@ -20,7 +20,7 @@ app.use(cors());
 app.use(express.json());
 
 // Initialize Gemini
-const apiKey = process.env.GEMINI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY;
+const apiKey = process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY;
 const genAI = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
 // --- MCP Clinical Logic ---
@@ -320,6 +320,37 @@ app.get("/api/v1/icd-clusters", (req, res) => {
   });
 });
 
+/**
+ * @openapi
+ * /api/v1/chat:
+ *   post:
+ *     summary: Standard A2A Chat Endpoint
+ *     description: Main entry point for agent-to-agent communication.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               message: { type: string, example: "Analyze this patient." }
+ *               context: { type: object }
+ *     responses:
+ *       200: { description: AI Response }
+ */
+app.post("/api/v1/chat", async (req, res) => {
+  const { message, context = {} } = req.body;
+  if (!genAI) return res.status(500).json({ error: "AI Service not configured" });
+  try {
+    const model = (genAI as any).getGenerativeModel({ model: "gemini-2.0-flash" });
+    const prompt = `Context: ${JSON.stringify(context)}\nUser Message: ${message}\nAs SafeGuard Clinical Agent, provide a professional clinical response.`;
+    const result = await model.generateContent(prompt);
+    res.json({ response: result.response.text(), timestamp: new Date().toISOString() });
+  } catch (error) {
+    res.status(500).json({ error: String(error) });
+  }
+});
+
 // MCP Endpoints
 app.get("/api/mcp/sse", async (req, res) => {
   const server = new Server({ name: "SafeGuard-Clinical-Agent", version: "2.7.0" }, { capabilities: { tools: {} } });
@@ -395,7 +426,7 @@ const swaggerOptions = {
   definition: {
     openapi: "3.0.0",
     info: { title: "SafeGuard Clinical Agent API", version: "1.0.0", description: "AI-powered psychosocial health surveillance and economic evaluation." },
-    servers: [{ url: "https://server-safeguard.onrender.com", description: "Production Server (Render)" }],
+    servers: [{ url: "https://server-safeguard.onrender.com", description: "Production Server" }],
   },
   apis: ["./api/index.ts"],
 };
