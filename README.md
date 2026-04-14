@@ -1,8 +1,10 @@
-# SafeGuard: Safespace AI/ML Prognostic & Health Economic Evaluation
+# SafeGuard: AI-Powered Psychosocial Risk Stratification & Economic ROI Forecasting
 
 <div align="center">
 
-[![HSIL Hackathon 2026](https://img.shields.io/badge/HSIL_Hackathon-2026-red?style=for-the-badge)](https://hsil.id/)
+[![Prompt Opinion Hackathon 2026](https://img.shields.io/badge/Prompt_Opinion-Hackathon_2026-blue?style=for-the-badge)](https://promptopinion.ai/)
+[![SHARP Compliant](https://img.shields.io/badge/SHARP-Compliant-green?style=for-the-badge)](https://app.promptopinion.ai/schemas/a2a/v1/fhir-context)
+[![A2A Integrated](https://img.shields.io/badge/A2A-Integrated-orange?style=for-the-badge)](https://server-safeguard.onrender.com/.well-known/agent-card.json)
 [![AI-Powered](https://img.shields.io/badge/AI--Powered-Teal?style=for-the-badge&logo=google-gemini&logoColor=white)](https://ai.google.dev/)
 [![Accessibility-First](https://img.shields.io/badge/Accessibility--First-Blue?style=for-the-badge&logo=accessibility&logoColor=white)](https://www.w3.org/WAI/standards-guidelines/wcag/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
@@ -138,28 +140,36 @@ SafeGuard is developed by a multidisciplinary team of experts in AI, product eng
 
 ---
 
-## 🎤 The S.A.F.E. Pitch (2-Minute Script)
+## 🚀 A2A Skills
 
-**Hook:** "1 fatality is not just an event; it is the visible tip of hundreds of ignored psychosocial signals. In Indonesia, a single psychiatric admission costs Rp12.4M, but the cost of a life is immeasurable."
+SafeGuard exposes four core skills via the **Agent-to-Agent (A2A)** protocol:
 
-*   **S (Sense):** "We sense the invisible. SafeGuard utilizes advanced digital anamnesis, wearable biometrics, and proprietary IoT companion hardware to scan for early warning signals of psychosocial hazards."
-*   **A (Analyze):** "We analyze with clinical precision. Our Gemini-powered AI maps these signals into **ICD-10** clinical layers and **ROI** economic models, predicting absenteeism before it happens."
-*   **F (Flag):** "We flag the danger. Automated alerts ensure that high-risk cases (Level 0-L2) are escalated to medical teams instantly via our **MERP** protocol."
-*   **E (Engage):** "We engage for prevention. Personalized roadmaps and clinical interventions transform high-risk populations into high-value health assets."
+### 1. **Clinical Risk Stratification**
+*   **Level 0-L3 Triaging**: Automated risk detection from **Level 0 (Psychiatric Emergency)** to **Level 3 (Prognostic/Functioning)**.
+*   **Standardized Assessment**: Real-time processing of DASS-21 and SRQ-20 scores to determine clinical urgency.
 
-**Credibility Boost:** "SafeGuard is not just a prototype; our framework is globally indexed with a **formal DOI**, ensuring our AI methodology and economic evaluations are transparent, citable, and ready for international research collaboration."
+### 2. **Psychosocial Analysis**
+*   **AI-Powered Insights**: Deep analysis of clinical notes and digital anamnesis to detect behavioral risks and workplace stressors.
+*   **Burnout Surveillance**: Specialized mapping for high-pressure environments (Hospitality, Tech, Healthcare).
 
-**Closing:** "SafeGuard: Bridging the gap between clinical risk and corporate productivity for a High-Value Health System. **Sense. Analyze. Flag. Engage.**"
+### 3. **ICD-10 Recommendation Support**
+*   **Chapter V Mapping**: Suggests relevant ICD-10 codes (F30-F39 Mood, F40-F48 Anxiety/Stress) based on patient symptoms and history.
+*   **Clinical Justification**: Provides evidence-based reasoning for each recommended code to assist clinicians in documentation.
+
+### 4. **Economic ROI Forecasting**
+*   **Health Economic Evaluation (HEE)**: Visualizes the **1:4 - 1:5 Return on Investment** for mental health interventions.
+*   **INA-CBG Claim Estimates**: Integration of Indonesian Case-Based Groups (INA-CBG) for mean claim analysis and potential cost savings.
 
 ---
 
-## 🎯 Why SafeGuard Matters (HSIL 2026 Focus)
+## 🛡️ SHARP & A2A Integration
 
-SafeGuard aligns with the **HSIL Harvard Hackathon's** focus on **High-Value Health Systems**:
-- **Economic Impact:** Transforms fragmented mental health data into boardroom-ready ROI models for the Tourism sector.
-- **Interoperability:** Uses **HL7 FHIR R4** standards for seamless integration with **SATUSEHAT**.
-- **Proactive Care:** Shifts the paradigm from reactive crisis management to proactive psychosocial surveillance in high-pressure service environments.
-- **Scalability:** Subscription-based model designed for large-scale hospitality ecosystems.
+SafeGuard is built for the **Prompt Opinion Marketplace**, adhering to the highest standards of interoperability:
+
+*   **SHARP Compliant**: Consumes `fhir-context` (Patient ID, Server URL, Token) to fetch real-time patient data.
+*   **A2A Manifest**: Discoverable via `.well-known/agent-card.json` with explicit capability declarations.
+*   **REST Transport**: Optimized for stable, high-performance inter-agent communication.
+*   **Structured JSON Output**: Returns machine-readable clinical and economic data for seamless UI rendering.
 
 ---
 
@@ -197,16 +207,19 @@ SafeGuard is built on privacy-first principles.
 
 ---
 
-## 📡 API Documentation (v1)
+## 📡 API Documentation
 
-SafeGuard provides a robust set of APIs for integration with external health systems and corporate dashboards.
+SafeGuard provides a robust set of APIs for integration with the Prompt Opinion Orchestrator and external health systems.
 
-👉 **Live Interactive Docs**: [https://safeguard-hsil.vercel.app/api-docs](https://safeguard-hsil.vercel.app/api-docs)
+👉 **Agent Card (Manifest)**: [https://server-safeguard.onrender.com/.well-known/agent-card.json](https://server-safeguard.onrender.com/.well-known/agent-card.json)
+👉 **Interactive Swagger Docs**: [https://server-safeguard.onrender.com/api-docs](https://server-safeguard.onrender.com/api-docs)
 
 ### Core Endpoints:
-- `POST /api/v1/risk-detect`: Automated psychosocial risk stratification (L0-L3).
-- `GET /api/v1/economic-forecast`: ROI calculations and INA-CBG claim estimates.
-- `GET /api/v1/icd-clusters`: ICD-10 Chapter V burden distribution data.
+- `POST /api/v1/chat`: Main A2A communication endpoint for skills execution.
+- `POST /api/v1/analyze`: SHARP-compliant patient data analysis.
+- `GET /api/v1/economic-forecast`: ROI and INA-CBG claim estimates.
+
+---
 
 ## 🚀 Technical Architecture Upgrade
 
@@ -230,4 +243,4 @@ SafeGuard is part of a broader ecosystem of AI-driven mental health and emotiona
 
 ---
 
-Developed for the **HSIL Hackathon 2026**
+Developed for the **Prompt Opinion Hackathon 2026**

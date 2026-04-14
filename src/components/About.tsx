@@ -53,15 +53,15 @@ export const About: React.FC<AboutProps> = ({ onGetStarted }) => {
         <div className="absolute top-0 right-0 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl -mr-32 -mt-32"></div>
       </section>
 
-      {/* HSIL Alignment Section */}
+      {/* Prompt Opinion Integration Section */}
       <section className="p-12 bg-white rounded-[40px] border border-teal-100 shadow-sm relative overflow-hidden">
         <div className="relative z-10">
           <div className="inline-flex items-center gap-2 px-3 py-1 bg-teal-50 text-teal-700 rounded-full text-[10px] font-bold uppercase tracking-widest mb-6">
-            HSIL Harvard Alignment
+            Prompt Opinion Integration
           </div>
-          <h2 className="text-2xl font-bold mb-4">Building High-Value Health Systems</h2>
+          <h2 className="text-2xl font-bold mb-4">A SHARP-Compliant Clinical Agent</h2>
           <p className="text-gray-600 leading-relaxed max-w-2xl">
-            SafeGuard is strategically aligned with the <b>Health Systems Innovation Lab (HSIL) at Harvard T.H. Chan School of Public Health</b>. Our mission is to leverage AI to create high-value health systems that prioritize early detection, economic accountability, and clinical excellence.
+            SafeGuard is a specialized clinical agent integrated into the <b>Prompt Opinion</b> ecosystem. We leverage the <b>SHARP Extension Specs</b> and <b>A2A Protocol</b> to provide seamless, evidence-based decision support directly within the clinician's workflow.
           </p>
         </div>
         <div className="absolute top-0 right-0 p-12 opacity-5">
@@ -346,7 +346,7 @@ export const About: React.FC<AboutProps> = ({ onGetStarted }) => {
           </div>
           <div>
             <div className="text-3xl font-bold text-gray-900 mb-1">2026</div>
-            <div className="text-[10px] font-mono text-gray-400 uppercase tracking-widest">HSIL Hackathon</div>
+            <div className="text-[10px] font-mono text-gray-400 uppercase tracking-widest">Prompt Opinion Hackathon</div>
           </div>
         </div>
       </section>

@@ -1,5 +1,5 @@
 {
   "name": "SafeGuard",
-  "description": "A High-Value Health System leveraging AI for Psychosocial Early Warning (EWS). Transforming fragmented mental health complaints into accountable, boardroom-ready economic interventions.",
+  "description": "An AI-powered clinical decision support agent for Prompt Opinion, specializing in psychosocial risk stratification, ICD-10 recommendations, and economic ROI forecasting.",
   "requestFramePermissions": ["bluetooth"]
 }

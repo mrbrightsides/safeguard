@@ -1,8 +1,8 @@
 # SafeGuard: From Invisible Risk to Measurable Economic Value
-## A High-Value Health System Leveraging AI for Psychosocial Early Warning (EWS)
+## A High-Value Clinical Agent for the Prompt Opinion Ecosystem
 
 ### 1. Executive Summary
-SafeGuard is a digital psychosocial early warning system designed to transform fragmented mental health complaints into accountable, boardroom-ready economic interventions. By leveraging AI and interoperable health data (FHIR), SafeGuard bridges the gap between clinical risk and corporate productivity, providing a "High-Value" solution for modern health systems.
+SafeGuard is a digital clinical decision support agent designed to transform fragmented psychosocial signals into accountable, boardroom-ready economic interventions. Integrated into the **Prompt Opinion** platform, SafeGuard leverages AI and interoperable health data (SHARP/FHIR) to bridge the gap between clinical risk and corporate productivity.
 
 #### **🔺 MASTER HOOK (BOARDROOM LEVEL)**
 > **“1 fatality is not 1 event — it is the visible tip of hundreds of ignored psychosocial signals.”**
@@ -153,4 +153,4 @@ SafeGuard is committed to obtaining formal ethical clearance from recognized Ins
 SafeGuard is not just a mental health app; it is a strategic economic tool integrated into the world's leading multi-agent healthcare platform. By making invisible risks measurable and interoperable via MCP, A2A, and SHARP, we empower healthcare leaders to make data-driven decisions that save both lives and capital.
 
 ---
-*Prepared for the Prompt Opinion Hackathon & HSIL 2026 – Building High-Value Health Systems Leveraging AI.*
+*Prepared for the Prompt Opinion Hackathon 2026 – Building High-Value Health Systems Leveraging AI.*

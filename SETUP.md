@@ -67,7 +67,31 @@ npm run lint
 
 - **Vite Port Conflict**: SafeGuard is configured to run on port 3000. Ensure no other service is using this port.
 - **Firebase Permissions**: If you encounter "Permission Denied" errors, ensure your `firestore.rules` are deployed to your Firebase project.
-- **Gemini API Errors**: Ensure your API key is valid and has access to the `gemini-1.5-flash` model.
+- **Gemini API Errors**: Ensure your API key is valid and has access to the `gemini-2.0-flash` model.
 
 ---
-Developed for the **HSIL Hackathon 2026**.
+
+## 🛡️ Prompt Opinion Integration
+
+### 1. Register Agent
+Use the following URL to register SafeGuard in the Prompt Opinion dashboard:
+`https://server-safeguard.onrender.com/.well-known/agent-card.json`
+
+### 2. Enable SHARP
+Ensure the **FHIR Context Extension** is enabled in the agent settings to allow SafeGuard to consume patient data.
+
+### 3. Test A2A
+In the Prompt Opinion Launchpad, use the `@SafeGuard` mention to trigger clinical analysis:
+`@SafeGuard analyze patient Edward Balistreri. DASS-21: 28, SRQ-20: 15.`
+
+## 🏗️ Deployment
+
+SafeGuard is optimized for deployment on **Render**:
+- **Build Command**: `npm run build`
+- **Start Command**: `npm run start` (runs `node server.ts`)
+- **Environment Variables**: Ensure `GEMINI_API_KEY` is set in the Render dashboard.
+
+---
+
+Developed for the **Prompt Opinion Hackathon 2026**.
+

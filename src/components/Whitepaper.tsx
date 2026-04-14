@@ -45,7 +45,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
     
     doc.setFontSize(10);
     doc.setTextColor(150, 150, 150);
-    doc.text(`v1.0 / Focus: Tourism & Hospitality / Generated: ${timestamp}`, 20, 38);
+    doc.text('v1.0 / Focus: Prompt Opinion Hackathon / Generated: ${timestamp}', 20, 38);
     
     // Line
     doc.setDrawColor(230, 230, 230);
@@ -477,7 +477,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
             </h2>
             <IncidentPyramid />
             <div className="mt-8 p-8 bg-teal-50 rounded-[32px] border border-teal-100">
-              <h4 className="font-bold text-teal-900 mb-4">Harvard Style Strategic Insight</h4>
+              <h4 className="font-bold text-teal-900 mb-4">Strategic Insight</h4>
               <p className="text-sm text-teal-800 leading-relaxed">
                 "1 major injury is preceded by 29 minor injuries and 300 near misses." (Heinrich, 1931). 
                 In the modern psychosocial context, 1 fatality (suicide/CVD) is preceded by 600+ unsafe acts (bullying, toxic culture). 
