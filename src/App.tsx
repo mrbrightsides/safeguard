@@ -176,7 +176,7 @@ export default function App() {
             </div>
             <div>
               <h1 className="font-bold text-xl tracking-tighter">SafeGuard</h1>
-              <p className="text-[10px] font-mono text-gray-400 uppercase tracking-widest">EWS Platform</p>
+              <p className="text-[10px] font-mono text-gray-400 uppercase tracking-widest">EWS System</p>
             </div>
           </div>
           {isPWAInstalled && (
@@ -610,7 +610,7 @@ Please provide a clinical risk stratification and recommendations based on these
       </AnimatePresence>
 
       <button 
-        onClick={() => window.open('https://safespace.elpeef.com', '_blank')}
+        onClick={() => setShowMERPModal(true)}
         className="fixed bottom-8 right-8 w-14 h-14 sm:w-16 sm:h-16 bg-red-600 text-white rounded-full shadow-2xl shadow-red-600/40 flex items-center justify-center hover:scale-110 active:scale-95 transition-all group z-30"
       >
         <AlertTriangle className="w-6 h-6 sm:w-8 sm:h-8 group-hover:animate-pulse" />
