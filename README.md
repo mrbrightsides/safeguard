@@ -130,7 +130,7 @@ SafeGuard operates on the **SAFE** mnemonic to ensure comprehensive mental healt
 
 SafeGuard is developed by a multidisciplinary team of experts in AI, product engineering, health data, and clinical occupational health:
 
-*   **Akhmad Khudri** → Team Lead & Product Owner (Strategy & SWOT)
+*   **Akhmad Khudri** → Team Lead & Product Orchestrator (Strategy & SWOT)
     *   [LinkedIn](https://www.linkedin.com/in/akhmad-khudri) | [GitHub](https://github.com/mrbrightsides)
 *   **Stanley Nathanael Wijaya** → Lead AI & Product Engineer (Front-end & Integration)
     *   [LinkedIn](https://www.linkedin.com/in/stanley-nathanael-wijaya) | [GitHub](https://github.com/StyNW7)

@@ -246,7 +246,7 @@ export const About: React.FC<AboutProps> = ({ onGetStarted }) => {
           {[
             {
               name: 'Akhmad Khudri',
-              role: 'Team Lead & Product Owner',
+              role: 'Team Lead & Product Orchestrator',
               focus: 'Strategy & SWOT',
               desc: 'Orchestrating the strategic alignment of SafeGuard with global health economics and high-value health system frameworks.',
               initials: 'AK',
@@ -268,7 +268,7 @@ export const About: React.FC<AboutProps> = ({ onGetStarted }) => {
               name: 'Dwiki Aulia Rahman',
               role: 'Health Data & Predictive Insight',
               focus: 'AI Architecture & Epidemiology',
-              desc: 'Designing robust predictive models and epidemiological frameworks to ensure data-driven psychosocial surveillance.',
+              desc: 'Designing robust dataset and epidemiological frameworks to ensure data-driven psychosocial surveillance.',
               initials: 'DR',
               color: 'bg-indigo-50 text-indigo-600'
             },
