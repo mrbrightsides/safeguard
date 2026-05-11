@@ -1,10 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { MessageSquare, Send, X, Bot, User, Loader2, AlertCircle, Heart, Quote, ExternalLink, GraduationCap, MessageSquareHeart } from 'lucide-react';
-import { cn } from '../lib/utils';
+import { MessageSquare, Send, X, Bot, User, Loader2, AlertCircle, Heart, Quote, ExternalLink } from 'lucide-react';
 import { GoogleGenAI } from "@google/genai";
 import Markdown from 'react-markdown';
-import { getVaultData } from '../lib/vaultUtils';
 
 interface Message {
   role: 'user' | 'model';
@@ -21,10 +19,7 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedMode, setSelectedMode] = useState<'analyst' | 'companion'>('companion');
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  const vault = getVaultData();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -58,34 +53,20 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
         parts: [{ text: m.text }]
       }));
 
-      const isCompanionMode = selectedMode === 'companion';
-      
-      const dynamicInstruction = `
-You are the SafeGuard AI Counselor. 
-[USER CONTEXT FROM SAFE-VAULT]:
-- User Name/Alias: ${vault.nickname || 'Friend'}
-- Tone Preference: ${vault.companionTone || 'Empathetic'}
-- Anonymity Status: ${vault.isAnonymous ? 'Strict Privacy' : 'Personalized'}
-
-[CURRENT OPERATIONAL MODE]: 
-${isCompanionMode 
-  ? 'MODE: AI COMPANION. Focus on empathy, use the user\'s name, be warm, and provide psychosocial support. Temperature is set higher for human-like warmth.' 
-  : 'MODE: CLINICAL ANALYST. Focus on precision, ICD-10 mapping, and DASS-21/SRQ-20 scoring. Be concise, professional, and data-driven.'
-}
-
-CORE PROTOCOLS:
-1. Crisis Triaging (L0-L3): If Suicidal Ideation detected, trigger MERP SOS resources immediately.
-2. Indonesian Clinical Context: Apply DASS-21 & SRQ-20 logic.
-3. Boundary: You are an AI. Advise professional consultation for diagnosis.
-4. Language: Respond in the user's primary language (Indonesian/English) but maintain professional medical empathy.
-`;
-
       const response = await ai.models.generateContent({
         model,
         contents: [...chatHistory, { role: 'user', parts: [{ text: userMessage }] }],
         config: {
-          systemInstruction: dynamicInstruction,
-          temperature: isCompanionMode ? 0.8 : 0.2,
+          systemInstruction: `You are the SafeGuard AI Counselor, a specialized mental health support assistant. 
+          Your goals are:
+          1. Provide empathetic, 24/7 initial support for psychosocial health.
+          2. Perform crisis triaging based on clinical hierarchy (L0-L3).
+          3. If a user expresses suicidal ideation or extreme distress (Level 0), immediately provide emergency resources and advise them to use the MERP SOS button or call local emergency services.
+          4. Use Indonesian clinical frameworks (DASS-21, SRQ-20) context where appropriate.
+          5. Be supportive, non-judgmental, and professional.
+          6. IMPORTANT: You are an AI, not a human doctor. Always advise professional consultation for clinical diagnosis.
+          7. Keep responses concise and actionable.`,
+          temperature: 0.7,
           topK: 40,
           topP: 0.95,
         }
@@ -126,36 +107,12 @@ CORE PROTOCOLS:
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="flex bg-gray-100 p-1 rounded-xl">
-                <button
-                  onClick={() => setSelectedMode('companion')}
-                  className={cn(
-                    "p-2 rounded-lg transition-all",
-                    selectedMode === 'companion' ? "bg-white text-teal-600 shadow-sm" : "text-gray-400"
-                  )}
-                  title="Companion Mode"
-                >
-                  <MessageSquareHeart size={16} />
-                </button>
-                <button
-                  onClick={() => setSelectedMode('analyst')}
-                  className={cn(
-                    "p-2 rounded-lg transition-all",
-                    selectedMode === 'analyst' ? "bg-white text-indigo-600 shadow-sm" : "text-gray-400"
-                  )}
-                  title="Analyst Mode"
-                >
-                  <GraduationCap size={16} />
-                </button>
-              </div>
-              <button
-                onClick={onClose}
-                className="p-2 hover:bg-teal-100 rounded-full transition-colors text-teal-600"
-              >
-                <X size={20} />
-              </button>
-            </div>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-teal-100 rounded-full transition-colors text-teal-600"
+            >
+              <X size={20} />
+            </button>
           </div>
 
           {/* Messages */}
