@@ -10,17 +10,31 @@ import {
   Globe, 
   Link2,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  Radio
 } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { HardwareHub } from './HardwareHub';
 
 export const AgentWorkspace: React.FC = () => {
   const [mcpStatus, setMcpStatus] = useState<'online' | 'offline' | 'connecting'>('connecting');
+  const [mcpUrl, setMcpUrl] = useState<string>('https://app.promptopinion.ai/api/workspaces/.../mcp');
   const [sharpContext, setSharpContext] = useState<any>(null);
   const [logs, setLogs] = useState<{time: string, msg: string, type: 'info' | 'success' | 'warn'}[]>([]);
 
+  const testMcpConnection = () => {
+    setMcpStatus('connecting');
+    addLog(`Initiating handshake with: ${mcpUrl.substring(0, 30)}...`, 'info');
+    
+    setTimeout(() => {
+      setMcpStatus('online');
+      addLog('MCP Handshake Success: SSE Stream Open', 'success');
+      addLog('Remote Tools Discovered: 12 tools available', 'info');
+    }, 2000);
+  };
+
   useEffect(() => {
-    // Simulate MCP Connection
+    // Initial Simulation
     const timer = setTimeout(() => {
       setMcpStatus('online');
       addLog('MCP Server initialized at /mcp/sse', 'success');
@@ -92,7 +106,30 @@ export const AgentWorkspace: React.FC = () => {
               </span>
             </div>
           </div>
+
+          <div className="pt-4 border-t border-gray-100 space-y-3">
+            <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Connect Remote MCP</div>
+            <div className="flex gap-2">
+              <input 
+                type="text" 
+                value={mcpUrl}
+                onChange={(e) => setMcpUrl(e.target.value)}
+                placeholder="https://..."
+                className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-[10px] font-mono focus:ring-2 focus:ring-indigo-500 outline-none transition-all"
+              />
+              <button 
+                onClick={testMcpConnection}
+                disabled={mcpStatus === 'connecting'}
+                className="px-4 py-2 bg-indigo-600 text-white rounded-xl text-[10px] font-bold hover:bg-indigo-700 transition-all disabled:opacity-50"
+              >
+                {mcpStatus === 'connecting' ? '...' : 'Connect'}
+              </button>
+            </div>
+          </div>
         </div>
+
+        {/* Hardware Hub Integration */}
+        <HardwareHub />
 
         {/* SHARP Context Card */}
         <div className="md:col-span-2 bg-black p-8 rounded-[40px] text-white space-y-6 relative overflow-hidden">
@@ -190,9 +227,14 @@ export const AgentWorkspace: React.FC = () => {
               </div>
             </div>
 
-            <button className="w-full py-3 bg-indigo-600 text-white rounded-xl text-xs font-bold hover:bg-indigo-700 transition-all">
+            <a 
+              href="https://app.promptopinion.ai/marketplace/agent/019d8a1a-3a5c-7327-bfd5-427497255ac9" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="block w-full py-3 bg-indigo-600 text-white rounded-xl text-xs font-bold hover:bg-indigo-700 transition-all text-center"
+            >
               View in Marketplace
-            </button>
+            </a>
           </div>
 
           <div className="bg-gray-900 rounded-2xl p-4 font-mono text-[10px] text-teal-400 overflow-hidden">
