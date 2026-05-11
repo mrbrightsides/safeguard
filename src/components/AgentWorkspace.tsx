@@ -14,7 +14,7 @@ import {
   Radio
 } from 'lucide-react';
 import { cn } from '../lib/utils';
-import { HardwareHub } from './HardwareHub';
+import { HardwareHub } from './HardwareHub.tsx';
 
 export const AgentWorkspace: React.FC = () => {
   const [mcpStatus, setMcpStatus] = useState<'online' | 'offline' | 'connecting'>('connecting');
