@@ -1,0 +1,35 @@
+{
+  "name": "SafeGuard Clinical Agent",
+  "description": "AI-powered psychosocial risk stratification and automated clinical triage matching protocol.",
+  "identifier": "safeguard-clinical-v1",
+  "version": "1.0.0",
+  "author": "SafeGuard AI",
+  "supportedInterfaces": [
+    "mcp",
+    "sharp-bearer"
+  ],
+  "mcpServers": [
+    {
+      "name": "SafeGuard Protocol Server",
+      "url": "https://app.promptopinion.ai/api/workspaces/d48e1ce7-92ea-45ac-b6b9-ef0eb3af7b78/mcp",
+      "tools": [
+        {
+          "name": "analyze_psychosocial_notes",
+          "description": "Extract behavioral risk indicators from clinical text."
+        },
+        {
+          "name": "get_risk_stratification",
+          "description": "Calculate clinical triage levels based on DASS-21 scores."
+        },
+        {
+          "name": "get_economic_impact",
+          "description": "Estimate organizational ROI and claim costs for interventions."
+        }
+      ]
+    }
+  ],
+  "capabilities": {
+    "fhirMappable": true,
+    "realtimeBiometrics": true
+  }
+}
