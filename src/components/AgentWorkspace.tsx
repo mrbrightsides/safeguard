@@ -14,7 +14,7 @@ import {
   Radio
 } from 'lucide-react';
 import { cn } from '../lib/utils';
-import { HardwareHub } from './HardwareHub.tsx';
+import { IoTBridge } from './IoTBridge';
 
 export const AgentWorkspace: React.FC = () => {
   const [mcpStatus, setMcpStatus] = useState<'online' | 'offline' | 'connecting'>('connecting');
@@ -129,7 +129,7 @@ export const AgentWorkspace: React.FC = () => {
         </div>
 
         {/* Hardware Hub Integration */}
-        <HardwareHub />
+        <IoTBridge />
 
         {/* SHARP Context Card */}
         <div className="md:col-span-2 bg-black p-8 rounded-[40px] text-white space-y-6 relative overflow-hidden">
