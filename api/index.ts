@@ -211,8 +211,9 @@ app.post("/api/v1/analyze", async (req, res) => {
   const { notes, dass21_score, srq20_positive } = req.body;
   
   // SHARP Context from Headers (Standard A2A pattern)
-  const patientId = req.headers['x-sharp-patient-id'];
+  const patientId = req.headers['x-sharp-patientid'] || req.headers['x-sharp-patient-id'];
   const fhirServer = req.headers['x-sharp-fhir-server'];
+  const fhirToken = req.headers['x-sharp-token'];
   
   if (!genAI) return res.status(500).json({ error: "AI Service not configured" });
   try {
@@ -220,6 +221,7 @@ app.post("/api/v1/analyze", async (req, res) => {
     let contextStr = "";
     if (patientId) contextStr += `\n[SHARP Context] Patient ID: ${patientId}`;
     if (fhirServer) contextStr += `\n[SHARP Context] FHIR Server: ${fhirServer}`;
+    if (fhirToken) contextStr += `\n[SHARP Context] FHIR Token: [PROVIDED]`;
 
     const prompt = `As a Clinical Psychologist, analyze this patient data:${contextStr}\nNotes: ${notes}\nDASS-21 Score: ${dass21_score}\nSRQ-20 Positive: ${srq20_positive}\nProvide a structured analysis including:\n1. Risk Level (L0-L3)\n2. Clinical Summary\n3. Suggested ICD-10 Code\n4. Immediate Recommendations`;
     const result = await model.generateContent(prompt);
@@ -362,13 +364,15 @@ app.post("/api/v1/chat", async (req, res) => {
     
     // Extract FHIR context if present (SHARP)
     const fhirContext = context.fhir || {};
-    const patientId = fhirContext.patientId || req.headers['x-sharp-patient-id'];
+    const patientId = fhirContext.patientId || req.headers['x-sharp-patientid'] || req.headers['x-sharp-patient-id'];
     const fhirServer = fhirContext.serverUrl || req.headers['x-sharp-fhir-server'];
+    const fhirToken = fhirContext.token || req.headers['x-sharp-token'];
 
     const systemPrompt = `You are SafeGuard, a Clinical AI Agent. 
     Context: ${JSON.stringify(context)}
     Patient ID: ${patientId || 'Unknown'}
     FHIR Server: ${fhirServer || 'Unknown'}
+    FHIR Token: ${fhirToken ? '[PROVIDED]' : 'Unknown'}
     
     User Message: ${message}
     
