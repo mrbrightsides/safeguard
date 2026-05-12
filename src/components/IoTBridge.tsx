@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Cpu, Wifi, WifiOff, RefreshCw, Radio, Zap, AlertCircle } from 'lucide-react';
-import { cn } from '../lib/utils';
+import { Cpu, Wifi, WifiOff, RefreshCw, Radio, Zap, AlertCircle, Music, Mic, Activity } from 'lucide-react';
+import { cn } from '@/src/lib/utils';
 
 export const IoTBridge: React.FC = () => {
   const [bridgeStatus, setBridgeStatus] = useState<'offline' | 'searching' | 'connected'>('offline');
@@ -111,6 +111,33 @@ export const IoTBridge: React.FC = () => {
             <div className="text-sm font-bold text-gray-900 flex items-center gap-1.5">
               <Zap size={14} className="text-teal-500" />
               {bridgeStatus === 'connected' ? 'RX/TX' : 'SIM'}
+            </div>
+          </div>
+        </div>
+
+        {/* Companion Doll Integration */}
+        <div className="p-5 bg-teal-50/30 border border-teal-100 rounded-3xl space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Music className="w-4 h-4 text-teal-600" />
+              <span className="text-[10px] font-bold text-teal-600 uppercase tracking-widest">Doll Companion Status</span>
+            </div>
+            <div className="w-2 h-2 rounded-full bg-teal-500 animate-pulse" />
+          </div>
+          <div className="flex items-center justify-around py-2">
+            <div className="flex flex-col items-center gap-1 opacity-50">
+              <Mic size={18} className="text-gray-400" />
+              <span className="text-[8px] font-bold text-gray-400">INPUT</span>
+            </div>
+            <div className="h-4 w-px bg-teal-100" />
+            <div className="flex flex-col items-center gap-1">
+              <RefreshCw size={18} className="text-teal-600" />
+              <span className="text-[8px] font-bold text-teal-600">TTS_READY</span>
+            </div>
+            <div className="h-4 w-px bg-teal-100" />
+            <div className="flex flex-col items-center gap-1 opacity-50">
+              <Cpu size={18} className="text-gray-400" />
+              <span className="text-[8px] font-bold text-gray-400">SERIAL</span>
             </div>
           </div>
         </div>
