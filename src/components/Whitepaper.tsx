@@ -25,7 +25,7 @@ import {
   CheckCircle2
 } from 'lucide-react';
 import { jsPDF } from 'jspdf';
-import { cn } from '../lib/utils';
+import { cn } from '@/src/lib/utils';
 
 import { IncidentPyramid } from './IncidentPyramid';
 
@@ -45,7 +45,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
     
     doc.setFontSize(10);
     doc.setTextColor(150, 150, 150);
-    doc.text('v1.0 / Focus: Prompt Opinion Hackathon / Generated: ${timestamp}', 20, 38);
+    doc.text('v3.0 / Focus: Prompt Opinion Hackathon / Generated: ${timestamp}', 20, 38);
     
     // Line
     doc.setDrawColor(230, 230, 230);
@@ -80,10 +80,10 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
     
     doc.setFontSize(9);
     doc.setTextColor(80, 80, 80);
-    doc.text('Strengths: Clinical-Grade AI, Dual-Tier Strategy, IoT Hardware Ecosystem.', 25, 145);
+    doc.text('Strengths: Hybrid Intelligence (Local + Cloud), SHARP Compliance, Economic ROI.', 25, 145);
     doc.text('Weaknesses: Ethical Clearance Requirements, Early Stage Data Validation.', 25, 151);
-    doc.text('Opportunities: Hospitality Wellness Mandate, Subscription-Based SaaS Revenue.', 25, 157);
-    doc.text('Threats: High Turnover in FnB, Persistent Mental Health Stigma.', 25, 163);
+    doc.text('Opportunities: Prompt Opinion Marketplace, EHR Integration (SHARP Extension).', 25, 157);
+    doc.text('Threats: PDP Law Compliance, Persistent Mental Health Stigma.', 25, 163);
 
     // Section 4: Operational Costs
     doc.setFontSize(16);
@@ -92,8 +92,8 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
     
     doc.setFontSize(11);
     doc.setTextColor(80, 80, 80);
-    doc.text('- AI API (Gemini 1.5 Flash): ~$5 - $10 / month.', 25, 190);
-    doc.text('- Cloud Database (Firebase Blaze): ~$15 - $25 / month.', 25, 197);
+    doc.text('- AI API (Gemini 3.1 Flash-Lite): ~$3 - $8 / month.', 25, 190);
+    doc.text('- Cloud Infrastructure (Edge-Mesh): ~$10 - $20 / month.', 25, 197);
     doc.text('- Maintenance & Support: Rp 5 - 10 Million / year.', 25, 204);
 
     // Section 5: Scaling Strategy
@@ -168,14 +168,14 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
     doc.addPage();
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
-    doc.text('11. The Agent Endgame: MCP & A2A Readiness', 20, 30);
+    doc.text('11. The Hybrid Architecture: Edge-Cloud Mesh', 20, 30);
     
     doc.setFontSize(11);
     doc.setTextColor(80, 80, 80);
-    doc.text('SafeGuard is now an interoperable agent compliant with Prompt Opinion standards.', 25, 40);
-    doc.text('- MCP Server: Exposing clinical tools for global invocation.', 25, 47);
-    doc.text('- SHARP Context: Native FHIR context propagation.', 25, 54);
-    doc.text('- A2A Protocol: Ready for multi-agent collaborative care.', 25, 61);
+    doc.text('SafeGuard v3.0 utilizes a Privacy-First Hybrid architecture:', 25, 40);
+    doc.text('- Edge Node: Local inference using Gemma 2.1 / 4.5.', 25, 47);
+    doc.text('- Global Mesh: High-performance reasoning via Gemini 3.1 Flash-Lite.', 25, 54);
+    doc.text('- SHARP Context: Native FHIR context propagation across call chains.', 25, 61);
 
     // Footer
     doc.setFontSize(10);
@@ -263,10 +263,10 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
             </h2>
             <div className="prose prose-teal max-w-none text-gray-600 leading-relaxed space-y-6">
               <p className="font-medium text-gray-900 text-lg italic border-l-4 border-teal-500 pl-6 py-2">
-                "From Symptom to System: Transforming fragmented mental health complaints into accountable, boardroom-ready economic interventions."
+                "From Invisible Risk to Measurable Economic Value: Bridging clinical risk and corporate productivity."
               </p>
               <p>
-                SafeGuard is a digital psychosocial early warning system designed to bridge the gap between clinical risk and corporate productivity. By leveraging AI and interoperable health data (FHIR), SafeGuard provides a "High-Value" solution for modern health systems, ensuring that invisible psychosocial hazards are detected and mitigated before they manifest as significant economic losses.
+                SafeGuard is a digital clinical decision support agent designed to transform fragmented psychosocial signals into accountable, boardroom-ready economic interventions. Integrated into the **Prompt Opinion** platform, SafeGuard leverages Hybrid AI (Local + Cloud) and interoperable health data (SHARP/FHIR) to bridge the gap between clinical risk and corporate productivity.
               </p>
             </div>
           </section>
@@ -381,8 +381,8 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {[
-                  { label: 'AI API', cost: '~$5-10/mo', desc: 'Gemini 1.5 Flash' },
-                  { label: 'Cloud DB', cost: '~$15-25/mo', desc: 'Firebase Blaze' },
+                  { label: 'AI API', cost: '~$3-8/mo', desc: 'Gemini 3.1 Flash-Lite' },
+                  { label: 'Cloud Infrastructure', cost: '~$10-20/mo', desc: 'Edge-Mesh Scaling' },
                   { label: 'Maintenance', cost: 'Rp 5-10M/yr', desc: 'System Updates' },
                 ].map((item) => (
                   <div key={item.label} className="p-4 bg-gray-50 rounded-2xl">
@@ -521,41 +521,47 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
                     s.sector.includes('Tier S') ? "text-teal-600" : "text-indigo-600"
                   )}>{s.sector}</div>
                   <div className="font-bold text-gray-900 mb-2">{s.risk}</div>
-                  <p className="text-xs text-gray-500 leading-relaxed">{s.desc}</p>
+                  <p className="text-xs text-gray-500 leading-relaxed mb-4">{s.desc}</p>
+                  {s.sector.includes('IT') && (
+                    <div className="mt-2 p-3 bg-teal-50 rounded-xl border border-teal-100">
+                      <div className="text-[9px] font-bold text-teal-600 uppercase tracking-widest mb-1">Feature Highlight</div>
+                      <div className="text-[10px] text-teal-800"><b>Persona-Driven Analysis:</b> Dual-mode support for high-rigor Analyst reporting and empathetic AI Companion engagement.</div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
           </section>
 
-          {/* Agent Interoperability */}
+          {/* Hybrid Architecture */}
           <section id="agent" className="scroll-mt-32">
             <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
               <BrainCircuit className="w-6 h-6 text-teal-600" />
-              9. Agent Interoperability (MCP & A2A)
+              9. Technical Architecture: Hybrid Edge-Cloud Mesh
             </h2>
             <div className="p-10 bg-indigo-900 text-white rounded-[40px] space-y-8 relative overflow-hidden">
               <div className="absolute top-0 right-0 p-12 opacity-10">
                 <Globe className="w-40 h-40" />
               </div>
               <div className="relative z-10 max-w-3xl space-y-6">
-                <h3 className="text-2xl font-bold">SafeGuard as a "Superpower" Agent</h3>
+                <h3 className="text-2xl font-bold">SafeGuard Hybrid Intelligence</h3>
                 <p className="text-indigo-100 leading-relaxed">
-                  SafeGuard v2.4.0 transitions from a standalone application to a standards-compliant **Healthcare AI Agent**. By implementing the **Model Context Protocol (MCP)** and **Agent-to-Agent (A2A)** standards, SafeGuard can now be invoked by other clinical agents or EHR systems.
+                  SafeGuard v3.0 transitions to a "Privacy-First" architecture. By implementing a **Hybrid Edge-Cloud Mesh**, SafeGuard ensures data residency compliance while maintaining state-of-the-art clinical reasoning.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="p-6 bg-white/5 rounded-3xl border border-white/10">
                     <div className="font-bold mb-2 flex items-center gap-2">
                       <Zap className="w-4 h-4 text-teal-400" />
-                      MCP Tooling
+                      Edge Inference
                     </div>
-                    <p className="text-xs text-indigo-200">Exposing clinical triage, risk detection, and economic evaluation as invokable tools for the global AI ecosystem.</p>
+                    <p className="text-xs text-indigo-200">Local processing using Gemma 2.1 for preliminary triage and immediate feedback without data leaving the client node.</p>
                   </div>
                   <div className="p-6 bg-white/5 rounded-3xl border border-white/10">
                     <div className="font-bold mb-2 flex items-center gap-2">
                       <ShieldCheck className="w-4 h-4 text-teal-400" />
-                      SHARP Context
+                      Global Mesh Reasoning
                     </div>
-                    <p className="text-xs text-indigo-200">Seamlessly propagating patient context and FHIR tokens across multi-agent call chains for secure, interoperable care.</p>
+                    <p className="text-xs text-indigo-200">High-performance reasoning via Gemini 3.1 Flash-Lite for complex diagnostics and ICD-10 mapping.</p>
                   </div>
                 </div>
               </div>
