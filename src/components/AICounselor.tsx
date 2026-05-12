@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MessageSquare, Send, X, Bot, User, Loader2, AlertCircle, Heart, Quote, ExternalLink, GraduationCap, MessageSquareHeart, Zap, Activity, Cpu } from 'lucide-react';
-import { cn } from '@/src/lib/utils';
+import { cn } from '../lib/utils';
 import { GoogleGenAI } from "@google/genai";
 import Markdown from 'react-markdown';
-import { getVaultData } from '@/src/lib/vaultUtils';
+import { getVaultData } from '../lib/vaultUtils';
 
-import { generateGemmaResponse } from '@/src/services/gemmaService';
-import { speakResponse, hardwareBridge } from '@/src/services/hardwareBridge';
+import { generateGemmaResponse } from '../services/gemmaService';
+import { speakResponse, hardwareBridge } from '../services/hardwareBridge';
 
 interface Message {
   role: 'user' | 'model';
@@ -75,7 +75,7 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
           hardwareBridge.sendToDoll(gemmaResponse.text.substring(0, 32));
         }
       } else {
-        const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
+        const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
         const model = "gemini-3-flash-preview";
         
         const chatHistory = messages.map(m => ({

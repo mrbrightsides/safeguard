@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Brain, Search, Loader2, ShieldCheck, FileText, ExternalLink, Info, Phone, UserPlus, X, Download, Database, CheckCircle2, WifiOff, Wifi } from 'lucide-react';
 import { ICD_DESCRIPTIONS, ICD_MAPPING } from '../lib/constants';
 import { cn } from '../lib/utils';
+import { getVaultData } from '../lib/vaultUtils';
+import { Sparkles, MessageSquareHeart, GraduationCap } from 'lucide-react';
 
 interface AIAnalysisProps {
   initialInput?: string;
@@ -27,6 +29,10 @@ export const AIAnalysis: React.FC<AIAnalysisProps> = ({ initialInput, initialSco
   const [showConsultModal, setShowConsultModal] = useState(false);
   const [showFHIRModal, setShowFHIRModal] = useState(false);
   const [fhirPayload, setFhirPayload] = useState<any>(null);
+  const [analysisMode, setAnalysisMode] = useState<'analyst' | 'companion'>('analyst');
+
+  // Load vault for prompt personalization
+  const vault = getVaultData();
 
   // Online status listener
   useEffect(() => {
@@ -122,7 +128,13 @@ export const AIAnalysis: React.FC<AIAnalysisProps> = ({ initialInput, initialSco
       const triggerAnalysis = async () => {
         setLoading(true);
         try {
-          const analysis = await analyzeBehavioralRisk(initialInput, initialContext);
+          const personalization = vault.isAnonymous ? '' : `Patient Name/Nickname: ${vault.nickname}\nTone Preference: ${vault.companionTone}`;
+          const modeInstruction = analysisMode === 'companion' 
+            ? "Mode: Companion (Empathetic, supportive, conversational, uses high temperature logic)."
+            : "Mode: Analyst (Clinical, precise, rigorous, follow ICD-10 chapters strictly).";
+
+          const augmentedInput = `${personalization}\n${modeInstruction}\n\nClinical Input: ${initialInput}`;
+          const analysis = await analyzeBehavioralRisk(augmentedInput, initialContext);
           setResult(analysis);
           
           // Flag: Analysis Complete
@@ -147,7 +159,13 @@ export const AIAnalysis: React.FC<AIAnalysisProps> = ({ initialInput, initialSco
     if (!input.trim() || !isOnline) return;
     setLoading(true);
     try {
-      const analysis = await analyzeBehavioralRisk(input);
+      const personalization = vault.isAnonymous ? '' : `Patient Name/Nickname: ${vault.nickname}\nTone Preference: ${vault.companionTone}`;
+      const modeInstruction = analysisMode === 'companion' 
+        ? "Mode: Companion (Empathetic, supportive, conversational, uses high temperature logic)."
+        : "Mode: Analyst (Clinical, precise, rigorous, follow ICD-10 chapters strictly).";
+
+      const augmentedInput = `${personalization}\n${modeInstruction}\n\nInput: ${input}`;
+      const analysis = await analyzeBehavioralRisk(augmentedInput);
       setResult(analysis);
     } catch (error) {
       console.error('Analysis failed:', error);
@@ -253,6 +271,32 @@ It does not constitute a formal medical diagnosis.
         </div>
 
         <div className="relative flex flex-col">
+          <div className="flex gap-2 mb-4">
+            <button
+              onClick={() => setAnalysisMode('analyst')}
+              className={cn(
+                "flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl text-[10px] font-bold uppercase tracking-widest border transition-all",
+                analysisMode === 'analyst' 
+                  ? "bg-black text-white border-black" 
+                  : "bg-white text-gray-400 border-gray-100"
+              )}
+            >
+              <GraduationCap size={14} />
+              Clinical Analyst
+            </button>
+            <button
+              onClick={() => setAnalysisMode('companion')}
+              className={cn(
+                "flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl text-[10px] font-bold uppercase tracking-widest border transition-all",
+                analysisMode === 'companion' 
+                  ? "bg-teal-600 text-white border-teal-600 shadow-lg shadow-teal-600/10" 
+                  : "bg-white text-gray-400 border-gray-100"
+              )}
+            >
+              <MessageSquareHeart size={14} />
+              AI Companion
+            </button>
+          </div>
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
