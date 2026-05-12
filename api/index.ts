@@ -217,15 +217,19 @@ app.post("/api/v1/analyze", async (req, res) => {
   
   if (!genAI) return res.status(500).json({ error: "AI Service not configured" });
   try {
-    const model = (genAI as any).getGenerativeModel({ model: "gemini-2.0-flash" });
     let contextStr = "";
     if (patientId) contextStr += `\n[SHARP Context] Patient ID: ${patientId}`;
     if (fhirServer) contextStr += `\n[SHARP Context] FHIR Server: ${fhirServer}`;
     if (fhirToken) contextStr += `\n[SHARP Context] FHIR Token: [PROVIDED]`;
 
     const prompt = `As a Clinical Psychologist, analyze this patient data:${contextStr}\nNotes: ${notes}\nDASS-21 Score: ${dass21_score}\nSRQ-20 Positive: ${srq20_positive}\nProvide a structured analysis including:\n1. Risk Level (L0-L3)\n2. Clinical Summary\n3. Suggested ICD-10 Code\n4. Immediate Recommendations`;
-    const result = await model.generateContent(prompt);
-    res.json({ analysis: result.response.text(), timestamp: new Date().toISOString() });
+    
+    const result = await genAI.models.generateContent({
+      model: "gemini-3-flash-preview",
+      contents: prompt
+    });
+    
+    res.json({ analysis: result.text, timestamp: new Date().toISOString() });
   } catch (error) {
     res.status(500).json({ error: String(error) });
   }
@@ -277,10 +281,12 @@ app.post("/api/v1/icd10-recommend", async (req, res) => {
   const { symptoms } = req.body;
   if (!genAI) return res.status(500).json({ error: "AI Service not configured" });
   try {
-    const model = (genAI as any).getGenerativeModel({ model: "gemini-2.0-flash" });
     const prompt = `As a Medical Coding Expert, suggest relevant ICD-10 codes for these symptoms: ${symptoms}. Provide the code, title, and a brief clinical justification for each.`;
-    const result = await model.generateContent(prompt);
-    res.json({ recommendations: result.response.text(), timestamp: new Date().toISOString() });
+    const result = await genAI.models.generateContent({
+      model: "gemini-3-flash-preview",
+      contents: prompt
+    });
+    res.json({ recommendations: result.text, timestamp: new Date().toISOString() });
   } catch (error) {
     res.status(500).json({ error: String(error) });
   }
@@ -360,8 +366,6 @@ app.post("/api/v1/chat", async (req, res) => {
   const { message, context = {} } = req.body;
   if (!genAI) return res.status(500).json({ error: "AI Service not configured" });
   try {
-    const model = (genAI as any).getGenerativeModel({ model: "gemini-2.0-flash" });
-    
     // Extract FHIR context if present (SHARP)
     const fhirContext = context.fhir || {};
     const patientId = fhirContext.patientId || req.headers['x-sharp-patientid'] || req.headers['x-sharp-patient-id'];
@@ -380,9 +384,13 @@ app.post("/api/v1/chat", async (req, res) => {
     Always suggest ICD-10 codes and provide ROI estimates if relevant.
     Provide a professional, structured clinical response.`;
 
-    const result = await model.generateContent(systemPrompt);
+    const result = await genAI.models.generateContent({
+      model: "gemini-3-flash-preview",
+      contents: systemPrompt
+    });
+    
     res.json({ 
-      response: result.response.text(), 
+      response: result.text, 
       timestamp: new Date().toISOString(),
       agent: "SafeGuard"
     });
@@ -419,15 +427,18 @@ app.get("/api/mcp/sse", async (req, res) => {
         const { notes, patientId, fhirServerUrl, fhirToken } = args as any;
         try {
           if (!genAI) throw new Error("GEMINI_API_KEY not configured.");
-          const model = (genAI as any).getGenerativeModel({ model: "gemini-2.0-flash" });
           
           let sharpInfo = "";
           if (patientId) sharpInfo += `\nSHARP Context - Patient: ${patientId}`;
           if (fhirServerUrl) sharpInfo += `\nSHARP Context - FHIR Server: ${fhirServerUrl}`;
           if (fhirToken) sharpInfo += `\nSHARP Context - Token: [PRESENT]`;
 
-          const result = await model.generateContent(`Analyze clinical notes: ${notes}${sharpInfo}\nProvide clinical risk assessment.`);
-          return { content: [{ type: "text", text: result.response.text() || "{}" }] };
+          const result = await genAI.models.generateContent({
+            model: "gemini-3-flash-preview",
+            contents: `Analyze clinical notes: ${notes}${sharpInfo}\nProvide clinical risk assessment.`
+          });
+          
+          return { content: [{ type: "text", text: result.text || "{}" }] };
         } catch (error) {
           return { content: [{ type: "text", text: JSON.stringify({ error: String(error) }) }], isError: true };
         }
@@ -440,9 +451,11 @@ app.get("/api/mcp/sse", async (req, res) => {
         const { symptoms } = args as any;
         try {
           if (!genAI) throw new Error("GEMINI_API_KEY not configured.");
-          const model = (genAI as any).getGenerativeModel({ model: "gemini-2.0-flash" });
-          const result = await model.generateContent(`Suggest ICD-10 codes for: ${symptoms}. Provide code, title, and justification.`);
-          return { content: [{ type: "text", text: result.response.text() || "{}" }] };
+          const result = await genAI.models.generateContent({
+            model: "gemini-3-flash-preview",
+            contents: `Suggest ICD-10 codes for: ${symptoms}. Provide code, title, and justification.`
+          });
+          return { content: [{ type: "text", text: result.text || "{}" }] };
         } catch (error) {
           return { content: [{ type: "text", text: JSON.stringify({ error: String(error) }) }], isError: true };
         }
