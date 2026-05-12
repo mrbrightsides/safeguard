@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MessageSquare, Send, X, Bot, User, Loader2, AlertCircle, Heart, Quote, ExternalLink, GraduationCap, MessageSquareHeart, Zap, Activity, Cpu } from 'lucide-react';
-import { cn } from '../lib/utils';
+import { cn } from '@/src/lib/utils';
 import { GoogleGenAI } from "@google/genai";
 import Markdown from 'react-markdown';
-import { getVaultData } from '../lib/vaultUtils';
+import { getVaultData } from '@/src/lib/vaultUtils';
 
-import { generateGemmaResponse } from '../services/gemmaService';
-import { speakResponse, hardwareBridge } from '../services/hardwareBridge';
+import { generateGemmaResponse } from '@/src/services/gemmaService';
+import { speakResponse, hardwareBridge } from '@/src/services/hardwareBridge';
 
 interface Message {
   role: 'user' | 'model';

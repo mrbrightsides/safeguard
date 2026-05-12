@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { analyzeBehavioralRisk } from '../services/geminiService';
-import { generateFHIRPayload } from '../services/fhirService';
+import { analyzeBehavioralRisk } from '@/src/services/geminiService';
+import { generateFHIRPayload } from '@/src/services/fhirService';
 import { motion, AnimatePresence } from 'motion/react';
 import { Brain, Search, Loader2, ShieldCheck, FileText, ExternalLink, Info, Phone, UserPlus, X, Download, Database, CheckCircle2, WifiOff, Wifi } from 'lucide-react';
-import { ICD_DESCRIPTIONS, ICD_MAPPING } from '../lib/constants';
-import { cn } from '../lib/utils';
-import { getVaultData } from '../lib/vaultUtils';
+import { ICD_DESCRIPTIONS, ICD_MAPPING } from '@/src/lib/constants';
+import { cn } from '@/src/lib/utils';
+import { getVaultData } from '@/src/lib/vaultUtils';
 import { Sparkles, MessageSquareHeart, GraduationCap } from 'lucide-react';
 
 interface AIAnalysisProps {

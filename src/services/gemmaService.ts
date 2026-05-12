@@ -1,4 +1,4 @@
-import { getVaultData } from '../lib/vaultUtils';
+import { getVaultData } from '@/src/lib/vaultUtils';
 
 interface Message {
   role: 'user' | 'model';

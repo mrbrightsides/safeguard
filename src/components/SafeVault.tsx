@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Shield, User, Heart, X, Save, Trash2, Lock, Eye, EyeOff } from 'lucide-react';
-import { getVaultData, saveVaultData, UserVaultData, clearVaultData } from '../lib/vaultUtils';
-import { cn } from '../lib/utils';
+import { getVaultData, saveVaultData, UserVaultData, clearVaultData } from '@/src/lib/vaultUtils';
+import { cn } from '@/src/lib/utils';
 
 interface SafeVaultProps {
   isOpen: boolean;
