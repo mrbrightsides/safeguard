@@ -11,7 +11,7 @@ export class LiveAudioService {
   private nextStartTime: number = 0;
   private gainNode: GainNode | null = null;
   private stream: MediaStream | null = null;
-  private processor: ScriptProcessorNode | null = null;
+  private workletNode: AudioWorkletNode | null = null;
   private source: MediaStreamAudioSourceNode | null = null;
 
   constructor(private config: LiveAudioConfig) {}
@@ -44,7 +44,10 @@ export class LiveAudioService {
   }
 
   async initAudio() {
-    this.audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
+    this.audioCtx = new (window.AudioContext || (window as any).webkitAudioContext)({ 
+      sampleRate: this.config.sampleRate 
+    });
+    
     this.gainNode = this.audioCtx.createGain();
     this.gainNode.gain.value = this.config.gain;
     this.gainNode.connect(this.audioCtx.destination);
@@ -52,20 +55,38 @@ export class LiveAudioService {
     this.stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     this.source = this.audioCtx.createMediaStreamSource(this.stream);
     
-    // Using ScriptProcessor for compatibility as suggested in skill
-    // Input for Gemini must be 16000Hz PCM
-    this.processor = this.audioCtx.createScriptProcessor(4096, 1, 1);
-    this.source.connect(this.processor);
-    this.processor.connect(this.audioCtx.destination); // Required for it to run
+    // Inline AudioWorklet Processor to handle audio in a separate thread
+    const workletCode = `
+      class InputProcessor extends AudioWorkletProcessor {
+        process(inputs) {
+          const input = inputs[0];
+          if (input.length > 0) {
+            const float32Data = input[0];
+            this.port.postMessage(float32Data);
+          }
+          return true;
+        }
+      }
+      registerProcessor('input-processor', InputProcessor);
+    `;
 
-    this.processor.onaudioprocess = (e) => {
+    const blob = new Blob([workletCode], { type: 'application/javascript' });
+    const url = URL.createObjectURL(blob);
+    
+    await this.audioCtx.audioWorklet.addModule(url);
+    this.workletNode = new AudioWorkletNode(this.audioCtx, 'input-processor');
+    
+    this.workletNode.port.onmessage = (event) => {
       if (this.ws?.readyState === WebSocket.OPEN) {
-        const inputData = e.inputBuffer.getChannelData(0);
-        const pcmData = this.float32ToPcm(inputData);
+        const float32Data = event.data;
+        const pcmData = this.float32ToPcm(float32Data);
         const base64 = this.arrayBufferToBase64(pcmData);
         this.ws.send(JSON.stringify({ audio: base64 }));
       }
     };
+
+    this.source.connect(this.workletNode);
+    this.workletNode.connect(this.audioCtx.destination);
   }
 
   private float32ToPcm(float32Array: Float32Array): ArrayBuffer {
@@ -128,7 +149,7 @@ export class LiveAudioService {
   stop() {
     this.ws?.close();
     this.stream?.getTracks().forEach(t => t.stop());
-    this.processor?.disconnect();
+    this.workletNode?.disconnect();
     this.source?.disconnect();
     this.audioCtx?.close();
   }
