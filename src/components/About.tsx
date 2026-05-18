@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { cn } from '../lib/utils';
+import { cn } from '@/src/lib/utils';
 import { 
   Shield, 
   Target, 
@@ -96,6 +96,63 @@ export const About: React.FC<AboutProps> = ({ onGetStarted }) => {
             </div>
           ))}
           <div className="hidden md:block absolute top-1/2 left-0 w-full h-[2px] bg-gray-100 -translate-y-1/2 z-0" />
+        </div>
+      </section>
+
+      {/* Gemma 4 Impact Challenge Submission Section */}
+      <section className="p-12 bg-gradient-to-br from-purple-900 to-indigo-900 rounded-[40px] text-white shadow-2xl relative overflow-hidden border border-purple-500/30">
+        <div className="absolute top-0 right-0 p-12 opacity-10">
+          <Zap className="w-64 h-64" />
+        </div>
+        
+        <div className="relative z-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-purple-500 text-white rounded-full text-[10px] font-bold uppercase tracking-widest mb-6">
+            Gemma 4 Impact Challenge 2026
+          </div>
+          <h2 className="text-3xl font-bold mb-8 tracking-tight">Proof of Work: Submission Architecture</h2>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div className="space-y-8">
+              <div>
+                <h3 className="text-xl font-bold mb-4 text-purple-300">Target Tracks</h3>
+                <div className="space-y-4">
+                  <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                    <p className="text-xs font-bold text-purple-400 uppercase mb-1">Track 1: Impact - Safety & Trust</p>
+                    <p className="text-sm text-purple-50">Leveraging <b>Local Gemma 4</b> to ensure clinical data never leaves the user's perimeter. Our <b>Safe-Vault</b> provides E2E encryption for sensitive psychosocial logs.</p>
+                  </div>
+                  <div className="p-4 bg-white/5 rounded-2xl border border-white/10">
+                    <p className="text-xs font-bold text-purple-400 uppercase mb-1">Track 2: Technology - Ollama</p>
+                    <p className="text-sm text-purple-50">Deep integration with <b>Ollama</b> for local inference. The system automatically detects local models and routes clinical triage to the edge for zero-latency, private analysis.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              <h3 className="text-xl font-bold mb-4 text-purple-300">Technical Stack</h3>
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { label: 'Cloud AI', val: 'Gemini 3.1 Flash (Live)' },
+                  { label: 'Local AI', val: 'Gemma 4 (via Ollama)' },
+                  { label: 'Security', val: 'Safe-Vault E2E Encryption' },
+                  { label: 'IoT Bridge', val: 'Arduino Hardware Protocol' },
+                  { label: 'Speech', val: 'Seamless 24kHz Audio' },
+                  { label: 'Data', val: 'SHARP Clinical Schema' }
+                ].map(stat => (
+                  <div key={stat.label} className="p-4 bg-indigo-800/30 rounded-2xl border border-indigo-500/20">
+                    <p className="text-[10px] font-mono text-indigo-300 uppercase">{stat.label}</p>
+                    <p className="text-sm font-bold">{stat.val}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+          
+          <div className="mt-12 p-6 bg-white/5 rounded-3xl border border-white/10 backdrop-blur-md">
+            <p className="text-sm italic text-purple-200">
+              "By combining the multimodality of Gemini 3.1 Live for seamless engagement with the absolute privacy of Local Gemma 4 via Ollama, we've built a counselor that is both empathic and sovereign."
+            </p>
+          </div>
         </div>
       </section>
 
@@ -246,7 +303,7 @@ export const About: React.FC<AboutProps> = ({ onGetStarted }) => {
           {[
             {
               name: 'Akhmad Khudri',
-              role: 'Team Lead & Product Orchestrator',
+              role: 'Team Lead & Product Owner',
               focus: 'Strategy & SWOT',
               desc: 'Orchestrating the strategic alignment of SafeGuard with global health economics and high-value health system frameworks.',
               initials: 'AK',
@@ -268,7 +325,7 @@ export const About: React.FC<AboutProps> = ({ onGetStarted }) => {
               name: 'Dwiki Aulia Rahman',
               role: 'Health Data & Predictive Insight',
               focus: 'AI Architecture & Epidemiology',
-              desc: 'Designing robust dataset and epidemiological frameworks to ensure data-driven psychosocial surveillance.',
+              desc: 'Designing robust predictive models and epidemiological frameworks to ensure data-driven psychosocial surveillance.',
               initials: 'DR',
               color: 'bg-indigo-50 text-indigo-600'
             },

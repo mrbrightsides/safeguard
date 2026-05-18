@@ -343,7 +343,7 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
                 <div className="flex items-center gap-1.5">
                   <span className={cn("w-2 h-2 rounded-full animate-pulse", executionMode === 'local' ? "bg-amber-400" : "bg-green-500")} />
                   <span className="text-xs text-teal-600 font-medium">
-                    {executionMode === 'local' ? 'Local Gemma (Disconnected Mode)' : 'Cloud Gemini (High Precision)'}
+                    {executionMode === 'local' ? 'Local Gemma 4 (Offline Frontier)' : 'Cloud Gemini 3.1 (Live Seamless)'}
                   </span>
                   {executionMode === 'local' && (
                     <div className={cn(
@@ -351,7 +351,7 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
                       ollamaStatus === 'online' ? "bg-amber-500/10 text-amber-600 border-amber-200" : "bg-red-500/10 text-red-600 border-red-200"
                     )}>
                       <Zap size={8} className={cn("fill-current", ollamaStatus === 'online' && "animate-pulse")} />
-                      {ollamaStatus === 'online' ? "OLLAMA ACTIVE" : "OLLAMA OFFLINE"}
+                      {ollamaStatus === 'online' ? "GEMMA 4 ACTIVE (OLLAMA)" : "OLLAMA OFFLINE"}
                     </div>
                   )}
                 </div>
