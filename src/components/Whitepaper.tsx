@@ -45,7 +45,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
     
     doc.setFontSize(10);
     doc.setTextColor(150, 150, 150);
-    doc.text('v3.0 / Focus: Prompt Opinion Hackathon / Generated: ${timestamp}', 20, 38);
+    doc.text('v3.0 / Focus: MCP and SHARP go to offline mode using Gemma / Generated: ${timestamp}', 20, 38);
     
     // Line
     doc.setDrawColor(230, 230, 230);
@@ -173,7 +173,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
     doc.setFontSize(11);
     doc.setTextColor(80, 80, 80);
     doc.text('SafeGuard v3.0 utilizes a Privacy-First Hybrid architecture:', 25, 40);
-    doc.text('- Edge Node: Local inference using Gemma 2.1 / 4.5.', 25, 47);
+    doc.text('- Edge Node: Local inference using Gemma 4.', 25, 47);
     doc.text('- Global Mesh: High-performance reasoning via Gemini 3.1 Flash-Lite.', 25, 54);
     doc.text('- SHARP Context: Native FHIR context propagation across call chains.', 25, 61);
 
@@ -266,7 +266,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
                 "From Invisible Risk to Measurable Economic Value: Bridging clinical risk and corporate productivity."
               </p>
               <p>
-                SafeGuard is a digital clinical decision support agent designed to transform fragmented psychosocial signals into accountable, boardroom-ready economic interventions. Integrated into the **Prompt Opinion** platform, SafeGuard leverages Hybrid AI (Local + Cloud) and interoperable health data (SHARP/FHIR) to bridge the gap between clinical risk and corporate productivity.
+                SafeGuard is a digital clinical decision support agent designed to transform fragmented psychosocial signals into accountable, boardroom-ready economic interventions. Integrated into the **Prompt Opinion** platform, SafeGuard leverages Hybrid AI (Local using Gemma + Cloud) and interoperable health data (SHARP/FHIR) to bridge the gap between clinical risk and corporate productivity.
               </p>
             </div>
           </section>
@@ -546,7 +546,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
               <div className="relative z-10 max-w-3xl space-y-6">
                 <h3 className="text-2xl font-bold">SafeGuard Hybrid Intelligence</h3>
                 <p className="text-indigo-100 leading-relaxed">
-                  SafeGuard v3.0 transitions to a "Privacy-First" architecture. By implementing a **Hybrid Edge-Cloud Mesh**, SafeGuard ensures data residency compliance while maintaining state-of-the-art clinical reasoning.
+                  SafeGuard v3.0 utilizes a "Privacy-First" architecture. By implementing a **Hybrid Edge-Cloud Mesh**, SafeGuard ensures data residency compliance while maintaining state-of-the-art clinical reasoning using Gemma 4 at the edge.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="p-6 bg-white/5 rounded-3xl border border-white/10">
@@ -554,7 +554,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
                       <Zap className="w-4 h-4 text-teal-400" />
                       Edge Inference
                     </div>
-                    <p className="text-xs text-indigo-200">Local processing using Gemma 2.1 for preliminary triage and immediate feedback without data leaving the client node.</p>
+                    <p className="text-xs text-indigo-200">Local processing using Gemma 4 for preliminary triage and immediate feedback without data leaving the client node.</p>
                   </div>
                   <div className="p-6 bg-white/5 rounded-3xl border border-white/10">
                     <div className="font-bold mb-2 flex items-center gap-2">
@@ -568,11 +568,40 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
             </div>
           </section>
 
+          {/* Validation Guide */}
+          <section id="validation" className="scroll-mt-32">
+            <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
+              <ShieldCheck className="w-6 h-6 text-amber-600" />
+              10. Judge's Validation Guide (Local Gemma 4)
+            </h2>
+            <div className="p-8 border-2 border-dashed border-amber-200 rounded-[40px] bg-amber-50/30">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div className="space-y-4">
+                  <h3 className="font-bold text-amber-900">Phase 1: Local Readiness</h3>
+                  <ul className="text-sm text-amber-800 space-y-2 list-disc pl-5">
+                    <li>Install Ollama from <b>ollama.com</b></li>
+                    <li>Run <code>ollama pull gemma4</code></li>
+                    <li>Set <code>OLLAMA_ORIGINS="*"</code> for CORS</li>
+                  </ul>
+                </div>
+                <div className="space-y-4">
+                  <h3 className="font-bold text-amber-900">Phase 2: Live Verification</h3>
+                  <ul className="text-sm text-amber-800 space-y-2 list-disc pl-5">
+                    <li>Toggle mode to <b>LOCAL</b> in AI Counselor</li>
+                    <li>Open <b>F12 Network Tab</b></li>
+                    <li>Verify <code>POST</code> request to <code>localhost:11434</code></li>
+                    <li>Witness zero latency edge-processing offline</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* Ethical Clearance */}
           <section id="compliance" className="scroll-mt-32">
             <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
               <ShieldCheck className="w-6 h-6 text-teal-600" />
-              10. Ethical Clearance & Clinical Compliance
+              11. Ethical Clearance & Clinical Compliance
             </h2>
             <div className="p-10 bg-gray-50 rounded-[40px] border border-gray-100">
               <div className="max-w-3xl space-y-6">
@@ -628,7 +657,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
               "SafeGuard is not a cost center; it is a risk control system."
             </p>
             <p className="text-gray-400 text-sm">
-              Prepared for the "Agents Assemble: The Healthcare AI Endgame Challenge" by Prompt Opinion. All data based on WHO, ILO, UNESCO, and Kemenkes official reports.
+              All data based on WHO, ILO, UNESCO, and Kemenkes official reports.
             </p>
           </div>
         </div>

@@ -48,6 +48,26 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
     setIsHardwareConnecting(false);
   };
 
+  const [ollamaStatus, setOllamaStatus] = useState<'checking' | 'online' | 'offline'>('checking');
+
+  useEffect(() => {
+    const checkOllama = async () => {
+      try {
+        const res = await fetch('http://localhost:11434/api/tags');
+        if (res.ok) setOllamaStatus('online');
+        else setOllamaStatus('offline');
+      } catch {
+        setOllamaStatus('offline');
+      }
+    };
+    
+    if (executionMode === 'local') {
+      checkOllama();
+      const interval = setInterval(checkOllama, 3000); // Poll status every 3 seconds
+      return () => clearInterval(interval);
+    }
+  }, [executionMode]);
+
   const toggleVision = async () => {
     if (isVisionActive) {
       visionStream?.getTracks().forEach(track => track.stop());
@@ -261,9 +281,24 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
                   <span className="text-xs text-teal-600 font-medium">
                     {executionMode === 'local' ? 'Local Gemma (Disconnected Mode)' : 'Cloud Gemini (High Precision)'}
                   </span>
+                  {executionMode === 'local' && (
+                    <div className={cn(
+                      "flex items-center gap-1 ml-1 px-1.5 py-0.5 rounded-full border text-[8px] font-bold",
+                      ollamaStatus === 'online' ? "bg-amber-500/10 text-amber-600 border-amber-200" : "bg-red-500/10 text-red-600 border-red-200"
+                    )}>
+                      <Zap size={8} className={cn("fill-current", ollamaStatus === 'online' && "animate-pulse")} />
+                      {ollamaStatus === 'online' ? "OLLAMA ACTIVE" : "OLLAMA OFFLINE"}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
+            {executionMode === 'local' && ollamaStatus === 'online' && (
+              <div className="absolute top-16 left-0 right-0 px-4 py-1 bg-amber-50 text-[9px] text-amber-700 border-b border-amber-100 flex justify-between items-center z-10">
+                <span>Verification: Data stays on your machine via 127.0.0.1:11434</span>
+                <span className="opacity-60 flex items-center gap-1"><Zap size={8} /> Check F12 Network for proof</span>
+              </div>
+            )}
             <div className="flex items-center gap-2">
               {/* Vision Mode Toggle */}
               <button
