@@ -44,21 +44,54 @@ export const hardwareBridge = new HardwareBridge();
  * Client-side Text-to-Speech using Web Speech API
  * This can be routed to the computer speaker or a bluetooth speaker inside the doll
  */
-export function speakResponse(text: string, voiceName?: string) {
+export function speakResponse(text: string) {
   if (!('speechSynthesis' in window)) return;
 
   // Stop any current speaking
   window.speechSynthesis.cancel();
 
   const utterance = new SpeechSynthesisUtterance(text);
+  
+  // Get all available voices
   const voices = window.speechSynthesis.getVoices();
   
-  // Try to find a warm/empathetic voice
-  const preferredVoice = voices.find(v => v.name.includes('Google') || v.name.includes('Natural'));
-  if (preferredVoice) utterance.voice = preferredVoice;
+  // Detect language roughly (prefer id since primary context is Indonesian)
+  const hasIndonesianMarkers = /saya|kamu|anda|halo|selamat|pagi|siang|malam|terima|kasih|dengan|adalah/i.test(text);
+  const targetLang = hasIndonesianMarkers ? 'id-ID' : 'en-US';
+  utterance.lang = targetLang;
+
+  // Voice Selection Priority Logic
+  let selectedVoice = null;
+
+  if (targetLang === 'id-ID') {
+    // 1. Try Google Indonesian Natural
+    selectedVoice = voices.find(v => v.lang.startsWith('id') && v.name.includes('Google'));
+    // 2. Try any Indonesian voice
+    if (!selectedVoice) selectedVoice = voices.find(v => v.lang.startsWith('id'));
+  } else {
+    // 1. Try English Neural/Natural/Google
+    selectedVoice = voices.find(v => v.lang.startsWith('en') && (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Neural')));
+    // 2. Try any English voice
+    if (!selectedVoice) selectedVoice = voices.find(v => v.lang.startsWith('en'));
+  }
+
+  if (selectedVoice) {
+    utterance.voice = selectedVoice;
+  }
+
+  // Adjust parameters for a more "empathetic" human tone
+  utterance.pitch = 1.05; 
+  utterance.rate = 1.0; 
   
-  utterance.pitch = 1.1; 
-  utterance.rate = 0.9; // Slightly slower for better empathy
-  
+  // Important: On some browsers, we need to re-fetch voices if the array is empty
+  if (voices.length === 0) {
+    window.speechSynthesis.onvoiceschanged = () => {
+      const updatedVoices = window.speechSynthesis.getVoices();
+      speakResponse(text); // Retry once
+      window.speechSynthesis.onvoiceschanged = null; // Prevent loops
+    };
+    return;
+  }
+
   window.speechSynthesis.speak(utterance);
 }
