@@ -223,55 +223,12 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
 
     try {
       if (executionMode === 'local') {
-        const userMessageObj: any = { role: 'user', text: userMessage };
-        const gemmaResponse = await generateGemmaResponse([...messages, userMessageObj], selectedMode);
+        const gemmaResponse = await generateGemmaResponse([...messages, { role: 'user', text: userMessage }], selectedMode);
+        setMessages(prev => [...prev, { role: 'model', text: gemmaResponse.text }]);
         
-        if (gemmaResponse.stream) {
-          const reader = gemmaResponse.stream.getReader();
-          const decoder = new TextDecoder();
-          let fullText = "";
-
-          // Start with an empty bot message
-          setMessages(prev => [...prev, { role: 'model', text: "" }]);
-          setIsLoading(false); // Stop loading spinner once stream starts
-
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-            
-            const chunk = decoder.decode(value, { stream: true });
-            const lines = chunk.split('\n');
-            
-            for (const line of lines) {
-              if (!line.trim()) continue;
-              try {
-                const data = JSON.parse(line);
-                if (data.response) {
-                  fullText += data.response;
-                  setMessages(prev => {
-                    const newMsgs = [...prev];
-                    if (newMsgs[newMsgs.length - 1].role === 'model') {
-                      newMsgs[newMsgs.length - 1].text = fullText;
-                    }
-                    return newMsgs;
-                  });
-                }
-              } catch (e) {
-                // Ignore parse errors for partial JSON
-              }
-            }
-          }
-          
-          if (isHardwareMode) {
-            speakResponse(fullText);
-            hardwareBridge.sendToDoll(fullText.substring(0, 32));
-          }
-        } else {
-          setMessages(prev => [...prev, { role: 'model', text: gemmaResponse.text }]);
-          if (isHardwareMode) {
-            speakResponse(gemmaResponse.text);
-            hardwareBridge.sendToDoll(gemmaResponse.text.substring(0, 32));
-          }
+        if (isHardwareMode) {
+          speakResponse(gemmaResponse.text);
+          hardwareBridge.sendToDoll(gemmaResponse.text.substring(0, 32));
         }
       } else {
         const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
@@ -387,26 +344,21 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
                     {executionMode === 'local' ? 'Local Gemma (Disconnected Mode)' : 'Cloud Gemini (High Precision)'}
                   </span>
                   {executionMode === 'local' && (
-                      <div className={cn(
-                        "flex items-center gap-1.5 ml-1 px-2.5 py-1 rounded-full border text-[9px] font-black tracking-wider uppercase transition-all shadow-sm",
-                        ollamaStatus === "online" 
-                          ? "bg-amber-100 text-amber-700 border-amber-300 ring-2 ring-amber-50" 
-                          : "bg-red-50 text-red-600 border-red-200"
-                      )}>
-                        <Zap size={10} className={cn("fill-current", ollamaStatus === "online" && "animate-pulse")} />
-                        {ollamaStatus === "online" ? "EDGE ENGINE ACTIVE" : "ENGINE OFFLINE"}
-                      </div>
+                    <div className={cn(
+                      "flex items-center gap-1 ml-1 px-1.5 py-0.5 rounded-full border text-[8px] font-bold",
+                      ollamaStatus === 'online' ? "bg-amber-500/10 text-amber-600 border-amber-200" : "bg-red-500/10 text-red-600 border-red-200"
+                    )}>
+                      <Zap size={8} className={cn("fill-current", ollamaStatus === 'online' && "animate-pulse")} />
+                      {ollamaStatus === 'online' ? "OLLAMA ACTIVE" : "OLLAMA OFFLINE"}
+                    </div>
                   )}
                 </div>
               </div>
             </div>
             {executionMode === 'local' && ollamaStatus === 'online' && (
-              <div className="absolute top-16 left-0 right-0 px-4 py-1 bg-amber-50 text-[9px] text-amber-700 border-b border-amber-100 flex justify-between items-center z-10 transition-all">
-                <span className="flex items-center gap-1.5 font-bold">
-                  <Cpu size={10} className="text-amber-600" />
-                  Edge Intelligence: High-Compute Latency Expected on Base Hardware
-                </span>
-                <span className="opacity-60 flex items-center gap-1 font-medium"><Zap size={8} /> Local Privacy Isolation Active</span>
+              <div className="absolute top-16 left-0 right-0 px-4 py-1 bg-amber-50 text-[9px] text-amber-700 border-b border-amber-100 flex justify-between items-center z-10">
+                <span>Verification: Data stays on your machine via 127.0.0.1:11434</span>
+                <span className="opacity-60 flex items-center gap-1"><Zap size={8} /> Check F12 Network for proof</span>
               </div>
             )}
             <div className="flex items-center gap-2">
