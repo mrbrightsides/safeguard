@@ -21,24 +21,27 @@ import {
   ChevronRight,
   Globe,
   Github,
-  Mail
+  Mail,
+  Star
 } from 'lucide-react';
-import { Dashboard } from './components/Dashboard';
-import { Assessment } from './components/Assessment';
-import { AIAnalysis } from './components/AIAnalysis';
-import { OrganizationAnalytics } from './components/OrganizationAnalytics';
-import { WellnessHub } from './components/WellnessHub';
-import { AgentWorkspace } from './components/AgentWorkspace';
-import { Whitepaper } from './components/Whitepaper';
-import { ScalingStrategy } from './components/ScalingStrategy';
-import { About } from './components/About';
-import { Compliance } from './components/Compliance';
-import { ConsultModal } from './components/ConsultModal';
-import { MERPModal } from './components/MERPModal';
-import { RoleSelection, UserRole } from './components/RoleSelection';
-import { cn } from './lib/utils';
+import { Dashboard } from '@/src/components/Dashboard';
+import { Assessment } from '@/src/components/Assessment';
+import { AIAnalysis } from '@/src/components/AIAnalysis';
+import { OrganizationAnalytics } from '@/src/components/OrganizationAnalytics';
+import { WellnessHub } from '@/src/components/WellnessHub';
+import { AgentWorkspace } from '@/src/components/AgentWorkspace';
+import { Whitepaper } from '@/src/components/Whitepaper';
+import { ScalingStrategy } from '@/src/components/ScalingStrategy';
+import { About } from '@/src/components/About';
+import { Compliance } from '@/src/components/Compliance';
+import { ConsultModal } from '@/src/components/ConsultModal';
+import { MERPModal } from '@/src/components/MERPModal';
+import { SafeVault } from '@/src/components/SafeVault';
+import { RoleSelection, UserRole } from '@/src/components/RoleSelection';
+import { SFIStarterPack } from '@/src/components/SFIStarterPack';
+import { cn } from '@/src/lib/utils';
 
-type View = 'dashboard' | 'assessment' | 'ai-analysis' | 'analytics' | 'wellness' | 'settings' | 'whitepaper' | 'about' | 'scaling' | 'compliance' | 'agent-workspace';
+type View = 'dashboard' | 'assessment' | 'ai-analysis' | 'analytics' | 'wellness' | 'settings' | 'whitepaper' | 'about' | 'scaling' | 'compliance' | 'agent-workspace' | 'sfi-starter-pack' | 'safe-vault';
 
 interface Notification {
   id: string;
@@ -58,6 +61,7 @@ export default function App() {
   const [pendingAnamnesisData, setPendingAnamnesisData] = useState<any>(null);
   const [showGlobalConsultModal, setShowGlobalConsultModal] = useState(false);
   const [showMERPModal, setShowMERPModal] = useState(false);
+  const [showSafeVault, setShowSafeVault] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [isAccessibilityMode, setIsAccessibilityMode] = useState(false);
   const [isPWAInstalled, setIsPWAInstalled] = useState(false);
@@ -139,6 +143,7 @@ export default function App() {
     { id: 'wellness', label: 'Wellness Hub', icon: Heart, roles: ['personal', 'corporate'] },
     { id: 'agent-workspace', label: 'Agent Workspace', icon: BrainCircuit, roles: ['corporate'] },
     { id: 'scaling', label: 'Scaling & Monetization', icon: TrendingUp, roles: ['corporate'] },
+    { id: 'sfi-starter-pack', label: 'Intel SFI - Starter Pack', icon: Star, roles: ['personal', 'corporate'] },
     { id: 'about', label: 'About SafeGuard', icon: Info, roles: ['personal', 'corporate'] },
     { id: 'compliance', label: 'Trust & Compliance', icon: ShieldCheck, roles: ['personal', 'corporate'] },
     { id: 'settings', label: 'System Config', icon: Settings, roles: ['corporate'] },
@@ -419,8 +424,14 @@ Please provide a clinical risk stratification and recommendations based on these
             {activeView === 'agent-workspace' && <AgentWorkspace />}
             {activeView === 'scaling' && <ScalingStrategy />}
             {activeView === 'about' && <About onGetStarted={() => setActiveView('assessment')} />}
-            {activeView === 'compliance' && <Compliance onBack={() => setActiveView(role === 'corporate' ? 'dashboard' : 'assessment')} />}
+            {activeView === 'compliance' && (
+              <Compliance 
+                onBack={() => setActiveView(role === 'corporate' ? 'dashboard' : 'assessment')} 
+                onOpenVault={() => setShowSafeVault(true)}
+              />
+            )}
             {activeView === 'whitepaper' && <Whitepaper onBack={() => setActiveView(role === 'corporate' ? 'dashboard' : 'assessment')} />}
+            {activeView === 'sfi-starter-pack' && <SFIStarterPack />}
             {activeView === 'settings' && (
               <div className="bg-white p-6 sm:p-8 rounded-3xl border border-gray-100 shadow-sm overflow-x-hidden">
                 <h3 className="text-xl font-bold mb-6">System Configuration</h3>
@@ -634,6 +645,11 @@ Please provide a clinical risk stratification and recommendations based on these
             'error'
           );
         }}
+      />
+
+      <SafeVault 
+        isOpen={showSafeVault} 
+        onClose={() => setShowSafeVault(false)} 
       />
     </div>
   );
