@@ -12,15 +12,17 @@ import {
   ArrowLeft,
   Download,
   AlertCircle,
-  CheckCircle2
+  CheckCircle2,
+  Shield
 } from 'lucide-react';
-import { cn } from '../lib/utils';
+import { cn } from '@/src/lib/utils';
 
 interface ComplianceProps {
   onBack?: () => void;
+  onOpenVault?: () => void;
 }
 
-export const Compliance: React.FC<ComplianceProps> = ({ onBack }) => {
+export const Compliance: React.FC<ComplianceProps> = ({ onBack, onOpenVault }) => {
   const [activeTab, setActiveTab] = useState<'privacy' | 'terms' | 'ai-ethics'>('privacy');
   const [isDownloading, setIsDownloading] = useState(false);
 
@@ -138,6 +140,27 @@ For the latest version, please visit the SafeGuard Trust Center.
         <p className="text-xl text-gray-500 leading-relaxed max-w-3xl">
           At SafeGuard, we believe that psychosocial safety starts with data trust. Our compliance framework is built on transparency, clinical integrity, and strict privacy standards.
         </p>
+
+        {/* Safe Vault Access Banner */}
+        {onOpenVault && (
+          <div className="mt-8 p-6 bg-gradient-to-r from-teal-600 to-emerald-600 rounded-[32px] text-white flex items-center justify-between flex-wrap gap-6 shadow-xl shadow-teal-900/10 border border-teal-500/20">
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center">
+                <Shield className="w-7 h-7 text-white" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold mb-1">Safe-Vault Security</h3>
+                <p className="text-teal-50 text-sm max-w-md">Manage your data encryption, clear local logs, and verify your end-to-end security status.</p>
+              </div>
+            </div>
+            <button 
+              onClick={onOpenVault}
+              className="px-6 py-3 bg-white text-teal-700 rounded-xl text-sm font-bold hover:bg-teal-50 transition-all flex items-center gap-2 shadow-lg"
+            >
+              Open Vault Manager
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Tabs */}
