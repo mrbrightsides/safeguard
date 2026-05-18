@@ -38,10 +38,9 @@ import { ConsultModal } from '@/src/components/ConsultModal';
 import { MERPModal } from '@/src/components/MERPModal';
 import { SafeVault } from '@/src/components/SafeVault';
 import { RoleSelection, UserRole } from '@/src/components/RoleSelection';
-import { SFIStarterPack } from '@/src/components/SFIStarterPack';
 import { cn } from '@/src/lib/utils';
 
-type View = 'dashboard' | 'assessment' | 'ai-analysis' | 'analytics' | 'wellness' | 'settings' | 'whitepaper' | 'about' | 'scaling' | 'compliance' | 'agent-workspace' | 'sfi-starter-pack' | 'safe-vault';
+type View = 'dashboard' | 'assessment' | 'ai-analysis' | 'analytics' | 'wellness' | 'settings' | 'whitepaper' | 'about' | 'scaling' | 'compliance' | 'agent-workspace' | 'safe-vault';
 
 interface Notification {
   id: string;
@@ -143,7 +142,6 @@ export default function App() {
     { id: 'wellness', label: 'Wellness Hub', icon: Heart, roles: ['personal', 'corporate'] },
     { id: 'agent-workspace', label: 'Agent Workspace', icon: BrainCircuit, roles: ['corporate'] },
     { id: 'scaling', label: 'Scaling & Monetization', icon: TrendingUp, roles: ['corporate'] },
-    { id: 'sfi-starter-pack', label: 'Intel SFI - Starter Pack', icon: Star, roles: ['personal', 'corporate'] },
     { id: 'about', label: 'About SafeGuard', icon: Info, roles: ['personal', 'corporate'] },
     { id: 'compliance', label: 'Trust & Compliance', icon: ShieldCheck, roles: ['personal', 'corporate'] },
     { id: 'settings', label: 'System Config', icon: Settings, roles: ['corporate'] },
@@ -431,7 +429,6 @@ Please provide a clinical risk stratification and recommendations based on these
               />
             )}
             {activeView === 'whitepaper' && <Whitepaper onBack={() => setActiveView(role === 'corporate' ? 'dashboard' : 'assessment')} />}
-            {activeView === 'sfi-starter-pack' && <SFIStarterPack />}
             {activeView === 'settings' && (
               <div className="bg-white p-6 sm:p-8 rounded-3xl border border-gray-100 shadow-sm overflow-x-hidden">
                 <h3 className="text-xl font-bold mb-6">System Configuration</h3>
