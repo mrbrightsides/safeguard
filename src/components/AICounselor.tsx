@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { MessageSquare, Send, X, Bot, User, Loader2, AlertCircle, Heart, Quote, ExternalLink, GraduationCap, MessageSquareHeart, Zap, Activity, Cpu, Eye, EyeOff, Camera } from 'lucide-react';
+import { MessageSquare, Send, X, Bot, User, Loader2, AlertCircle, Heart, Quote, ExternalLink, GraduationCap, MessageSquareHeart, Zap, Activity, Cpu, Eye, EyeOff, Camera, Mic, MicOff } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import { GoogleGenAI } from "@google/genai";
 import Markdown from 'react-markdown';
@@ -30,6 +30,8 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
   const [isHardwareConnecting, setIsHardwareConnecting] = useState(false);
   const [isVisionActive, setIsVisionActive] = useState(false);
   const [visionStream, setVisionStream] = useState<MediaStream | null>(null);
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef<any>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -93,8 +95,54 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
     }
   }, [isOpen, initialMessage]);
 
+  useEffect(() => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = true;
+      recognitionRef.current.interimResults = true;
+      
+      recognitionRef.current.onresult = (event: any) => {
+        const transcript = Array.from(event.results)
+          .map((result: any) => result[0])
+          .map((result) => result.transcript)
+          .join('');
+        setInput(transcript);
+      };
+
+      recognitionRef.current.onerror = (event: any) => {
+        console.error('Speech recognition error:', event.error);
+        setIsListening(false);
+      };
+
+      recognitionRef.current.onend = () => {
+        setIsListening(false);
+      };
+    }
+  }, []);
+
+  const toggleListening = () => {
+    if (isListening) {
+      recognitionRef.current?.stop();
+    } else {
+      if (recognitionRef.current) {
+        // Detect language markers for better recognition
+        const hasIndo = /saya|kamu|halo|apa|kabar/i.test(input);
+        recognitionRef.current.lang = hasIndo ? 'id-ID' : 'id-ID'; // Defaulting to ID for your primary context
+        recognitionRef.current.start();
+        setIsListening(true);
+      } else {
+        alert("Speech Recognition is not supported in this browser.");
+      }
+    }
+  };
+
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
+
+    if (isListening) {
+      recognitionRef.current?.stop();
+    }
 
     const userMessage = input.trim();
     const imageData = isVisionActive ? captureFrame() : null;
@@ -381,21 +429,40 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
           {/* Input */}
           <div className="p-4 border-t border-teal-50 bg-white">
             <div className="relative flex items-center gap-2 mb-4">
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-                placeholder="Type your message here..."
-                className="flex-1 p-3 pr-12 bg-teal-50/50 border border-teal-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white transition-all text-teal-900 placeholder-teal-400"
-              />
-              <button
-                onClick={handleSend}
-                disabled={!input.trim() || isLoading}
-                className="absolute right-2 p-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50 disabled:hover:bg-teal-600 transition-colors shadow-md shadow-teal-100"
-              >
-                <Send size={18} />
-              </button>
+              <div className="relative flex-1">
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+                  placeholder={isListening ? "Listening..." : "Type or speak your message..."}
+                  className={cn(
+                    "w-full p-3 pr-24 bg-teal-50/50 border border-teal-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 focus:bg-white transition-all text-teal-900 placeholder-teal-400",
+                    isListening && "border-teal-500 ring-2 ring-teal-200"
+                  )}
+                />
+                <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                  <button
+                    onClick={toggleListening}
+                    className={cn(
+                      "p-2 rounded-lg transition-all",
+                      isListening 
+                        ? "bg-red-500 text-white animate-pulse" 
+                        : "text-teal-600 hover:bg-teal-100"
+                    )}
+                    title={isListening ? "Stop Recording" : "Start Voice Input"}
+                  >
+                    {isListening ? <MicOff size={18} /> : <Mic size={18} />}
+                  </button>
+                  <button
+                    onClick={handleSend}
+                    disabled={!input.trim() || isLoading}
+                    className="p-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 disabled:opacity-50 disabled:hover:bg-teal-600 transition-colors shadow-md shadow-teal-100"
+                  >
+                    <Send size={18} />
+                  </button>
+                </div>
+              </div>
             </div>
 
             {/* Specialized Companions footer */}
