@@ -69,7 +69,7 @@ export async function analyzeBehavioralRisk(input: string, context?: any) {
   // 2. Fallback to Cloud Gemini
   try {
     const response = await ai.models.generateContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-3.1-flash-lite",
       contents: fullPrompt,
       config: {
         responseMimeType: "application/json"

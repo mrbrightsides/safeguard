@@ -225,7 +225,7 @@ app.post("/api/v1/analyze", async (req, res) => {
     const prompt = `As a Clinical Psychologist, analyze this patient data:${contextStr}\nNotes: ${notes}\nDASS-21 Score: ${dass21_score}\nSRQ-20 Positive: ${srq20_positive}\nProvide a structured analysis including:\n1. Risk Level (L0-L3)\n2. Clinical Summary\n3. Suggested ICD-10 Code\n4. Immediate Recommendations`;
     
     const result = await genAI.models.generateContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-3.1-flash-lite",
       contents: prompt
     });
     
@@ -283,7 +283,7 @@ app.post("/api/v1/icd10-recommend", async (req, res) => {
   try {
     const prompt = `As a Medical Coding Expert, suggest relevant ICD-10 codes for these symptoms: ${symptoms}. Provide the code, title, and a brief clinical justification for each.`;
     const result = await genAI.models.generateContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-3.1-flash-lite",
       contents: prompt
     });
     res.json({ recommendations: result.text, timestamp: new Date().toISOString() });
@@ -385,7 +385,7 @@ app.post("/api/v1/chat", async (req, res) => {
     Provide a professional, structured clinical response.`;
 
     const result = await genAI.models.generateContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-3.1-flash-lite",
       contents: systemPrompt
     });
     
@@ -434,7 +434,7 @@ app.get("/api/mcp/sse", async (req, res) => {
           if (fhirToken) sharpInfo += `\nSHARP Context - Token: [PRESENT]`;
 
           const result = await genAI.models.generateContent({
-            model: "gemini-3-flash-preview",
+            model: "gemini-3.1-flash-lite",
             contents: `Analyze clinical notes: ${notes}${sharpInfo}\nProvide clinical risk assessment.`
           });
           
@@ -452,7 +452,7 @@ app.get("/api/mcp/sse", async (req, res) => {
         try {
           if (!genAI) throw new Error("GEMINI_API_KEY not configured.");
           const result = await genAI.models.generateContent({
-            model: "gemini-3-flash-preview",
+            model: "gemini-3.1-flash-lite",
             contents: `Suggest ICD-10 codes for: ${symptoms}. Provide code, title, and justification.`
           });
           return { content: [{ type: "text", text: result.text || "{}" }] };

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { MessageSquare, Send, X, Bot, User, Loader2, AlertCircle, Heart, Quote, ExternalLink, GraduationCap, MessageSquareHeart, Zap, Activity, Cpu } from 'lucide-react';
+import { MessageSquare, Send, X, Bot, User, Loader2, AlertCircle, Heart, Quote, ExternalLink, GraduationCap, MessageSquareHeart, Zap, Activity, Cpu, Eye, EyeOff, Camera } from 'lucide-react';
 import { cn } from '@/src/lib/utils';
 import { GoogleGenAI } from "@google/genai";
 import Markdown from 'react-markdown';
@@ -28,6 +28,10 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
   const [executionMode, setExecutionMode] = useState<'cloud' | 'local'>('cloud');
   const [isHardwareMode, setIsHardwareMode] = useState(false);
   const [isHardwareConnecting, setIsHardwareConnecting] = useState(false);
+  const [isVisionActive, setIsVisionActive] = useState(false);
+  const [visionStream, setVisionStream] = useState<MediaStream | null>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const vault = getVaultData();
@@ -40,6 +44,38 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
       setMessages(prev => [...prev, { role: 'model', text: "SafeGuard Doll hardware connected! I will now speak through the companion doll." }]);
     }
     setIsHardwareConnecting(false);
+  };
+
+  const toggleVision = async () => {
+    if (isVisionActive) {
+      visionStream?.getTracks().forEach(track => track.stop());
+      setVisionStream(null);
+      setIsVisionActive(false);
+    } else {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
+        setVisionStream(stream);
+        setIsVisionActive(true);
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+      } catch (err) {
+        console.error("Camera access denied:", err);
+        setMessages(prev => [...prev, { role: 'model', text: "I can't access your camera. Please check your permissions if you want me to see through my 'AI Eye'." }]);
+      }
+    }
+  };
+
+  const captureFrame = (): string | null => {
+    if (!videoRef.current || !canvasRef.current) return null;
+    const canvas = canvasRef.current;
+    const video = videoRef.current;
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return null;
+    ctx.drawImage(video, 0, 0);
+    return canvas.toDataURL('image/jpeg', 0.6).split(',')[1];
   };
 
   const scrollToBottom = () => {
@@ -61,6 +97,8 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
     if (!input.trim() || isLoading) return;
 
     const userMessage = input.trim();
+    const imageData = isVisionActive ? captureFrame() : null;
+    
     setInput('');
     setMessages(prev => [...prev, { role: 'user', text: userMessage }]);
     setIsLoading(true);
@@ -76,7 +114,7 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
         }
       } else {
         const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
-        const model = "gemini-3-flash-preview";
+        const model = "gemini-3.1-flash-lite";
         
         const chatHistory = messages.map(m => ({
           role: m.role,
@@ -98,6 +136,9 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
     : 'MODE: CLINICAL ANALYST. Focus on precision, ICD-10 mapping, and DASS-21/SRQ-20 scoring. Be concise, professional, and data-driven.'
   }
   
+  [VISION SYSTEM]:
+  ${isVisionActive ? 'Vision is ACTIVE. You can see the user through the camera. Analyze their facial expressions, surroundings, and non-verbal cues from the image part provided to provide deeper psychosocial insights.' : 'Vision is OFFLINE. Rely on text interaction.'}
+  
   CORE PROTOCOLS:
   1. Crisis Triaging (L0-L3): If Suicidal Ideation detected, trigger MERP SOS resources immediately.
   2. Indonesian Clinical Context: Apply DASS-21 & SRQ-20 logic.
@@ -105,9 +146,19 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
   4. Language: Respond in the user's primary language (Indonesian/English) but maintain professional medical empathy.
   `;
 
+        const userParts: any[] = [{ text: userMessage }];
+        if (imageData) {
+          userParts.push({
+            inlineData: {
+              data: imageData,
+              mimeType: 'image/jpeg'
+            }
+          });
+        }
+
         const response = await ai.models.generateContent({
           model,
-          contents: [...chatHistory, { role: 'user', parts: [{ text: userMessage }] }],
+          contents: [...chatHistory, { role: 'user', parts: userParts }],
           config: {
             systemInstruction: dynamicInstruction,
             temperature: isCompanionMode ? 0.8 : 0.2,
@@ -166,6 +217,21 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
               </div>
             </div>
             <div className="flex items-center gap-2">
+              {/* Vision Mode Toggle */}
+              <button
+                onClick={toggleVision}
+                className={cn(
+                  "flex items-center gap-2 px-3 py-1.5 rounded-xl text-[10px] font-bold transition-all border",
+                  isVisionActive 
+                    ? "bg-teal-600 border-teal-600 text-white shadow-lg shadow-teal-100" 
+                    : "bg-white border-teal-100 text-teal-600 hover:bg-teal-50"
+                )}
+                title={isVisionActive ? "Deactivate AI Eye" : "Activate AI Eye (Vision Sensor)"}
+              >
+                {isVisionActive ? <Eye size={12} className="animate-pulse" /> : <EyeOff size={12} />}
+                {isVisionActive ? "VISION ACTIVE" : "ACTIVATE VISION"}
+              </button>
+
               {/* Hardware Doll Toggle */}
               <button
                 onClick={handleHardwareConnect}
@@ -241,7 +307,33 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
 
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-teal-50/10">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-teal-50/10 relative">
+            {/* Camera Overlay for Vision Mode */}
+            {isVisionActive && (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="fixed bottom-32 right-8 w-40 h-40 rounded-3xl overflow-hidden border-4 border-teal-500 shadow-2xl z-20 group"
+              >
+                <video 
+                  ref={videoRef}
+                  autoPlay 
+                  playsInline 
+                  muted
+                  className="w-full h-full object-cover grayscale brightness-110"
+                />
+                <div className="absolute inset-0 bg-teal-500/10 pointer-events-none" />
+                <div className="absolute top-2 left-2 px-2 py-0.5 bg-teal-600 text-[8px] text-white font-bold rounded-full flex items-center gap-1">
+                  <span className="w-1 h-1 bg-white rounded-full animate-ping" />
+                  AI VISION SENSOR
+                </div>
+                <div className="absolute bottom-2 right-2 p-1.5 bg-black/50 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Camera size={12} />
+                </div>
+                <canvas ref={canvasRef} className="hidden" />
+              </motion.div>
+            )}
+
             {messages.map((m, i) => (
               <motion.div
                 key={i}

@@ -1,5 +1,6 @@
 {
   "name": "SafeGuard",
   "description": "An AI-powered clinical decision support agent for Prompt Opinion, specializing in psychosocial risk stratification, ICD-10 recommendations, and economic ROI forecasting.",
-  "requestFramePermissions": ["bluetooth"]
+  "requestFramePermissions": ["bluetooth", "camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
