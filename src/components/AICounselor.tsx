@@ -8,6 +8,7 @@ import { getVaultData } from '@/src/lib/vaultUtils';
 
 import { generateGemmaResponse } from '@/src/services/gemmaService';
 import { speakResponse, hardwareBridge } from '@/src/services/hardwareBridge';
+import { LiveAudioService } from '@/src/services/liveAudioService';
 
 interface Message {
   role: 'user' | 'model';
@@ -29,6 +30,9 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
   const [isHardwareMode, setIsHardwareMode] = useState(false);
   const [isHardwareConnecting, setIsHardwareConnecting] = useState(false);
   const [isVisionActive, setIsVisionActive] = useState(false);
+  const [isLiveMode, setIsLiveMode] = useState(false);
+  const [liveService, setLiveService] = useState<LiveAudioService | null>(null);
+  const [liveTranscription, setLiveTranscription] = useState("");
   const [visionStream, setVisionStream] = useState<MediaStream | null>(null);
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef<any>(null);
@@ -54,8 +58,13 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
     const checkOllama = async () => {
       try {
         const res = await fetch('http://localhost:11434/api/tags');
-        if (res.ok) setOllamaStatus('online');
-        else setOllamaStatus('offline');
+        if (res.ok) {
+          const data = await res.json();
+          const hasGemma4 = data.models?.some((m: any) => m.name.includes('gemma4'));
+          setOllamaStatus(hasGemma4 ? 'online' : 'offline');
+        } else {
+          setOllamaStatus('offline');
+        }
       } catch {
         setOllamaStatus('offline');
       }
@@ -144,21 +153,62 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
   const toggleListening = () => {
     if (isListening) {
       recognitionRef.current?.stop();
+      hardwareBridge.sendToDoll("CMD:LISTEN_STOP");
     } else {
       if (recognitionRef.current) {
         // Detect language markers for better recognition
         const hasIndo = /saya|kamu|halo|apa|kabar/i.test(input);
-        recognitionRef.current.lang = hasIndo ? 'id-ID' : 'id-ID'; // Defaulting to ID for your primary context
+        recognitionRef.current.lang = hasIndo ? 'id-ID' : 'id-ID'; 
         recognitionRef.current.start();
         setIsListening(true);
+        hardwareBridge.sendToDoll("CMD:LISTEN_START");
       } else {
         alert("Speech Recognition is not supported in this browser.");
       }
     }
   };
 
+  const toggleLiveMode = async () => {
+    if (isLiveMode) {
+      liveService?.stop();
+      setLiveService(null);
+      setIsLiveMode(false);
+      setMessages(prev => [...prev, { role: 'model', text: "Live session ended." }]);
+    } else {
+      const service = new LiveAudioService({
+        sampleRate: 24000,
+        gain: 1.8,
+        voiceName: 'Zephyr'
+      });
+      
+      try {
+        await service.connect(
+          () => { /* Audio chunk started playing */ },
+          () => { /* Interrupted */ },
+          (text) => {
+            setLiveTranscription(text);
+          }
+        );
+        setLiveService(service);
+        setIsLiveMode(true);
+        setMessages(prev => [...prev, { role: 'model', text: "Live Counselor session started! (Seamless Voice Active)" }]);
+      } catch (err) {
+        console.error("Live Mode Error:", err);
+        alert("Failed to start Live Mode. Check server connection.");
+      }
+    }
+  };
+
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
+
+    if (isLiveMode && liveService) {
+      const userMsg = input.trim();
+      setMessages(prev => [...prev, { role: 'user', text: userMsg }]);
+      liveService.sendText(userMsg);
+      setInput('');
+      return;
+    }
 
     if (isListening) {
       recognitionRef.current?.stop();
@@ -252,6 +302,18 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
     }
   };
 
+  useEffect(() => {
+    if (liveTranscription) {
+      setMessages(prev => {
+        const last = prev[prev.length - 1];
+        if (last && last.role === 'model') {
+          return [...prev.slice(0, -1), { role: 'model', text: liveTranscription }];
+        }
+        return [...prev, { role: 'model', text: liveTranscription }];
+      });
+    }
+  }, [liveTranscription]);
+
   if (!isOpen) return null;
 
   return (
@@ -300,6 +362,21 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
               </div>
             )}
             <div className="flex items-center gap-2">
+              {/* Live Mode Toggle */}
+              <button
+                onClick={toggleLiveMode}
+                className={cn(
+                  "flex items-center gap-2 px-3 py-1.5 rounded-xl text-[10px] font-bold transition-all border",
+                  isLiveMode 
+                    ? "bg-purple-600 border-purple-600 text-white shadow-lg shadow-purple-100" 
+                    : "bg-white border-purple-100 text-purple-600 hover:bg-purple-50"
+                )}
+                title={isLiveMode ? "End Live Session" : "Start Live Session (Seamless Voice)"}
+              >
+                <Zap size={12} className={cn(isLiveMode && "animate-pulse")} />
+                {isLiveMode ? "LIVE ACTIVE" : "GO LIVE"}
+              </button>
+
               {/* Vision Mode Toggle */}
               <button
                 onClick={toggleVision}

@@ -3,8 +3,10 @@ import cors from "cors";
 import path from "path";
 import swaggerUi from "swagger-ui-express";
 import swaggerJsdoc from "swagger-jsdoc";
-import { GoogleGenAI } from "@google/genai";
+import { WebSocketServer } from "ws";
+import { GoogleGenAI, Modality, ThinkingLevel, LiveServerMessage } from "@google/genai";
 import { createServer as createViteServer } from "vite";
+import http from "http";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import { 
@@ -503,6 +505,91 @@ app.get("/api-docs/swagger.json", (req, res) => {
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 async function startServer() {
+  const httpServer = http.createServer(app);
+  const wss = new WebSocketServer({ noServer: true });
+
+  // Gemini Live WebSocket Handling
+  wss.on("connection", async (ws) => {
+    console.log("Gemini Live: Client connected");
+    if (!genAI) {
+      ws.close(1008, "AI Service not configured");
+      return;
+    }
+
+    try {
+      const session = await genAI.live.connect({
+        model: "gemini-3.1-flash-live-preview",
+        config: {
+          thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
+          responseModalities: [Modality.AUDIO],
+          speechConfig: {
+            voiceConfig: { prebuiltVoiceConfig: { voiceName: "Zephyr" } },
+          },
+          systemInstruction: `You are SafeGuard, a supportive AI Counselor.
+Greet in a mix of casual Indonesian and English (Gaya Bahasa Anak Selatan/Casual Mix).
+IGNORE background noise, coughs, and short interjections. 
+Only stop if the user is clearly and intentionally taking the turn.
+Be proactive: if the user seems hesitant or silent for too long, gently probe or ask open-ended questions about their feelings.
+Tone: Supportive, professional but casual, like a mentor or coach.
+Format: Speech-first. Keep responses natural for a conversation.`,
+        },
+        callbacks: {
+          onmessage: (message: LiveServerMessage) => {
+            const audio = message.serverContent?.modelTurn?.parts[0]?.inlineData?.data;
+            if (audio) {
+              ws.send(JSON.stringify({ type: 'audio', data: audio }));
+            }
+            if (message.serverContent?.interrupted) {
+              ws.send(JSON.stringify({ type: 'interrupted' }));
+            }
+            // Optional: Handle transcription if requested
+            const transcription = message.serverContent?.modelTurn?.parts[0]?.text;
+            if (transcription) {
+              ws.send(JSON.stringify({ type: 'text', data: transcription }));
+            }
+          },
+        },
+      });
+
+      ws.on("message", (data) => {
+        try {
+          const msg = JSON.parse(data.toString());
+          if (msg.audio) {
+            session.sendRealtimeInput({
+              audio: { data: msg.audio, mimeType: "audio/pcm;rate=24000" },
+            });
+          }
+          if (msg.text) {
+            session.sendRealtimeInput({ text: msg.text });
+          }
+        } catch (e) {
+          console.error("WS Message Error:", e);
+        }
+      });
+
+      ws.on("close", () => {
+        console.log("Gemini Live: Client disconnected");
+        session.close();
+      });
+
+    } catch (error) {
+      console.error("Gemini Live Connection Error:", error);
+      ws.close(1011, "Internal AI connection error");
+    }
+  });
+
+  // Upgrade HTTP to WS
+  httpServer.on("upgrade", (request, socket, head) => {
+    const pathname = new URL(request.url || "", `http://${request.headers.host}`).pathname;
+    if (pathname === "/api/live") {
+      wss.handleUpgrade(request, socket, head, (ws) => {
+        wss.emit("connection", ws, request);
+      });
+    } else {
+      socket.destroy();
+    }
+  });
+
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({ server: { middlewareMode: true }, appType: "spa" });
     app.use(vite.middlewares);
@@ -512,9 +599,9 @@ async function startServer() {
     app.get('*', (req, res) => res.sendFile(path.join(distPath, 'index.html')));
   }
   const PORT = Number(process.env.PORT) || 3000;
-  app.listen(PORT, "0.0.0.0", () => {
+  httpServer.listen(PORT, "0.0.0.0", () => {
     console.log(`🚀 SafeGuard Server listening on port ${PORT}`);
-    console.log(`📖 Swagger UI: https://server-safeguard.onrender.com/api-docs`);
+    console.log(`📖 Swagger UI: http://localhost:${PORT}/api-docs`);
   });
 }
 

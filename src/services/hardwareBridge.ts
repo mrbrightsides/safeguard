@@ -63,6 +63,16 @@ export function speakResponse(text: string) {
   // Voice Selection Priority Logic
   let selectedVoice = null;
 
+  // Signal hardware to start talking animation (LEDs)
+  utterance.onstart = () => {
+    hardwareBridge.sendToDoll("CMD:TALK_START");
+  };
+
+  // Signal hardware to stop talking animation
+  utterance.onend = () => {
+    hardwareBridge.sendToDoll("CMD:TALK_STOP");
+  };
+
   if (targetLang === 'id-ID') {
     // 1. Try Google Indonesian Natural
     selectedVoice = voices.find(v => v.lang.startsWith('id') && v.name.includes('Google'));

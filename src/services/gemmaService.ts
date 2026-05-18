@@ -32,6 +32,7 @@ CRISIS PROTOCOL: If indicators of self-harm are detected, output [TRIGGER_MERP] 
 `;
 
   const prompt = `${systemInstruction}\n\nHistory:\n${messages.map(m => `${m.role.toUpperCase()}: ${m.text}`).join('\n')}\nUSER: ${messages[messages.length - 1].text}\nMODEL:`;
+  const modelName = 'gemma4'; // Updated to Gemma 4 as per competition requirements
 
   try {
     // Attempting to reach local Ollama endpoint
@@ -42,7 +43,7 @@ CRISIS PROTOCOL: If indicators of self-harm are detected, output [TRIGGER_MERP] 
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gemma:2b', // Falling back to 2b for local efficiency, or whatever is pulled
+        model: modelName,
         prompt: prompt,
         stream: false,
         options: {
@@ -53,7 +54,10 @@ CRISIS PROTOCOL: If indicators of self-harm are detected, output [TRIGGER_MERP] 
     });
 
     if (!response.ok) {
-      throw new Error(`Ollama error: ${response.statusText}`);
+      if (response.status === 404) {
+        throw new Error(`Model '${modelName}' not found in your Ollama library. Please run 'ollama pull ${modelName}' in your terminal.`);
+      }
+      throw new Error(`Ollama server error (${response.status}): ${response.statusText}`);
     }
 
     const data = await response.json();
@@ -61,12 +65,21 @@ CRISIS PROTOCOL: If indicators of self-harm are detected, output [TRIGGER_MERP] 
       text: data.response,
       source: 'local-gemma'
     };
-  } catch (error) {
-    console.error("Local Gemma failed, falling back to Cloud Gemini", error);
-    // In a real "Disconnected" scenario, this would return an error message
-    // But for the hackathon, we show a fallback or error
+  } catch (error: any) {
+    console.error("Local Gemma failed", error);
+    
+    let errorMessage = "Local Gemma Connection Error.";
+    
+    if (error.message && error.message.includes('not found')) {
+      errorMessage = error.message;
+    } else if (error instanceof TypeError || error.message?.includes('fetch')) {
+      errorMessage = "Cannot connect to Ollama. 1. Ensure Ollama is running. 2. Set OLLAMA_ORIGINS='*' 3. Ensure you have pulled the 'gemma4' model.";
+    } else {
+      errorMessage = `Local Error: ${error.message || 'Unknown error'}`;
+    }
+
     return {
-      text: "Local Gemma is offline. Please ensure Ollama is running at localhost:11434 with 'gemma' model pulled.",
+      text: errorMessage,
       source: 'error'
     };
   }
