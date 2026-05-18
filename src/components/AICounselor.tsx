@@ -401,9 +401,12 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
               </div>
             </div>
             {executionMode === 'local' && ollamaStatus === 'online' && (
-              <div className="absolute top-16 left-0 right-0 px-4 py-1 bg-amber-50 text-[9px] text-amber-700 border-b border-amber-100 flex justify-between items-center z-10">
-                <span>Verification: Data stays on your machine via 127.0.0.1:11434</span>
-                <span className="opacity-60 flex items-center gap-1"><Zap size={8} /> Check F12 Network for proof</span>
+              <div className="absolute top-16 left-0 right-0 px-4 py-1 bg-amber-50 text-[9px] text-amber-700 border-b border-amber-100 flex justify-between items-center z-10 transition-all">
+                <span className="flex items-center gap-1.5 font-bold">
+                  <Cpu size={10} className="text-amber-600" />
+                  Edge Intelligence: High-Compute Latency Expected on Base Hardware
+                </span>
+                <span className="opacity-60 flex items-center gap-1 font-medium"><Zap size={8} /> Local Privacy Isolation Active</span>
               </div>
             )}
             <div className="flex items-center gap-2">

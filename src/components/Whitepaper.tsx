@@ -45,7 +45,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
     
     doc.setFontSize(10);
     doc.setTextColor(150, 150, 150);
-    doc.text('v3.0 / Focus: MCP and SHARP go to offline mode using Gemma / Generated: ${timestamp}', 20, 38);
+    doc.text('v3.0 / Focus: Prompt Opinion Hackathon / Generated: ${timestamp}', 20, 38);
     
     // Line
     doc.setDrawColor(230, 230, 230);
@@ -266,7 +266,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
                 "From Invisible Risk to Measurable Economic Value: Bridging clinical risk and corporate productivity."
               </p>
               <p>
-                SafeGuard is a digital clinical decision support agent designed to transform fragmented psychosocial signals into accountable, boardroom-ready economic interventions. Integrated into the **Prompt Opinion** platform, SafeGuard leverages Hybrid AI (Local using Gemma + Cloud) and interoperable health data (SHARP/FHIR) to bridge the gap between clinical risk and corporate productivity.
+                SafeGuard is a digital clinical decision support agent designed to transform fragmented psychosocial signals into accountable, boardroom-ready economic interventions. Integrated into the **Prompt Opinion** platform, SafeGuard leverages Hybrid AI (Local + Cloud) and interoperable health data (SHARP/FHIR) to bridge the gap between clinical risk and corporate productivity.
               </p>
             </div>
           </section>
@@ -568,29 +568,33 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
             </div>
           </section>
 
-          {/* Validation Guide */}
+          {/* Hardware Specs & Scalability */}
           <section id="validation" className="scroll-mt-32">
             <h2 className="text-2xl font-bold mb-8 flex items-center gap-3 text-gray-900">
               <ShieldCheck className="w-6 h-6 text-amber-600" />
-              10. Judge's Validation Guide (Local Gemma 4)
+              10. Hardware Specs & Scalability (Local Intelligence)
             </h2>
             <div className="p-8 border-2 border-dashed border-amber-200 rounded-[40px] bg-amber-50/30">
+              <p className="text-sm text-amber-900 mb-6 leading-relaxed bg-white/50 p-4 rounded-2xl">
+                SafeGuard is built for <b>Hybrid Autonomy</b>. While Cloud-Live provides extreme speed, Local Mode provides a zero-trust privacy guarantee.
+              </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-4">
-                  <h3 className="font-bold text-amber-900">Phase 1: Local Readiness</h3>
+                  <h3 className="font-bold text-amber-900">Target Production Hardware</h3>
                   <ul className="text-sm text-amber-800 space-y-2 list-disc pl-5">
-                    <li>Install Ollama from <b>ollama.com</b></li>
-                    <li>Run <code>ollama pull gemma4</code></li>
-                    <li>Set <code>OLLAMA_ORIGINS="*"</code> for CORS</li>
+                    <li>NVIDIA Jetson Orin / RTX 40-series</li>
+                    <li>Minimum 16GB Dedicated VRAM</li>
+                    <li>High-speed NVMe for model weights</li>
+                    <li>Quantization: 4-bit to 8-bit weight mapping</li>
                   </ul>
                 </div>
                 <div className="space-y-4">
-                  <h3 className="font-bold text-amber-900">Phase 2: Live Verification</h3>
+                  <h3 className="font-bold text-amber-900">Edge Privacy Deployment</h3>
                   <ul className="text-sm text-amber-800 space-y-2 list-disc pl-5">
-                    <li>Toggle mode to <b>LOCAL</b> in AI Counselor</li>
-                    <li>Open <b>F12 Network Tab</b></li>
-                    <li>Verify <code>POST</code> request to <code>localhost:11434</code></li>
-                    <li>Witness zero latency edge-processing offline</li>
+                    <li>Zero-Trust Data Governance</li>
+                    <li>Offline-first psychosocial support</li>
+                    <li>Edge-mesh scaling for institutional use</li>
+                    <li>Latency Tiers based on available compute</li>
                   </ul>
                 </div>
               </div>
@@ -657,7 +661,7 @@ export const Whitepaper: React.FC<WhitepaperProps> = ({ onBack }) => {
               "SafeGuard is not a cost center; it is a risk control system."
             </p>
             <p className="text-gray-400 text-sm">
-              All data based on WHO, ILO, UNESCO, and Kemenkes official reports.
+              Prepared for the "Agents Assemble: The Healthcare AI Endgame Challenge" by Prompt Opinion. All data based on WHO, ILO, UNESCO, and Kemenkes official reports.
             </p>
           </div>
         </div>
