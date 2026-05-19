@@ -8,7 +8,6 @@ interface Message {
 export interface GemmaResponse {
   text: string;
   source: 'local-gemma' | 'cloud-gemini' | 'error';
-  stream?: ReadableStream<Uint8Array> | null;
 }
 
 /**
@@ -32,40 +31,52 @@ ${isCompanionMode
 CRISIS PROTOCOL: If indicators of self-harm are detected, output [TRIGGER_MERP] and provide emergency resources.
 `;
 
-  const prompt = `${systemInstruction}\n\nHistory:\n${messages.map(m => `${m.role.toUpperCase()}: ${m.text}`).join('\n')}\nUSER: ${messages[messages.length - 1].text}\nMODEL:`;
-  const modelToUse = 'gemma4'; // Strict competition requirement
+  const modelName = 'gemma4'; // Updated to Gemma 4 as per competition requirements
 
   try {
-    // Attempting to reach local Ollama endpoint with streaming enabled
-    const response = await fetch('http://localhost:11434/api/generate', {
+    // Convert history to Ollama chat format
+    const chatMessages = [
+      { role: 'system', content: systemInstruction },
+      ...messages.map(m => ({
+        role: m.role === 'model' ? 'assistant' : 'user',
+        content: m.text
+      }))
+    ];
+
+    console.log("Sending to Local Gemma:", { model: modelName, messages: chatMessages });
+
+    const response = await fetch('http://localhost:11434/api/chat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: modelToUse,
-        prompt: prompt,
-        stream: true, // Enable streaming for real-time feedback
+        model: modelName,
+        messages: chatMessages,
+        stream: false,
         options: {
           temperature: isCompanionMode ? 0.7 : 0.1,
           top_p: 0.9,
-          num_ctx: 1024,   // Optimized for 8GB RAM systems
-          num_predict: 512, // Limit response length
         },
       }),
     });
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Ollama error response:", errorText);
+      if (response.status === 404) {
+        throw new Error(`Model '${modelName}' not found in your Ollama library. Please run 'ollama pull ${modelName}' in your terminal.`);
+      }
       throw new Error(`Ollama server error (${response.status}): ${response.statusText}`);
     }
 
-    // Return the response stream for the UI
-    return {
-      text: "", 
-      source: 'local-gemma',
-      stream: response.body
-    };
+    const data = await response.json();
+    console.log("Ollama Raw Data:", data);
 
+    return {
+      text: data.message?.content || data.response || "No response received from local model.",
+      source: 'local-gemma'
+    };
   } catch (error: any) {
     console.error("Local Gemma failed", error);
     
@@ -74,7 +85,7 @@ CRISIS PROTOCOL: If indicators of self-harm are detected, output [TRIGGER_MERP] 
     if (error.message && error.message.includes('not found')) {
       errorMessage = error.message;
     } else if (error instanceof TypeError || error.message?.includes('fetch')) {
-      errorMessage = "Cannot connect to Ollama. 1. Ensure Ollama is running. 2. Set OLLAMA_ORIGINS='*' 3. Highly recommended: 'ollama pull gemma:2b' for smooth performance.";
+      errorMessage = "Cannot connect to Ollama. 1. Ensure Ollama is running. 2. Set OLLAMA_ORIGINS='*' 3. Ensure you have pulled the 'gemma4' model.";
     } else {
       errorMessage = `Local Error: ${error.message || 'Unknown error'}`;
     }

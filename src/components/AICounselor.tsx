@@ -60,8 +60,17 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
         const res = await fetch('http://localhost:11434/api/tags');
         if (res.ok) {
           const data = await res.json();
-          const hasGemma4 = data.models?.some((m: any) => m.name.includes('gemma4'));
-          setOllamaStatus(hasGemma4 ? 'online' : 'offline');
+          // Look for any model that contains "gemma"
+          const preferredModel = data.models?.find((m: any) => m.name.toLowerCase().includes('gemma4'))?.name 
+                               || data.models?.find((m: any) => m.name.toLowerCase().includes('gemma'))?.name;
+          
+          if (preferredModel) {
+            setOllamaStatus('online');
+            // Store the detected model name in a cookie or localStorage if needed, 
+            // but for now we'll just keep the status logic.
+          } else {
+            setOllamaStatus('offline');
+          }
         } else {
           setOllamaStatus('offline');
         }
@@ -226,9 +235,13 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
     try {
       if (executionMode === 'local') {
         const gemmaResponse = await generateGemmaResponse([...messages, { role: 'user', text: userMessage }], selectedMode);
-        setMessages(prev => [...prev, { role: 'model', text: gemmaResponse.text }]);
         
-        if (isHardwareMode) {
+        // Handle empty or error responses from local model
+        const finalResponseText = gemmaResponse.text || "Local model returned an empty string. Please check if your machine has enough RAM for Gemma 4.";
+        
+        setMessages(prev => [...prev, { role: 'model', text: finalResponseText }]);
+        
+        if (isHardwareMode && gemmaResponse.text) {
           speakResponse(gemmaResponse.text);
           hardwareBridge.sendToDoll(gemmaResponse.text.substring(0, 32));
         }
@@ -349,9 +362,16 @@ const AICounselor: React.FC<AICounselorProps> = ({ isOpen, onClose, initialMessa
                     <div className={cn(
                       "flex items-center gap-1 ml-1 px-1.5 py-0.5 rounded-full border text-[8px] font-bold",
                       ollamaStatus === 'online' ? "bg-amber-500/10 text-amber-600 border-amber-200" : "bg-red-500/10 text-red-600 border-red-200"
-                    )}>
+                    )}
+                    title={ollamaStatus === 'offline' ? 'Click to see setup instructions' : ''}
+                    onClick={() => {
+                      if (ollamaStatus === 'offline') {
+                        alert(`To connect Local Gemma 4, run this in your terminal:\n\nOLLAMA_ORIGINS="${window.location.origin}" ollama serve`);
+                      }
+                    }}
+                    >
                       <Zap size={8} className={cn("fill-current", ollamaStatus === 'online' && "animate-pulse")} />
-                      {ollamaStatus === 'online' ? "GEMMA 4 ACTIVE (OLLAMA)" : "OLLAMA OFFLINE"}
+                      {ollamaStatus === 'online' ? "GEMMA 4 ACTIVE (OLLAMA)" : "OLLAMA OFFLINE (SETUP)"}
                     </div>
                   )}
                 </div>
