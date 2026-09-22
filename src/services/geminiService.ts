@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 
-const apiKey = (import.meta as ImportMeta & { env?: { VITE_GEMINI_API_KEY?: string } }).env?.VITE_GEMINI_API_KEY || "";
+const apiKey = (import.meta as ImportMeta & { env?: { GEMINI_API_KEY?: string } }).env?.GEMINI_API_KEY || "";
 const ai = new GoogleGenAI({ apiKey });
 
 // Local Gemma Configuration
