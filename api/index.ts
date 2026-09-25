@@ -22,7 +22,7 @@ app.use(cors());
 app.use(express.json());
 
 // Initialize Gemini
-const apiKey = process.env.GEMINI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY;
+const apiKey = process.env.GEMINI_API_KEY || import.meta.env.GEMINI_API_KEY;
 const genAI = apiKey ? new GoogleGenAI({ apiKey }) : null;
 
 // --- MCP Clinical Logic ---
